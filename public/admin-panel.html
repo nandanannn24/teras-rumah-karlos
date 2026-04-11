@@ -1163,6 +1163,38 @@
             new bootstrap.Modal(document.getElementById('modalATK')).show();
         }
 
+        // ==========================================
+        // FIX ERROR PREVIEW GAMBAR ATK & BUKET
+        // ==========================================
+        window.previewImageATK = function (input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('previewATKImg').src = e.target.result;
+                    document.getElementById('previewATKContainer').style.display = 'block';
+                    // Simpan data base64 ke input hidden
+                    document.getElementById('imgATKData').value = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        window.previewImageBuket = function (input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('previewBuketImg').src = e.target.result;
+                    document.getElementById('previewBuketContainer').style.display = 'block';
+                    document.getElementById('imgBuketData').value = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+        // ==========================================
+        // FIX ERROR EDIT & SIMPAN ATK (ID imgATKData)
+        // ==========================================
         function editProdukATK(id) {
             const data = getDataATK();
             const produk = data.find(p => p.id === id);
@@ -1171,8 +1203,17 @@
             document.getElementById('namaATK').value = produk.nama;
             document.getElementById('hargaATK').value = produk.harga;
             document.getElementById('kategoriATK').value = produk.kategori;
-            document.getElementById('imgATK').value = produk.img || '';
+            document.getElementById('imgATKData').value = produk.img || ''; // FIX TYPO DISINI
             document.getElementById('deskATK').value = produk.deskripsi || '';
+
+            // Tampilin preview kalo gambar udah ada
+            if (produk.img && produk.img !== 'logo.webp') {
+                document.getElementById('previewATKImg').src = produk.img;
+                document.getElementById('previewATKContainer').style.display = 'block';
+            } else {
+                document.getElementById('previewATKContainer').style.display = 'none';
+            }
+
             document.getElementById('modalATKTitle').innerHTML = '<i class="bi bi-pencil-square me-2"></i>Edit Produk ATK';
             new bootstrap.Modal(document.getElementById('modalATK')).show();
         }
@@ -1185,7 +1226,7 @@
                 nama: document.getElementById('namaATK').value,
                 harga: parseInt(document.getElementById('hargaATK').value),
                 kategori: document.getElementById('kategoriATK').value,
-                img: document.getElementById('imgATK').value || 'logo.webp',
+                img: document.getElementById('imgATKData').value || 'logo.webp', // FIX TYPO DISINI
                 deskripsi: document.getElementById('deskATK').value
             };
             if (editId) {
@@ -1260,6 +1301,9 @@
             new bootstrap.Modal(document.getElementById('modalBuket')).show();
         }
 
+        // ==========================================
+        // FIX ERROR EDIT & SIMPAN BUKET (ID imgBuketData)
+        // ==========================================
         function editProdukBuket(id) {
             const data = getDataBuket();
             const buket = data.find(b => b.id === id);
@@ -1269,8 +1313,17 @@
             document.getElementById('hargaBuket').value = buket.harga;
             document.getElementById('kategoriBuket').value = buket.kategori;
             document.getElementById('badgeBuket').value = buket.badge || '';
-            document.getElementById('imgBuket').value = buket.img || '';
+            document.getElementById('imgBuketData').value = buket.img || ''; // FIX TYPO DISINI
             document.getElementById('deskBuket').value = buket.deskripsi || '';
+
+            // Tampilin preview kalo gambar udah ada
+            if (buket.img && buket.img !== 'logo.webp') {
+                document.getElementById('previewBuketImg').src = buket.img;
+                document.getElementById('previewBuketContainer').style.display = 'block';
+            } else {
+                document.getElementById('previewBuketContainer').style.display = 'none';
+            }
+
             document.getElementById('modalBuketTitle').innerHTML = '<i class="bi bi-pencil-square me-2"></i>Edit Buket Bunga';
             new bootstrap.Modal(document.getElementById('modalBuket')).show();
         }
@@ -1283,7 +1336,7 @@
                 nama: document.getElementById('namaBuket').value,
                 harga: parseInt(document.getElementById('hargaBuket').value),
                 kategori: document.getElementById('kategoriBuket').value,
-                img: document.getElementById('imgBuket').value || 'logo.webp',
+                img: document.getElementById('imgBuketData').value || 'logo.webp', // FIX TYPO DISINI
                 deskripsi: document.getElementById('deskBuket').value,
                 badge: document.getElementById('badgeBuket').value
             };
