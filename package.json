@@ -8,7 +8,8 @@
     "db:setup": "node db-setup.mjs"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^1.0.2"
+    "@neondatabase/serverless": "^1.0.2",
+    "dotenv": "^17.4.1"
   },
   "devDependencies": {
     "netlify-cli": "^19.0.0"
