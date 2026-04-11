@@ -1164,30 +1164,62 @@
         }
 
         // ==========================================
-        // FIX ERROR PREVIEW GAMBAR ATK & BUKET
+        // FIX ERROR PREVIEW GAMBAR ATK & BUKET (PLUS KOMPRESI GAMBAR)
         // ==========================================
+        function compressImage(file, callback) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    const max_size = 800; // Resize resolusi maksimal 800px
+
+                    if (width > height) {
+                        if (width > max_size) {
+                            height *= max_size / width;
+                            width = max_size;
+                        }
+                    } else {
+                        if (height > max_size) {
+                            width *= max_size / height;
+                            height = max_size;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Kompresi jadi format WebP, kualitas 60%
+                    // Ini bikin size file dari MBs jadi cuma puluhan KB bro!
+                    const dataUrl = canvas.toDataURL('image/webp', 0.6);
+                    callback(dataUrl);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
         window.previewImageATK = function (input) {
             if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    document.getElementById('previewATKImg').src = e.target.result;
+                compressImage(input.files[0], function(compressedDataUrl) {
+                    document.getElementById('previewATKImg').src = compressedDataUrl;
                     document.getElementById('previewATKContainer').style.display = 'block';
-                    // Simpan data base64 ke input hidden
-                    document.getElementById('imgATKData').value = e.target.result;
-                };
-                reader.readAsDataURL(input.files[0]);
+                    document.getElementById('imgATKData').value = compressedDataUrl;
+                });
             }
         }
 
         window.previewImageBuket = function (input) {
             if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    document.getElementById('previewBuketImg').src = e.target.result;
+                compressImage(input.files[0], function(compressedDataUrl) {
+                    document.getElementById('previewBuketImg').src = compressedDataUrl;
                     document.getElementById('previewBuketContainer').style.display = 'block';
-                    document.getElementById('imgBuketData').value = e.target.result;
-                };
-                reader.readAsDataURL(input.files[0]);
+                    document.getElementById('imgBuketData').value = compressedDataUrl;
+                });
             }
         }
 
