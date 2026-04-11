@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Layanan Fotokopi & Print Teras Rumah Karlos - Upload file dan cetak dokumen dengan mudah.">
+    <title>Layanan Fotokopi | Teras Rumah Karlos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-utama: #F9F8F6;
+            --hijau-pekat: #2E5E3F;
+            --hijau-hover: #3A7A52;
+            --peach: #FFDAB9;
+            --gold: #E2C275;
+            --charcoal: #2D3436;
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-utama);
+            color: var(--charcoal);
+        }
+
+        .navbar-custom {
+            background: var(--hijau-pekat);
+            padding: 0.8rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .navbar-custom .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #fff !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-custom .navbar-brand img {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .navbar-custom .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 400;
+            font-size: 0.92rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-custom .nav-link:hover,
+        .navbar-custom .nav-link.active {
+            color: #fff !important;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,255,255,0.9)' stroke-linecap='round' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--hijau-pekat) 0%, #1a3a28 100%);
+            padding: 3rem 0 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(52, 152, 219, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .page-header p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .breadcrumb-custom a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        .breadcrumb-custom span {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .info-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .info-card .ic-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .info-card h6 {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .info-card p {
+            font-size: 0.82rem;
+            color: #888;
+            margin: 0;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .form-label-custom {
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-control-custom {
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+            background: #fff;
+        }
+
+        .form-control-custom:focus {
+            border-color: var(--hijau-pekat);
+            box-shadow: 0 0 0 3px rgba(46, 94, 63, 0.1);
+        }
+
+        .form-select-custom {
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+            background: #fff;
+        }
+
+        .form-select-custom:focus {
+            border-color: var(--hijau-pekat);
+            box-shadow: 0 0 0 3px rgba(46, 94, 63, 0.1);
+        }
+
+        .upload-area {
+            border: 3px dashed #ddd;
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            background: rgba(46, 94, 63, 0.02);
+        }
+
+        .upload-area:hover,
+        .upload-area.dragover {
+            border-color: var(--hijau-pekat);
+            background: rgba(46, 94, 63, 0.05);
+        }
+
+        .upload-area .upload-icon {
+            font-size: 3rem;
+            color: var(--hijau-pekat);
+            opacity: 0.5;
+            margin-bottom: 1rem;
+        }
+
+        .upload-area h6 {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .upload-area p {
+            font-size: 0.82rem;
+            color: #888;
+        }
+
+        .file-preview {
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 0.8rem;
+        }
+
+        .file-preview .fp-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .file-preview .fp-info h6 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        .file-preview .fp-info small {
+            color: #888;
+            font-size: 0.75rem;
+        }
+
+        .file-preview .fp-remove {
+            margin-left: auto;
+            border: none;
+            background: none;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .spec-option {
+            border: 2px solid #eee;
+            border-radius: 12px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .spec-option:hover,
+        .spec-option.selected {
+            border-color: var(--hijau-pekat);
+            background: rgba(46, 94, 63, 0.04);
+        }
+
+        .spec-option input[type="radio"] {
+            display: none;
+        }
+
+        .spec-option i {
+            font-size: 1.5rem;
+            color: var(--hijau-pekat);
+        }
+
+        .spec-option h6 {
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin: 0.5rem 0 0.2rem;
+        }
+
+        .spec-option p {
+            font-size: 0.75rem;
+            color: #888;
+            margin: 0;
+        }
+
+        .payment-option {
+            border: 2px solid #eee;
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .payment-option:hover,
+        .payment-option.selected {
+            border-color: var(--hijau-pekat);
+            background: rgba(46, 94, 63, 0.03);
+        }
+
+        .payment-option input[type="radio"] {
+            accent-color: var(--hijau-pekat);
+            width: 18px;
+            height: 18px;
+        }
+
+        .summary-box {
+            background: var(--bg-utama);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 2px solid rgba(46, 94, 63, 0.1);
+        }
+
+        .btn-submit-order {
+            background: var(--gold);
+            color: var(--charcoal);
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit-order:hover {
+            background: var(--peach);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(226, 194, 117, 0.3);
+            color: var(--charcoal);
+        }
+
+        .harga-table {
+            background: #fff;
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .harga-table table {
+            margin: 0;
+        }
+
+        .harga-table th {
+            background: var(--hijau-pekat);
+            color: #fff;
+            font-weight: 500;
+            font-size: 0.85rem;
+            padding: 0.8rem;
+            border: none;
+        }
+
+        .harga-table td {
+            font-size: 0.85rem;
+            padding: 0.7rem 0.8rem;
+            vertical-align: middle;
+        }
+
+        .footer {
+            background: var(--hijau-pekat);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 2rem 0;
+        }
+
+        .toast-success {
+            background: var(--hijau-pekat) !important;
+            color: #fff !important;
+            border-radius: 12px !important;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-utama);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--hijau-pekat);
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><img src="logo.webp" alt="Logo">Teras Rumah Karlos</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarMenu">
+                <ul class="navbar-nav ms-auto gap-1">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i
+                                class="bi bi-house me-1"></i>Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="toko-atk.html"><i class="bi bi-pencil me-1"></i>Toko
+                            ATK</a></li>
+                    <li class="nav-item"><a class="nav-link" href="toko-buket.html"><i
+                                class="bi bi-flower1 me-1"></i>Buket Bunga</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="layanan-fotokopi.html"><i
+                                class="bi bi-printer me-1"></i>Fotokopi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="layanan-passfoto.html"><i
+                                class="bi bi-camera me-1"></i>Pass Foto</a></li>
+                    <li class="nav-item"><a class="nav-link" href="dashboard-pesanan.html"><i
+                                class="bi bi-clipboard-data me-1"></i>Pesanan</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section class="page-header">
+        <div class="container" style="position: relative; z-index: 2;">
+            <div class="breadcrumb-custom mb-2">
+                <a href="index.html">Beranda</a> <span class="mx-2">/</span> <span>Layanan Fotokopi</span>
+            </div>
+            <h1><i class="bi bi-printer-fill me-2" style="color: #3498db;"></i>Layanan Fotokopi & Print</h1>
+            <p>Upload file Anda, pilih spesifikasi cetak, dan kami siapkan!</p>
+        </div>
+    </section>
+    <div class="container py-5">
+        <div class="row g-3 mb-5" style="margin-top: -2rem; position: relative; z-index: 2;">
+            <div class="col-md-3 col-6">
+                <div class="info-card">
+                    <div class="ic-icon" style="background: rgba(52,152,219,0.1); color: #3498db;"><i
+                            class="bi bi-file-earmark-pdf"></i></div>
+                    <h6>PDF & DOCX</h6>
+                    <p>Support berbagai format</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="info-card">
+                    <div class="ic-icon" style="background: rgba(46,94,63,0.1); color: var(--hijau-pekat);"><i
+                            class="bi bi-palette"></i></div>
+                    <h6>Hitam Putih & Warna</h6>
+                    <p>Pilih sesuai kebutuhan</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="info-card">
+                    <div class="ic-icon" style="background: rgba(226,194,117,0.15); color: var(--gold);"><i
+                            class="bi bi-lightning-charge"></i></div>
+                    <h6>Proses Cepat</h6>
+                    <p>Maksimal 30 menit</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="info-card">
+                    <div class="ic-icon" style="background: rgba(231,76,139,0.1); color: #e74c8b;"><i
+                            class="bi bi-cash-coin"></i></div>
+                    <h6>Mulai Rp 200</h6>
+                    <p>Harga terjangkau</p>
+                </div>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="form-card">
+                    <h4 style="font-weight: 700; margin-bottom: 0.3rem;">
+                        <i class="bi bi-cloud-upload me-2" style="color: var(--hijau-pekat);"></i>Form Pemesanan Cetak
+                    </h4>
+                    <p style="color: #888; font-size: 0.9rem; margin-bottom: 2rem;">Lengkapi formulir di bawah untuk
+                        memesan cetak dokumen</p>
+                    <form id="formFotokopi" onsubmit="return prosesFotokopi(event)">
+                        <div class="mb-4">
+                            <label class="form-label-custom"><i class="bi bi-file-earmark-arrow-up me-1"></i>Upload File
+                                Dokumen *</label>
+                            <div class="upload-area" id="uploadArea"
+                                onclick="document.getElementById('fileInput').click()">
+                                <i class="bi bi-cloud-arrow-up-fill upload-icon d-block"></i>
+                                <h6>Klik atau seret file ke sini</h6>
+                                <p>Format: <strong>.pdf, .docx, .doc, .jpg, .png</strong> — Maks. 10MB</p>
+                            </div>
+                            <input type="file" id="fileInput" accept=".pdf,.docx,.doc,.jpg,.jpeg,.png" multiple
+                                style="display: none;" onchange="handleFileUpload(this.files)">
+                            <div id="filePreviewList"></div>
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Nama Lengkap *</label>
+                                <input type="text" class="form-control form-control-custom" id="namaFotokopi" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">No. HP / WhatsApp *</label>
+                                <input type="tel" class="form-control form-control-custom" id="hpFotokopi" required>
+                            </div>
+                        </div>
+                        <h5 style="font-weight: 600; font-size: 1rem; margin-bottom: 1rem;">
+                            <i class="bi bi-sliders me-1" style="color: var(--hijau-pekat);"></i>Spesifikasi Cetak
+                        </h5>
+                        <div class="mb-3">
+                            <label class="form-label-custom">Jenis Cetak *</label>
+                            <div class="row g-2">
+                                <div class="col-md-4 col-6">
+                                    <label class="spec-option" onclick="selectSpec(this, 'jenisCetak')">
+                                        <input type="radio" name="jenisCetak" value="Fotokopi B/W" required>
+                                        <i class="bi bi-files d-block"></i>
+                                        <h6>Fotokopi B/W</h6>
+                                        <p>Rp 200/lbr</p>
+                                    </label>
+                                </div>
+                                <div class="col-md-4 col-6">
+                                    <label class="spec-option" onclick="selectSpec(this, 'jenisCetak')">
+                                        <input type="radio" name="jenisCetak" value="Print B/W">
+                                        <i class="bi bi-printer d-block"></i>
+                                        <h6>Print B/W</h6>
+                                        <p>Rp 500/lbr</p>
+                                    </label>
+                                </div>
+                                <div class="col-md-4 col-6">
+                                    <label class="spec-option" onclick="selectSpec(this, 'jenisCetak')">
+                                        <input type="radio" name="jenisCetak" value="Print Warna">
+                                        <i class="bi bi-palette d-block"></i>
+                                        <h6>Print Warna</h6>
+                                        <p>Rp 1.500/lbr</p>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Ukuran Kertas *</label>
+                                <select class="form-select form-select-custom" id="ukuranKertas" required>
+                                    <option value="">-- Pilih Ukuran --</option>
+                                    <option value="A4">A4 (21 × 29.7 cm)</option>
+                                    <option value="F4/Folio">F4 / Folio (21.5 × 33 cm)</option>
+                                    <option value="A3">A3 (29.7 × 42 cm)</option>
+                                    <option value="A5">A5 (14.8 × 21 cm)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Jumlah Lembar / Kopi *</label>
+                                <input type="number" class="form-control form-control-custom" id="jumlahLembar" min="1"
+                                    value="1" required onchange="hitungEstimasi()">
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Bolak-Balik?</label>
+                                <select class="form-select form-select-custom" id="bolakBalik">
+                                    <option value="Tidak">Tidak (Satu Sisi)</option>
+                                    <option value="Ya">Ya (Bolak-Balik)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Jilid / Finishing</label>
+                                <select class="form-select form-select-custom" id="jilid">
+                                    <option value="Tanpa Jilid">Tanpa Jilid</option>
+                                    <option value="Jilid Spiral">Jilid Spiral (+Rp 5.000)</option>
+                                    <option value="Jilid Lakban">Jilid Lakban (+Rp 3.000)</option>
+                                    <option value="Laminating">Laminating per lembar (+Rp 2.000)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label-custom">Catatan Tambahan (opsional)</label>
+                            <textarea class="form-control form-control-custom" id="catatanFotokopi" rows="2"
+                                placeholder="Contoh: halaman 1-10 saja, warna di hal 5, dll."></textarea>
+                        </div>
+                        <h5 style="font-weight: 600; font-size: 1rem; margin-bottom: 1rem;">
+                            <i class="bi bi-credit-card me-1" style="color: var(--hijau-pekat);"></i>Metode Pengambilan
+                        </h5>
+                        <div class="d-flex flex-column gap-2 mb-4">
+                            <label class="payment-option">
+                                <input type="radio" name="metodeFotokopi" value="COD - Ambil di Tempat" required>
+                                <div>
+                                    <strong style="font-size: 0.9rem;">COD - Ambil di Tempat</strong>
+                                    <div style="font-size: 0.78rem; color: #888;">Ambil langsung di toko</div>
+                                </div>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="metodeFotokopi" value="COD - Diantar">
+                                <div>
+                                    <strong style="font-size: 0.9rem;">COD - Diantar</strong>
+                                    <div style="font-size: 0.78rem; color: #888;">Diantar ke alamat Anda (+ongkir)</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div id="alamatAntarWrap" style="display: none;" class="mb-4">
+                            <label class="form-label-custom">Alamat Pengantaran *</label>
+                            <textarea class="form-control form-control-custom" id="alamatAntar" rows="2"></textarea>
+                        </div>
+                        <div class="summary-box mb-4" id="estimasiBox">
+                            <h6 style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.8rem;">
+                                <i class="bi bi-calculator me-1"></i> Estimasi Harga
+                            </h6>
+                            <div id="estimasiDetail">
+                                <p style="color: #888; font-size: 0.85rem;">Pilih jenis cetak dan jumlah lembar untuk
+                                    melihat estimasi.</p>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-submit-order">
+                            <i class="bi bi-send me-2"></i>Kirim Pesanan Cetak
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="harga-table mb-4">
+                    <h5 style="font-weight: 700; font-size: 1rem; margin-bottom: 1rem;">
+                        <i class="bi bi-tag me-1" style="color: var(--hijau-pekat);"></i>Daftar Harga
+                    </h5>
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th style="border-radius: 8px 0 0 0;">Layanan</th>
+                                <th style="border-radius: 0 8px 0 0;">Harga/lbr</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Fotokopi B/W</td>
+                                <td><strong>Rp 200</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Print B/W</td>
+                                <td><strong>Rp 500</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Print Warna</td>
+                                <td><strong>Rp 1.500</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Print A3 B/W</td>
+                                <td><strong>Rp 1.000</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Print A3 Warna</td>
+                                <td><strong>Rp 3.000</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="harga-table mb-4">
+                    <h5 style="font-weight: 700; font-size: 1rem; margin-bottom: 1rem;">
+                        <i class="bi bi-bookmark me-1" style="color: var(--hijau-pekat);"></i>Harga Finishing
+                    </h5>
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th style="border-radius: 8px 0 0 0;">Finishing</th>
+                                <th style="border-radius: 0 8px 0 0;">Harga</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Jilid Spiral</td>
+                                <td><strong>Rp 5.000</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Jilid Lakban</td>
+                                <td><strong>Rp 3.000</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Laminating /lbr</td>
+                                <td><strong>Rp 2.000</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div
+                    style="background: #fff; border-radius: 16px; padding: 1.5rem; border: 1px solid rgba(0,0,0,0.05); box-shadow: var(--shadow-soft);">
+                    <h5 style="font-weight: 700; font-size: 1rem; margin-bottom: 1rem;">
+                        <i class="bi bi-question-circle me-1" style="color: var(--hijau-pekat);"></i>FAQ
+                    </h5>
+                    <div class="accordion accordion-flush" id="faqAccordion">
+                        <div class="accordion-item" style="border: none; background: transparent;">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed"
+                                    style="font-size: 0.85rem; padding: 0.8rem 0; background: transparent;"
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                    Berapa lama proses cetak?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse">
+                                <div class="accordion-body"
+                                    style="font-size: 0.82rem; color: #888; padding: 0 0 0.8rem;">
+                                    Untuk order biasa 10-30 menit. Order banyak atau jilid bisa 1-2 jam.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item" style="border: none; background: transparent;">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed"
+                                    style="font-size: 0.85rem; padding: 0.8rem 0; background: transparent;"
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                    Bisa cetak dari HP?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse">
+                                <div class="accordion-body"
+                                    style="font-size: 0.82rem; color: #888; padding: 0 0 0.8rem;">
+                                    Ya! Upload file PDF atau gambar langsung dari HP Anda melalui form ini.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
+        <div id="toastNotif" class="toast toast-success" role="alert">
+            <div class="toast-body d-flex align-items-center gap-2">
+                <i class="bi bi-check-circle-fill fs-5"></i>
+                <span id="toastMessage">Pesanan berhasil!</span>
+            </div>
+        </div>
+    </div>
+    <footer class="footer text-center">
+        <div class="container">
+            <p style="margin: 0; font-size: 0.85rem;">&copy; 2026 Teras Rumah Karlos. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const _hargaAdmin = JSON.parse(localStorage.getItem('adminHargaFotokopi')) || { fotokopiBW: 200, printBW: 500, printWarna: 1500, printA3BW: 1000, printA3Warna: 3000, jilidSpiral: 5000, jilidLakban: 3000, laminating: 2000 };
+        (function updateHargaDisplay() {
+            const specLabels = document.querySelectorAll('.spec-option p');
+            if (specLabels[0]) specLabels[0].textContent = 'Rp ' + _hargaAdmin.fotokopiBW.toLocaleString('id-ID') + '/lbr';
+            if (specLabels[1]) specLabels[1].textContent = 'Rp ' + _hargaAdmin.printBW.toLocaleString('id-ID') + '/lbr';
+            if (specLabels[2]) specLabels[2].textContent = 'Rp ' + _hargaAdmin.printWarna.toLocaleString('id-ID') + '/lbr';
+            const rows = document.querySelectorAll('.harga-table tbody tr');
+            const hargaDisplay = [_hargaAdmin.fotokopiBW, _hargaAdmin.printBW, _hargaAdmin.printWarna, _hargaAdmin.printA3BW, _hargaAdmin.printA3Warna, _hargaAdmin.jilidSpiral, _hargaAdmin.jilidLakban, _hargaAdmin.laminating];
+            rows.forEach((row, i) => { if (hargaDisplay[i] !== undefined) { const td = row.querySelector('td:last-child'); if (td) td.innerHTML = '<strong>Rp ' + hargaDisplay[i].toLocaleString('id-ID') + '</strong>'; } });
+            const jilidSelect = document.getElementById('jilid');
+            if (jilidSelect) { jilidSelect.options[1].textContent = 'Jilid Spiral (+Rp ' + _hargaAdmin.jilidSpiral.toLocaleString('id-ID') + ')'; jilidSelect.options[2].textContent = 'Jilid Lakban (+Rp ' + _hargaAdmin.jilidLakban.toLocaleString('id-ID') + ')'; jilidSelect.options[3].textContent = 'Laminating per lembar (+Rp ' + _hargaAdmin.laminating.toLocaleString('id-ID') + ')'; }
+        })();
+        let uploadedFiles = [];
+        const uploadArea = document.getElementById('uploadArea');
+        uploadArea.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+        uploadArea.addEventListener('dragleave', function () {
+            this.classList.remove('dragover');
+        });
+        uploadArea.addEventListener('drop', function (e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            handleFileUpload(e.dataTransfer.files);
+        });
+        function handleFileUpload(files) {
+            const allowedTypes = ['application/pdf', 'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'image/jpeg', 'image/png'];
+            const maxSize = 10 * 1024 * 1024;
+            for (let file of files) {
+                if (!allowedTypes.includes(file.type)) {
+                    alert(`File "${file.name}" tidak didukung. Gunakan PDF, DOCX, JPG, atau PNG.`);
+                    continue;
+                }
+                if (file.size > maxSize) {
+                    alert(`File "${file.name}" terlalu besar. Maksimal 10MB.`);
+                    continue;
+                }
+                uploadedFiles.push({
+                    name: file.name,
+                    size: file.size,
+                    type: file.type
+                });
+            }
+            renderFilePreview();
+        }
+        function renderFilePreview() {
+            const container = document.getElementById('filePreviewList');
+            if (uploadedFiles.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            container.innerHTML = uploadedFiles.map((f, i) => {
+                const sizeKB = (f.size / 1024).toFixed(1);
+                const icon = f.type.includes('pdf') ? 'bi-file-earmark-pdf-fill' :
+                    f.type.includes('word') ? 'bi-file-earmark-word-fill' :
+                        'bi-file-earmark-image-fill';
+                const color = f.type.includes('pdf') ? '#e74c3c' :
+                    f.type.includes('word') ? '#3498db' : '#2ecc71';
+                return `
+                    <div class="file-preview">
+                        <div class="fp-icon" style="background: ${color}15; color: ${color};"><i class="bi ${icon}"></i></div>
+                        <div class="fp-info">
+                            <h6>${f.name}</h6>
+                            <small>${sizeKB} KB</small>
+                        </div>
+                        <button type="button" class="fp-remove" onclick="hapusFile(${i})"><i class="bi bi-x-circle"></i></button>
+                    </div>`;
+            }).join('');
+        }
+        function hapusFile(index) {
+            uploadedFiles.splice(index, 1);
+            renderFilePreview();
+        }
+        function selectSpec(el, groupName) {
+            document.querySelectorAll(`input[name="${groupName}"]`).forEach(r => {
+                r.closest('.spec-option').classList.remove('selected');
+            });
+            el.classList.add('selected');
+            hitungEstimasi();
+        }
+        function hitungEstimasi() {
+            const jenisCetak = document.querySelector('input[name="jenisCetak"]:checked');
+            const jumlahLembar = parseInt(document.getElementById('jumlahLembar').value) || 0;
+            const jilid = document.getElementById('jilid').value;
+            if (!jenisCetak || jumlahLembar <= 0) return;
+            const hargaPerLembar = {
+                'Fotokopi B/W': _hargaAdmin.fotokopiBW,
+                'Print B/W': _hargaAdmin.printBW,
+                'Print Warna': _hargaAdmin.printWarna
+            };
+            let hargaCetak = (hargaPerLembar[jenisCetak.value] || 0) * jumlahLembar;
+            let hargaFinishing = 0;
+            if (jilid === 'Jilid Spiral') hargaFinishing = _hargaAdmin.jilidSpiral;
+            else if (jilid === 'Jilid Lakban') hargaFinishing = _hargaAdmin.jilidLakban;
+            else if (jilid === 'Laminating') hargaFinishing = _hargaAdmin.laminating * jumlahLembar;
+            const total = hargaCetak + hargaFinishing;
+            document.getElementById('estimasiDetail').innerHTML = `
+                <div class="d-flex justify-content-between mb-1">
+                    <span style="font-size: 0.85rem;">${jenisCetak.value} × ${jumlahLembar} lbr</span>
+                    <span style="font-size: 0.85rem;">Rp ${hargaCetak.toLocaleString('id-ID')}</span>
+                </div>
+                ${hargaFinishing > 0 ? `
+                <div class="d-flex justify-content-between mb-1">
+                    <span style="font-size: 0.85rem;">${jilid}</span>
+                    <span style="font-size: 0.85rem;">Rp ${hargaFinishing.toLocaleString('id-ID')}</span>
+                </div>` : ''}
+                <hr style="margin: 0.5rem 0;">
+                <div class="d-flex justify-content-between">
+                    <strong style="font-size: 0.95rem;">Estimasi Total</strong>
+                    <strong style="font-size: 1.1rem; color: var(--hijau-pekat);">Rp ${total.toLocaleString('id-ID')}</strong>
+                </div>
+            `;
+        }
+        document.getElementById('jilid').addEventListener('change', hitungEstimasi);
+        document.querySelectorAll('input[name="metodeFotokopi"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                const wrap = document.getElementById('alamatAntarWrap');
+                wrap.style.display = this.value.includes('Diantar') ? 'block' : 'none';
+                document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+                this.closest('.payment-option').classList.add('selected');
+            });
+        });
+        function prosesFotokopi(event) {
+            event.preventDefault();
+            if (uploadedFiles.length === 0) {
+                alert('Silakan upload file dokumen terlebih dahulu!');
+                return false;
+            }
+            const jenisCetak = document.querySelector('input[name="jenisCetak"]:checked');
+            const metodeBayar = document.querySelector('input[name="metodeFotokopi"]:checked');
+            if (!jenisCetak) { alert('Pilih jenis cetak!'); return false; }
+            if (!metodeBayar) { alert('Pilih metode pengambilan!'); return false; }
+            const jumlahLembar = parseInt(document.getElementById('jumlahLembar').value) || 1;
+            const jilid = document.getElementById('jilid').value;
+            const hargaPerLembar = { 'Fotokopi B/W': _hargaAdmin.fotokopiBW, 'Print B/W': _hargaAdmin.printBW, 'Print Warna': _hargaAdmin.printWarna };
+            let total = (hargaPerLembar[jenisCetak.value] || 0) * jumlahLembar;
+            if (jilid === 'Jilid Spiral') total += _hargaAdmin.jilidSpiral;
+            else if (jilid === 'Jilid Lakban') total += _hargaAdmin.jilidLakban;
+            else if (jilid === 'Laminating') total += _hargaAdmin.laminating * jumlahLembar;
+            const idPesanan = 'FTK-' + Date.now().toString(36).toUpperCase();
+            let antrianCounters = JSON.parse(localStorage.getItem('antrianCounters')) || { ATK: 0, BKT: 0, FTK: 0, PFT: 0 };
+            antrianCounters.FTK++;
+            localStorage.setItem('antrianCounters', JSON.stringify(antrianCounters));
+            const pesananBaru = {
+                id: idPesanan,
+                tipe: 'Fotokopi & Print',
+                nama: document.getElementById('namaFotokopi').value,
+                hp: document.getElementById('hpFotokopi').value,
+                alamat: document.getElementById('alamatAntar').value || 'Ambil di Toko',
+                catatan: document.getElementById('catatanFotokopi').value || '-',
+                nomorAntrian: antrianCounters.FTK,
+                items: [{
+                    nama: `${jenisCetak.value} - ${document.getElementById('ukuranKertas').value}`,
+                    qty: jumlahLembar,
+                    harga: hargaPerLembar[jenisCetak.value],
+                    subtotal: total
+                }],
+                detail: {
+                    files: uploadedFiles.map(f => f.name),
+                    ukuran: document.getElementById('ukuranKertas').value,
+                    bolakBalik: document.getElementById('bolakBalik').value,
+                    jilid: jilid
+                },
+                total: total,
+                metode: metodeBayar.value,
+                status: 'Diproses',
+                tanggal: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }),
+                waktu: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+            };
+            let semuaPesanan = JSON.parse(localStorage.getItem('pesananTRK')) || [];
+            semuaPesanan.push(pesananBaru);
+            localStorage.setItem('pesananTRK', JSON.stringify(semuaPesanan));
+            document.getElementById('formFotokopi').reset();
+            uploadedFiles = [];
+            renderFilePreview();
+            document.querySelectorAll('.spec-option').forEach(s => s.classList.remove('selected'));
+            document.querySelectorAll('.payment-option').forEach(s => s.classList.remove('selected'));
+            document.getElementById('estimasiDetail').innerHTML = '<p style="color: #888; font-size: 0.85rem;">Pilih jenis cetak dan jumlah lembar untuk melihat estimasi.</p>';
+            document.getElementById('alamatAntarWrap').style.display = 'none';
+            tampilToast(`Pesanan ${idPesanan} berhasil dikirim! Dokumen Anda segera diproses 📄`);
+            return false;
+        }
+        function tampilToast(pesan) {
+            document.getElementById('toastMessage').textContent = pesan;
+            const toast = new bootstrap.Toast(document.getElementById('toastNotif'), { delay: 4000 });
+            toast.show();
+        }
+    </script>
+</body>
+
+</html>

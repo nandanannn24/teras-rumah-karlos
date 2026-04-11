@@ -1,0 +1,16 @@
+{
+  "name": "teras-rumah-karlos",
+  "version": "1.0.0",
+  "description": "Website UMKM Teras Rumah Karlos",
+  "type": "module",
+  "scripts": {
+    "dev": "netlify dev",
+    "db:setup": "node db-setup.mjs"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.2"
+  },
+  "devDependencies": {
+    "netlify-cli": "^19.0.0"
+  }
+}

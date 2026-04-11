@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin Panel - Teras Rumah Karlos">
+    <title>Admin Panel | Teras Rumah Karlos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-utama: #F9F8F6;
+            --hijau-pekat: #2E5E3F;
+            --hijau-hover: #3A7A52;
+            --peach: #FFDAB9;
+            --gold: #E2C275;
+            --charcoal: #2D3436;
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-utama);
+            color: var(--charcoal);
+        }
+
+        .navbar-custom {
+            background: var(--hijau-pekat);
+            padding: 0.8rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .navbar-custom .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #fff !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-custom .navbar-brand img {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .navbar-custom .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 400;
+            font-size: 0.92rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-custom .nav-link:hover,
+        .navbar-custom .nav-link.active {
+            color: #fff !important;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,255,255,0.9)' stroke-linecap='round' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+
+        .admin-badge {
+            background: rgba(226, 194, 117, 0.2);
+            color: var(--gold);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-logout {
+            background: rgba(231, 76, 60, 0.15);
+            color: #ff6b6b;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--hijau-pekat) 0%, #1a3a28 100%);
+            padding: 3rem 0 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(226, 194, 117, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .page-header p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .breadcrumb-custom a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        .breadcrumb-custom span {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .tab-nav {
+            background: #fff;
+            border-radius: 16px;
+            padding: 6px;
+            box-shadow: var(--shadow-soft);
+            display: inline-flex;
+            gap: 4px;
+            margin-top: -1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tab-btn {
+            border: none;
+            background: transparent;
+            padding: 10px 22px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            color: var(--charcoal);
+        }
+
+        .tab-btn.active {
+            background: var(--hijau-pekat);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(46, 94, 63, 0.2);
+        }
+
+        .tab-content-section {
+            display: none;
+        }
+
+        .tab-content-section.active {
+            display: block;
+        }
+
+        .panel-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .panel-card h4 {
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .panel-card .sub {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-tambah {
+            background: var(--hijau-pekat);
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-tambah:hover {
+            background: var(--hijau-hover);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .btn-simpan {
+            background: var(--gold);
+            color: var(--charcoal);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-simpan:hover {
+            background: var(--peach);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(226, 194, 117, 0.3);
+            color: var(--charcoal);
+        }
+
+        .table-admin {
+            font-size: 0.88rem;
+        }
+
+        .table-admin thead th {
+            background: var(--hijau-pekat);
+            color: #fff;
+            font-weight: 500;
+            font-size: 0.82rem;
+            padding: 0.9rem 0.8rem;
+            border: none;
+            white-space: nowrap;
+        }
+
+        .table-admin tbody td {
+            padding: 0.8rem;
+            vertical-align: middle;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .table-admin tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        .table-admin tbody tr:hover {
+            background: rgba(46, 94, 63, 0.03);
+        }
+
+        .btn-edit {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-edit:hover {
+            background: #3498db;
+            color: #fff;
+        }
+
+        .btn-hapus {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-hapus:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .badge-kategori {
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        .badge-tulis {
+            background: rgba(46, 94, 63, 0.1);
+            color: var(--hijau-pekat);
+        }
+
+        .badge-kertas {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+        }
+
+        .badge-kantor {
+            background: rgba(226, 194, 117, 0.15);
+            color: #b8860b;
+        }
+
+        .badge-sekolah {
+            background: rgba(231, 76, 139, 0.1);
+            color: #e74c8b;
+        }
+
+        .badge-wisuda {
+            background: rgba(46, 94, 63, 0.1);
+            color: var(--hijau-pekat);
+        }
+
+        .badge-anniversary {
+            background: rgba(231, 76, 139, 0.1);
+            color: #e74c8b;
+        }
+
+        .badge-ulang-tahun {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+        }
+
+        .badge-uang {
+            background: rgba(226, 194, 117, 0.15);
+            color: #b8860b;
+        }
+
+        .form-label-custom {
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-control-custom,
+        .form-select-custom {
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control-custom:focus,
+        .form-select-custom:focus {
+            border-color: var(--hijau-pekat);
+            box-shadow: 0 0 0 3px rgba(46, 94, 63, 0.1);
+        }
+
+        .harga-input-group {
+            background: #fff;
+            border-radius: 16px;
+            padding: 1.2rem 1.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .harga-input-group:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .harga-input-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+
+        .harga-input-group small {
+            color: #888;
+            font-size: 0.78rem;
+        }
+
+        .harga-input-group input {
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            transition: border-color 0.3s;
+            margin-top: 0.5rem;
+        }
+
+        .harga-input-group input:focus {
+            border-color: var(--hijau-pekat);
+            box-shadow: 0 0 0 3px rgba(46, 94, 63, 0.1);
+            outline: none;
+        }
+
+        .search-admin {
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 10px 14px 10px 40px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+            background: var(--bg-utama);
+            width: 100%;
+        }
+
+        .search-admin:focus {
+            border-color: var(--hijau-pekat);
+            box-shadow: 0 0 0 3px rgba(46, 94, 63, 0.1);
+            outline: none;
+            background: #fff;
+        }
+
+        .modal .modal-content {
+            border-radius: 20px;
+            border: none;
+            overflow: hidden;
+        }
+
+        .modal .modal-header {
+            background: var(--hijau-pekat);
+            color: #fff;
+            border-bottom: none;
+            padding: 1.2rem 1.5rem;
+        }
+
+        .modal .modal-body {
+            padding: 1.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #ddd;
+        }
+
+        .empty-state p {
+            font-size: 0.88rem;
+            color: #999;
+            margin-top: 0.5rem;
+        }
+
+        .img-preview {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid #eee;
+        }
+
+        .stat-mini {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .stat-mini .val {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--hijau-pekat);
+        }
+
+        .stat-mini .lbl {
+            font-size: 0.78rem;
+            color: #888;
+        }
+
+        .footer {
+            background: var(--hijau-pekat);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 2rem 0;
+        }
+
+        .toast-success {
+            background: var(--hijau-pekat) !important;
+            color: #fff !important;
+            border-radius: 12px !important;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-utama);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--hijau-pekat);
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .tab-nav {
+                flex-wrap: wrap;
+                border-radius: 12px;
+            }
+
+            .tab-btn {
+                font-size: 0.78rem;
+                padding: 8px 14px;
+            }
+
+            .panel-card {
+                padding: 1.2rem;
+            }
+
+            .table-admin {
+                min-width: 600px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="logo.webp" alt="Logo">Teras Rumah Karlos
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarMenu">
+                <ul class="navbar-nav ms-auto gap-1 align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i
+                                class="bi bi-house me-1"></i>Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="dashboard-pesanan.html"><i
+                                class="bi bi-clipboard-data me-1"></i>Pesanan</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="admin-panel.html"><i
+                                class="bi bi-gear me-1"></i>Kelola Toko</a></li>
+                    <li class="nav-item ms-lg-2">
+                        <span class="admin-badge" id="adminInfo">
+                            <i class="bi bi-person-circle"></i>
+                            <span id="adminName">Admin</span>
+                        </span>
+                    </li>
+                    <li class="nav-item ms-lg-1">
+                        <button class="btn-logout" onclick="logoutAdmin()">
+                            <i class="bi bi-box-arrow-right me-1"></i>Logout
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section class="page-header">
+        <div class="container" style="position: relative; z-index: 2;">
+            <div class="breadcrumb-custom mb-2">
+                <a href="index.html">Beranda</a> <span class="mx-2">/</span> <span>Admin Panel</span>
+            </div>
+            <h1><i class="bi bi-gear-fill me-2" style="color: var(--gold);"></i>Kelola Toko</h1>
+            <p>Tambah, edit, hapus produk dan atur harga layanan</p>
+        </div>
+    </section>
+    <div class="container py-5">
+        <div class="text-center mb-4">
+            <div class="tab-nav">
+                <button class="tab-btn active" onclick="switchTab('atk', this)">
+                    <i class="bi bi-pencil"></i>ATK
+                </button>
+                <button class="tab-btn" onclick="switchTab('buket', this)">
+                    <i class="bi bi-flower1"></i>Buket Bunga
+                </button>
+                <button class="tab-btn" onclick="switchTab('fotokopi', this)">
+                    <i class="bi bi-printer"></i>Fotokopi
+                </button>
+                <button class="tab-btn" onclick="switchTab('passfoto', this)">
+                    <i class="bi bi-camera"></i>Pass Foto
+                </button>
+            </div>
+        </div>
+        <div class="tab-content-section active" id="tabATK">
+            <div class="panel-card">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+                    <div>
+                        <h4><i class="bi bi-pencil-fill me-2" style="color: var(--hijau-pekat);"></i>Kelola Produk ATK
+                        </h4>
+                        <p class="sub">Tambah, edit, dan hapus produk alat tulis kantor</p>
+                    </div>
+                    <button class="btn-tambah" onclick="bukaModalATK()">
+                        <i class="bi bi-plus-circle me-1"></i>Tambah Produk
+                    </button>
+                </div>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-5">
+                        <div class="position-relative">
+                            <i class="bi bi-search position-absolute"
+                                style="left: 14px; top: 50%; transform: translateY(-50%); color: #aaa;"></i>
+                            <input type="text" class="search-admin" id="searchATK" placeholder="Cari produk ATK..."
+                                oninput="renderTabelATK()">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select form-select-custom" id="filterKatATK" onchange="renderTabelATK()">
+                            <option value="">Semua Kategori</option>
+                            <option value="tulis">Alat Tulis</option>
+                            <option value="kertas">Kertas & Buku</option>
+                            <option value="kantor">Perlengkapan Kantor</option>
+                            <option value="sekolah">Sekolah</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row g-2">
+                            <div class="col-4">
+                                <div class="stat-mini">
+                                    <div class="val" id="statATKTotal">0</div>
+                                    <div class="lbl">Produk</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-mini">
+                                    <div class="val" id="statATKKategori">0</div>
+                                    <div class="lbl">Kategori</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-mini">
+                                    <div class="val" id="statATKHarga">0</div>
+                                    <div class="lbl">Avg Harga</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="table table-admin" id="tabelATK">
+                        <thead>
+                            <tr>
+                                <th style="border-radius: 10px 0 0 0;">Gambar</th>
+                                <th>Nama Produk</th>
+                                <th>Kategori</th>
+                                <th>Harga</th>
+                                <th>Deskripsi</th>
+                                <th style="border-radius: 0 10px 0 0;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bodyATK"></tbody>
+                    </table>
+                </div>
+                <div id="emptyATK" class="empty-state" style="display:none;">
+                    <i class="bi bi-inbox d-block"></i>
+                    <p>Belum ada produk ATK. Klik "Tambah Produk" untuk mulai.</p>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content-section" id="tabBuket">
+            <div class="panel-card">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+                    <div>
+                        <h4><i class="bi bi-flower1 me-2" style="color: #e74c8b;"></i>Kelola Buket Bunga</h4>
+                        <p class="sub">Tambah, edit, dan hapus katalog buket bunga</p>
+                    </div>
+                    <button class="btn-tambah" onclick="bukaModalBuket()">
+                        <i class="bi bi-plus-circle me-1"></i>Tambah Buket
+                    </button>
+                </div>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-5">
+                        <div class="position-relative">
+                            <i class="bi bi-search position-absolute"
+                                style="left: 14px; top: 50%; transform: translateY(-50%); color: #aaa;"></i>
+                            <input type="text" class="search-admin" id="searchBuket" placeholder="Cari buket bunga..."
+                                oninput="renderTabelBuket()">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select form-select-custom" id="filterKatBuket"
+                            onchange="renderTabelBuket()">
+                            <option value="">Semua Kategori</option>
+                            <option value="wisuda">Wisuda</option>
+                            <option value="anniversary">Anniversary</option>
+                            <option value="ulang-tahun">Ulang Tahun</option>
+                            <option value="uang">Buket Uang</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row g-2">
+                            <div class="col-4">
+                                <div class="stat-mini">
+                                    <div class="val" id="statBuketTotal">0</div>
+                                    <div class="lbl">Buket</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-mini">
+                                    <div class="val" id="statBuketKategori">0</div>
+                                    <div class="lbl">Kategori</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-mini">
+                                    <div class="val" id="statBuketHarga">0</div>
+                                    <div class="lbl">Avg Harga</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="table table-admin" id="tabelBuket">
+                        <thead>
+                            <tr>
+                                <th style="border-radius: 10px 0 0 0;">Gambar</th>
+                                <th>Nama Buket</th>
+                                <th>Kategori</th>
+                                <th>Harga</th>
+                                <th>Badge</th>
+                                <th style="border-radius: 0 10px 0 0;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bodyBuket"></tbody>
+                    </table>
+                </div>
+                <div id="emptyBuket" class="empty-state" style="display:none;">
+                    <i class="bi bi-inbox d-block"></i>
+                    <p>Belum ada buket bunga. Klik "Tambah Buket" untuk mulai.</p>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content-section" id="tabFotokopi">
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="panel-card">
+                        <h4><i class="bi bi-printer-fill me-2" style="color: #3498db;"></i>Harga Cetak</h4>
+                        <p class="sub">Atur harga per lembar untuk layanan cetak</p>
+                        <div class="harga-input-group">
+                            <label>Fotokopi B/W</label>
+                            <small>Harga per lembar fotokopi hitam putih</small>
+                            <input type="number" id="hargaFotokopiBW" min="0" step="100">
+                        </div>
+                        <div class="harga-input-group">
+                            <label>Print B/W</label>
+                            <small>Harga per lembar print hitam putih</small>
+                            <input type="number" id="hargaPrintBW" min="0" step="100">
+                        </div>
+                        <div class="harga-input-group">
+                            <label>Print Warna</label>
+                            <small>Harga per lembar print full color</small>
+                            <input type="number" id="hargaPrintWarna" min="0" step="100">
+                        </div>
+                        <div class="harga-input-group">
+                            <label>Print A3 B/W</label>
+                            <small>Harga per lembar print A3 hitam putih</small>
+                            <input type="number" id="hargaPrintA3BW" min="0" step="100">
+                        </div>
+                        <div class="harga-input-group">
+                            <label>Print A3 Warna</label>
+                            <small>Harga per lembar print A3 full color</small>
+                            <input type="number" id="hargaPrintA3Warna" min="0" step="100">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="panel-card">
+                        <h4><i class="bi bi-bookmark-fill me-2" style="color: var(--hijau-pekat);"></i>Harga Finishing
+                        </h4>
+                        <p class="sub">Atur harga untuk jilid dan laminating</p>
+                        <div class="harga-input-group">
+                            <label>Jilid Spiral</label>
+                            <small>Harga per dokumen</small>
+                            <input type="number" id="hargaJilidSpiral" min="0" step="500">
+                        </div>
+                        <div class="harga-input-group">
+                            <label>Jilid Lakban</label>
+                            <small>Harga per dokumen</small>
+                            <input type="number" id="hargaJilidLakban" min="0" step="500">
+                        </div>
+                        <div class="harga-input-group">
+                            <label>Laminating</label>
+                            <small>Harga per lembar</small>
+                            <input type="number" id="hargaLaminating" min="0" step="500">
+                        </div>
+                        <div class="mt-4">
+                            <button class="btn-simpan w-100" onclick="simpanHargaFotokopi()">
+                                <i class="bi bi-check-circle me-2"></i>Simpan Harga Fotokopi & Print
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content-section" id="tabPassFoto">
+            <div class="panel-card">
+                <h4><i class="bi bi-camera-fill me-2" style="color: var(--gold);"></i>Harga Paket Pass Foto</h4>
+                <p class="sub">Atur harga untuk setiap paket pass foto</p>
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="harga-input-group"
+                            style="border: 2px solid rgba(52,152,219,0.2); border-radius: 16px;">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <div
+                                    style="width: 40px; height: 40px; border-radius: 50%; background: rgba(52,152,219,0.1); display: flex; align-items: center; justify-content: center; color: #3498db;">
+                                    <i class="bi bi-person-badge"></i>
+                                </div>
+                                <div>
+                                    <label style="margin: 0;">Paket Basic</label>
+                                    <small style="display: block;">Ukuran 2×3 / 3×4</small>
+                                </div>
+                            </div>
+                            <input type="number" id="hargaPaketBasic" min="0" step="1000">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="harga-input-group"
+                            style="border: 2px solid rgba(226,194,117,0.3); border-radius: 16px;">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <div
+                                    style="width: 40px; height: 40px; border-radius: 50%; background: rgba(226,194,117,0.15); display: flex; align-items: center; justify-content: center; color: var(--gold);">
+                                    <i class="bi bi-person-vcard"></i>
+                                </div>
+                                <div>
+                                    <label style="margin: 0;">Paket Standard</label>
+                                    <small style="display: block;">Ukuran 4×6</small>
+                                </div>
+                            </div>
+                            <input type="number" id="hargaPaketStandard" min="0" step="1000">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="harga-input-group"
+                            style="border: 2px solid rgba(46,94,63,0.2); border-radius: 16px;">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <div
+                                    style="width: 40px; height: 40px; border-radius: 50%; background: rgba(46,94,63,0.1); display: flex; align-items: center; justify-content: center; color: var(--hijau-pekat);">
+                                    <i class="bi bi-person-square"></i>
+                                </div>
+                                <div>
+                                    <label style="margin: 0;">Paket Premium</label>
+                                    <small style="display: block;">Semua Ukuran</small>
+                                </div>
+                            </div>
+                            <input type="number" id="hargaPaketPremium" min="0" step="1000">
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <button class="btn-simpan w-100" onclick="simpanHargaPassFoto()">
+                        <i class="bi bi-check-circle me-2"></i>Simpan Harga Pass Foto
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalATK" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalATKTitle"><i class="bi bi-plus-circle me-2"></i>Tambah Produk ATK
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formATK" onsubmit="return simpanProdukATK(event)">
+                        <input type="hidden" id="editIdATK" value="">
+                        <input type="hidden" id="imgATKData" value="">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Nama Produk *</label>
+                                <input type="text" class="form-control form-control-custom" id="namaATK" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Harga (Rp) *</label>
+                                <input type="number" class="form-control form-control-custom" id="hargaATK" min="0"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Kategori *</label>
+                                <select class="form-select form-select-custom" id="kategoriATK" required>
+                                    <option value="">-- Pilih Kategori --</option>
+                                    <option value="tulis">Alat Tulis</option>
+                                    <option value="kertas">Kertas & Buku</option>
+                                    <option value="kantor">Perlengkapan Kantor</option>
+                                    <option value="sekolah">Sekolah</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Gambar Produk</label>
+                                <input type="file" class="form-control form-control-custom" id="fileATK"
+                                    accept="image/*" onchange="previewImageATK(this)">
+                                <div id="previewATKContainer" style="margin-top: 8px; display: none;">
+                                    <img id="previewATKImg" src=""
+                                        style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover; border: 2px solid #eee;">
+                                    <small style="display: block; color: #888; margin-top: 4px;"
+                                        id="previewATKInfo"></small>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label-custom">Deskripsi</label>
+                                <input type="text" class="form-control form-control-custom" id="deskATK"
+                                    placeholder="Deskripsi singkat produk">
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn-simpan w-100" id="btnSimpanATK">
+                                    <i class="bi bi-check-circle me-2"></i>Simpan Produk
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalBuket" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalBuketTitle"><i class="bi bi-plus-circle me-2"></i>Tambah Buket
+                        Bunga</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formBuket" onsubmit="return simpanProdukBuket(event)">
+                        <input type="hidden" id="editIdBuket" value="">
+                        <input type="hidden" id="imgBuketData" value="">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Nama Buket *</label>
+                                <input type="text" class="form-control form-control-custom" id="namaBuket" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Harga (Rp) *</label>
+                                <input type="number" class="form-control form-control-custom" id="hargaBuket" min="0"
+                                    required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label-custom">Kategori *</label>
+                                <select class="form-select form-select-custom" id="kategoriBuket" required>
+                                    <option value="">-- Pilih --</option>
+                                    <option value="wisuda">Wisuda</option>
+                                    <option value="anniversary">Anniversary</option>
+                                    <option value="ulang-tahun">Ulang Tahun</option>
+                                    <option value="uang">Buket Uang</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label-custom">Badge</label>
+                                <input type="text" class="form-control form-control-custom" id="badgeBuket"
+                                    placeholder="Best Seller, Popular, dll">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label-custom">Gambar Buket</label>
+                                <input type="file" class="form-control form-control-custom" id="fileBuket"
+                                    accept="image/*" onchange="previewImageBuket(this)">
+                            </div>
+                            <div class="col-12" id="previewBuketContainer" style="display: none;">
+                                <img id="previewBuketImg" src=""
+                                    style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover; border: 2px solid #eee;">
+                                <small style="color: #888; margin-left: 8px;" id="previewBuketInfo"></small>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label-custom">Deskripsi</label>
+                                <textarea class="form-control form-control-custom" id="deskBuket" rows="2"
+                                    placeholder="Deskripsi buket bunga"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn-simpan w-100" id="btnSimpanBuket">
+                                    <i class="bi bi-check-circle me-2"></i>Simpan Buket
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
+        <div id="toastNotif" class="toast toast-success" role="alert">
+            <div class="toast-body d-flex align-items-center gap-2">
+                <i class="bi bi-check-circle-fill fs-5"></i>
+                <span id="toastMessage">Berhasil!</span>
+            </div>
+        </div>
+    </div>
+    <footer class="footer text-center">
+        <div class="container">
+            <p style="margin: 0; font-size: 0.85rem;">&copy; 2026 Teras Rumah Karlos. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        if (localStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = 'login-admin.html';
+        }
+        const adminNama = localStorage.getItem('adminNama') || 'Admin';
+        document.getElementById('adminName').textContent = adminNama;
+
+        function logoutAdmin() {
+            if (confirm('Yakin ingin logout?')) {
+                localStorage.removeItem('adminLoggedIn');
+                localStorage.removeItem('adminNama');
+                localStorage.removeItem('adminUsername');
+                window.location.href = 'login-admin.html';
+            }
+        }
+
+        function switchTab(tabName, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.tab-content-section').forEach(s => s.classList.remove('active'));
+            const tabMap = { atk: 'tabATK', buket: 'tabBuket', fotokopi: 'tabFotokopi', passfoto: 'tabPassFoto' };
+            document.getElementById(tabMap[tabName]).classList.add('active');
+        }
+
+        function tampilToast(pesan) {
+            document.getElementById('toastMessage').textContent = pesan;
+            const toast = new bootstrap.Toast(document.getElementById('toastNotif'), { delay: 3500 });
+            toast.show();
+        }
+
+        const defaultProdukATK = [
+            { id: 1, nama: "Pulpen Pilot G2", harga: 12000, kategori: "tulis", img: "atk/pulpen-pilot-g2.webp", deskripsi: "Pulpen gel hitam 0.5mm" },
+            { id: 2, nama: "Pensil 2B Faber-Castell", harga: 5000, kategori: "tulis", img: "atk/pensil-2b-faber-castell.webp", deskripsi: "Pensil ujian berkualitas" },
+            { id: 3, nama: "Buku Tulis Sidu 58 lbr", harga: 7000, kategori: "kertas", img: "atk/buku-tulis-sidu.webp", deskripsi: "Buku tulis isi 58 lembar" },
+            { id: 4, nama: "Kertas HVS A4 70gr (Rim)", harga: 48000, kategori: "kertas", img: "atk/kertas-hvs-a4.webp", deskripsi: "1 rim / 500 lembar" },
+            { id: 5, nama: "Spidol Snowman Hitam", harga: 8000, kategori: "tulis", img: "atk/spidol-snowman.webp", deskripsi: "Spidol whiteboard" },
+            { id: 6, nama: "Penggaris Besi 30cm", harga: 10000, kategori: "sekolah", img: "atk/penggaris-besi.webp", deskripsi: "Penggaris stainless steel" },
+            { id: 7, nama: "Stapler Kenko HD-10", harga: 25000, kategori: "kantor", img: "atk/stapler-kenko.webp", deskripsi: "Stapler ukuran kecil" },
+            { id: 8, nama: "Map File Plastik F4", harga: 3500, kategori: "kantor", img: "atk/map-file-plastik.webp", deskripsi: "Map plastik warna-warni" },
+            { id: 9, nama: "Penghapus Joyko EB-30", harga: 3000, kategori: "tulis", img: "atk/penghapus-joyko.webp", deskripsi: "Penghapus kuat dan bersih" },
+            { id: 10, nama: "Binder Clip No. 111", harga: 9000, kategori: "kantor", img: "atk/binder-clip.webp", deskripsi: "Isi 12 pcs per kotak" },
+            { id: 11, nama: "Buku Gambar A3", harga: 15000, kategori: "sekolah", img: "atk/buku-gambar-a3.webp", deskripsi: "Buku gambar besar 10 lembar" },
+            { id: 12, nama: "Correction Tape Joyko", harga: 6500, kategori: "tulis", img: "atk/correction-tape.webp", deskripsi: "Tip-Ex cair roll 5mm" },
+            { id: 13, nama: "Amplop Coklat A4", harga: 2000, kategori: "kantor", img: "atk/amplop-coklat.webp", deskripsi: "Amplop coklat per lembar" },
+            { id: 14, nama: "Crayon Titi 12 Warna", harga: 18000, kategori: "sekolah", img: "atk/crayon-titi.webp", deskripsi: "Set crayon anak-anak" },
+            { id: 15, nama: "Post-it Notes 3x3 inch", harga: 11000, kategori: "kantor", img: "atk/post-it-notes.webp", deskripsi: "Sticky notes warna kuning" },
+            { id: 16, nama: "Kertas Folio Bergaris", harga: 1500, kategori: "kertas", img: "atk/kertas-folio.webp", deskripsi: "Per lembar, minimal 10" },
+        ];
+
+        const defaultProdukBuket = [
+            { id: 1, nama: "Bouquet Rose Classic", harga: 150000, kategori: "anniversary", img: "buket/bouquet-rose-classic.webp", deskripsi: "Rangkaian mawar merah premium dengan baby breath dan wrapping elegan.", badge: "Best Seller" },
+            { id: 2, nama: "Wisuda Sunflower Joy", harga: 120000, kategori: "wisuda", img: "buket/wisuda-sunflower-joy.webp", deskripsi: "Buket sunflower cerah untuk merayakan momen kelulusan istimewa.", badge: "Popular" },
+            { id: 3, nama: "Pink Lily Bouquet", harga: 180000, kategori: "anniversary", img: "buket/pink-lily-bouquet.webp", deskripsi: "Lily pink elegan dengan sentuhan eucalyptus dan pita satin.", badge: "" },
+            { id: 4, nama: "Birthday Rainbow Mix", harga: 95000, kategori: "ulang-tahun", img: "buket/birthday-rainbow-mix.webp", deskripsi: "Campuran bunga warna-warni ceria untuk ucapan ulang tahun.", badge: "" },
+            { id: 5, nama: "Wisuda Teddy Bear Combo", harga: 200000, kategori: "wisuda", img: "buket/wisuda-teddy-bear.webp", deskripsi: "Buket bunga + boneka teddy bear kecil, cocok untuk wisuda!", badge: "Premium" },
+            { id: 6, nama: "Money Bouquet 50K", harga: 85000, kategori: "uang", img: "buket/money-bouquet-50k.webp", deskripsi: "Buket uang Rp50.000 (belum termasuk nominal uang). Kreatif dan unik!", badge: "" },
+            { id: 7, nama: "White Elegance", harga: 165000, kategori: "anniversary", img: "buket/white-elegance.webp", deskripsi: "Buket putih minimalis dengan baby breath dan daun hijau.", badge: "" },
+            { id: 8, nama: "Money Bouquet 100K", harga: 120000, kategori: "uang", img: "buket/money-bouquet-100k.webp", deskripsi: "Buket uang Rp100.000 cantik (belum termasuk nominal uang).", badge: "Popular" },
+            { id: 9, nama: "Wisuda Dried Flower", harga: 135000, kategori: "wisuda", img: "buket/wisuda-dried-flower.webp", deskripsi: "Buket dried flower tahan lama, aesthetic untuk foto wisuda.", badge: "" },
+            { id: 10, nama: "Birthday Snack Bouquet", harga: 75000, kategori: "ulang-tahun", img: "buket/birthday-snack-bouquet.webp", deskripsi: "Buket snack cokelat & permen untuk pecinta kuliner.", badge: "Fun!" },
+            { id: 11, nama: "Red Velvet Romance", harga: 220000, kategori: "anniversary", img: "buket/red-velvet-romance.webp", deskripsi: "50 tangkai mawar merah premium dalam box elegant.", badge: "Luxury" },
+            { id: 12, nama: "Wisuda Orchid Premium", harga: 250000, kategori: "wisuda", img: "buket/wisuda-orchid-premium.webp", deskripsi: "Anggrek ungu cantik dengan wrapping premium dan pita emas.", badge: "Premium" },
+        ];
+
+        const defaultHargaFotokopi = {
+            fotokopiBW: 200, printBW: 500, printWarna: 1500,
+            printA3BW: 1000, printA3Warna: 3000,
+            jilidSpiral: 5000, jilidLakban: 3000, laminating: 2000
+        };
+
+        const defaultHargaPassFoto = {
+            basic: 15000, standard: 25000, premium: 45000
+        };
+
+        function getDataATK() {
+            return JSON.parse(localStorage.getItem('adminProdukATK')) || [...defaultProdukATK];
+        }
+        function setDataATK(data) {
+            localStorage.setItem('adminProdukATK', JSON.stringify(data));
+        }
+        function getDataBuket() {
+            return JSON.parse(localStorage.getItem('adminProdukBuket')) || [...defaultProdukBuket];
+        }
+        function setDataBuket(data) {
+            localStorage.setItem('adminProdukBuket', JSON.stringify(data));
+        }
+        function getHargaFotokopi() {
+            return JSON.parse(localStorage.getItem('adminHargaFotokopi')) || { ...defaultHargaFotokopi };
+        }
+        function getHargaPassFoto() {
+            return JSON.parse(localStorage.getItem('adminHargaPassFoto')) || { ...defaultHargaPassFoto };
+        }
+
+        function getKategoriATKLabel(kat) {
+            const labels = { tulis: 'Alat Tulis', kertas: 'Kertas & Buku', kantor: 'Kantor', sekolah: 'Sekolah' };
+            return labels[kat] || kat;
+        }
+        function getKategoriBuketLabel(kat) {
+            const labels = { wisuda: '🎓 Wisuda', anniversary: '💕 Anniversary', 'ulang-tahun': '🎂 Ulang Tahun', uang: '💰 Buket Uang' };
+            return labels[kat] || kat;
+        }
+
+        function renderTabelATK() {
+            let data = getDataATK();
+            const search = document.getElementById('searchATK').value.toLowerCase();
+            const filterKat = document.getElementById('filterKatATK').value;
+            if (search) data = data.filter(p => p.nama.toLowerCase().includes(search) || (p.deskripsi && p.deskripsi.toLowerCase().includes(search)));
+            if (filterKat) data = data.filter(p => p.kategori === filterKat);
+
+            const allData = getDataATK();
+            document.getElementById('statATKTotal').textContent = allData.length;
+            const kats = new Set(allData.map(p => p.kategori));
+            document.getElementById('statATKKategori').textContent = kats.size;
+            const avg = allData.length > 0 ? Math.round(allData.reduce((s, p) => s + p.harga, 0) / allData.length / 1000) : 0;
+            document.getElementById('statATKHarga').textContent = avg + 'K';
+
+            const tbody = document.getElementById('bodyATK');
+            const table = document.getElementById('tabelATK');
+            const empty = document.getElementById('emptyATK');
+            if (data.length === 0) {
+                table.style.display = 'none';
+                empty.style.display = 'block';
+                return;
+            }
+            table.style.display = 'table';
+            empty.style.display = 'none';
+            tbody.innerHTML = data.map(p => `<tr>
+                <td><img src="${p.img || 'logo.webp'}" alt="${p.nama}" class="img-preview" onerror="this.src='logo.webp'"></td>
+                <td><strong style="font-size: 0.88rem;">${p.nama}</strong><br><small style="color: #888;">${p.deskripsi || '-'}</small></td>
+                <td><span class="badge-kategori badge-${p.kategori}">${getKategoriATKLabel(p.kategori)}</span></td>
+                <td><strong>Rp ${p.harga.toLocaleString('id-ID')}</strong></td>
+                <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${p.deskripsi || ''}">${p.deskripsi || '-'}</td>
+                <td>
+                    <div class="d-flex gap-1">
+                        <button class="btn-edit" onclick="editProdukATK(${p.id})" title="Edit"><i class="bi bi-pencil-square"></i></button>
+                        <button class="btn-hapus" onclick="hapusProdukATK(${p.id})" title="Hapus"><i class="bi bi-trash3"></i></button>
+                    </div>
+                </td>
+            </tr>`).join('');
+        }
+
+        function bukaModalATK(editId) {
+            document.getElementById('editIdATK').value = '';
+            document.getElementById('formATK').reset();
+            document.getElementById('modalATKTitle').innerHTML = '<i class="bi bi-plus-circle me-2"></i>Tambah Produk ATK';
+            new bootstrap.Modal(document.getElementById('modalATK')).show();
+        }
+
+        function editProdukATK(id) {
+            const data = getDataATK();
+            const produk = data.find(p => p.id === id);
+            if (!produk) return;
+            document.getElementById('editIdATK').value = produk.id;
+            document.getElementById('namaATK').value = produk.nama;
+            document.getElementById('hargaATK').value = produk.harga;
+            document.getElementById('kategoriATK').value = produk.kategori;
+            document.getElementById('imgATK').value = produk.img || '';
+            document.getElementById('deskATK').value = produk.deskripsi || '';
+            document.getElementById('modalATKTitle').innerHTML = '<i class="bi bi-pencil-square me-2"></i>Edit Produk ATK';
+            new bootstrap.Modal(document.getElementById('modalATK')).show();
+        }
+
+        function simpanProdukATK(event) {
+            event.preventDefault();
+            let data = getDataATK();
+            const editId = document.getElementById('editIdATK').value;
+            const produk = {
+                nama: document.getElementById('namaATK').value,
+                harga: parseInt(document.getElementById('hargaATK').value),
+                kategori: document.getElementById('kategoriATK').value,
+                img: document.getElementById('imgATK').value || 'logo.webp',
+                deskripsi: document.getElementById('deskATK').value
+            };
+            if (editId) {
+                const idx = data.findIndex(p => p.id === parseInt(editId));
+                if (idx !== -1) {
+                    produk.id = parseInt(editId);
+                    data[idx] = produk;
+                }
+            } else {
+                produk.id = data.length > 0 ? Math.max(...data.map(p => p.id)) + 1 : 1;
+                data.push(produk);
+            }
+            setDataATK(data);
+            bootstrap.Modal.getInstance(document.getElementById('modalATK')).hide();
+            renderTabelATK();
+            tampilToast(editId ? 'Produk ATK berhasil diperbarui!' : 'Produk ATK berhasil ditambahkan!');
+            return false;
+        }
+
+        function hapusProdukATK(id) {
+            if (!confirm('Yakin hapus produk ini?')) return;
+            let data = getDataATK();
+            data = data.filter(p => p.id !== id);
+            setDataATK(data);
+            renderTabelATK();
+            tampilToast('Produk ATK berhasil dihapus!');
+        }
+
+        function renderTabelBuket() {
+            let data = getDataBuket();
+            const search = document.getElementById('searchBuket').value.toLowerCase();
+            const filterKat = document.getElementById('filterKatBuket').value;
+            if (search) data = data.filter(b => b.nama.toLowerCase().includes(search) || (b.deskripsi && b.deskripsi.toLowerCase().includes(search)));
+            if (filterKat) data = data.filter(b => b.kategori === filterKat);
+
+            const allData = getDataBuket();
+            document.getElementById('statBuketTotal').textContent = allData.length;
+            const kats = new Set(allData.map(b => b.kategori));
+            document.getElementById('statBuketKategori').textContent = kats.size;
+            const avg = allData.length > 0 ? Math.round(allData.reduce((s, b) => s + b.harga, 0) / allData.length / 1000) : 0;
+            document.getElementById('statBuketHarga').textContent = avg + 'K';
+
+            const tbody = document.getElementById('bodyBuket');
+            const table = document.getElementById('tabelBuket');
+            const empty = document.getElementById('emptyBuket');
+            if (data.length === 0) {
+                table.style.display = 'none';
+                empty.style.display = 'block';
+                return;
+            }
+            table.style.display = 'table';
+            empty.style.display = 'none';
+            tbody.innerHTML = data.map(b => `<tr>
+                <td><img src="${b.img || 'logo.webp'}" alt="${b.nama}" class="img-preview" onerror="this.src='logo.webp'"></td>
+                <td><strong style="font-size: 0.88rem;">${b.nama}</strong><br><small style="color: #888;">${(b.deskripsi || '').substring(0, 50)}${(b.deskripsi || '').length > 50 ? '...' : ''}</small></td>
+                <td><span class="badge-kategori badge-${b.kategori}">${getKategoriBuketLabel(b.kategori)}</span></td>
+                <td><strong>Rp ${b.harga.toLocaleString('id-ID')}</strong></td>
+                <td>${b.badge ? `<span style="background: rgba(231,76,139,0.1); color: #e74c8b; padding: 3px 10px; border-radius: 50px; font-size: 0.72rem; font-weight: 600;">${b.badge}</span>` : '<span style="color:#ccc;">-</span>'}</td>
+                <td>
+                    <div class="d-flex gap-1">
+                        <button class="btn-edit" onclick="editProdukBuket(${b.id})" title="Edit"><i class="bi bi-pencil-square"></i></button>
+                        <button class="btn-hapus" onclick="hapusProdukBuket(${b.id})" title="Hapus"><i class="bi bi-trash3"></i></button>
+                    </div>
+                </td>
+            </tr>`).join('');
+        }
+
+        function bukaModalBuket() {
+            document.getElementById('editIdBuket').value = '';
+            document.getElementById('formBuket').reset();
+            document.getElementById('modalBuketTitle').innerHTML = '<i class="bi bi-plus-circle me-2"></i>Tambah Buket Bunga';
+            new bootstrap.Modal(document.getElementById('modalBuket')).show();
+        }
+
+        function editProdukBuket(id) {
+            const data = getDataBuket();
+            const buket = data.find(b => b.id === id);
+            if (!buket) return;
+            document.getElementById('editIdBuket').value = buket.id;
+            document.getElementById('namaBuket').value = buket.nama;
+            document.getElementById('hargaBuket').value = buket.harga;
+            document.getElementById('kategoriBuket').value = buket.kategori;
+            document.getElementById('badgeBuket').value = buket.badge || '';
+            document.getElementById('imgBuket').value = buket.img || '';
+            document.getElementById('deskBuket').value = buket.deskripsi || '';
+            document.getElementById('modalBuketTitle').innerHTML = '<i class="bi bi-pencil-square me-2"></i>Edit Buket Bunga';
+            new bootstrap.Modal(document.getElementById('modalBuket')).show();
+        }
+
+        function simpanProdukBuket(event) {
+            event.preventDefault();
+            let data = getDataBuket();
+            const editId = document.getElementById('editIdBuket').value;
+            const buket = {
+                nama: document.getElementById('namaBuket').value,
+                harga: parseInt(document.getElementById('hargaBuket').value),
+                kategori: document.getElementById('kategoriBuket').value,
+                img: document.getElementById('imgBuket').value || 'logo.webp',
+                deskripsi: document.getElementById('deskBuket').value,
+                badge: document.getElementById('badgeBuket').value
+            };
+            if (editId) {
+                const idx = data.findIndex(b => b.id === parseInt(editId));
+                if (idx !== -1) {
+                    buket.id = parseInt(editId);
+                    data[idx] = buket;
+                }
+            } else {
+                buket.id = data.length > 0 ? Math.max(...data.map(b => b.id)) + 1 : 1;
+                data.push(buket);
+            }
+            setDataBuket(data);
+            bootstrap.Modal.getInstance(document.getElementById('modalBuket')).hide();
+            renderTabelBuket();
+            tampilToast(editId ? 'Buket bunga berhasil diperbarui!' : 'Buket bunga berhasil ditambahkan!');
+            return false;
+        }
+
+        function hapusProdukBuket(id) {
+            if (!confirm('Yakin hapus buket ini?')) return;
+            let data = getDataBuket();
+            data = data.filter(b => b.id !== id);
+            setDataBuket(data);
+            renderTabelBuket();
+            tampilToast('Buket bunga berhasil dihapus!');
+        }
+
+        function loadHargaFotokopi() {
+            const harga = getHargaFotokopi();
+            document.getElementById('hargaFotokopiBW').value = harga.fotokopiBW;
+            document.getElementById('hargaPrintBW').value = harga.printBW;
+            document.getElementById('hargaPrintWarna').value = harga.printWarna;
+            document.getElementById('hargaPrintA3BW').value = harga.printA3BW;
+            document.getElementById('hargaPrintA3Warna').value = harga.printA3Warna;
+            document.getElementById('hargaJilidSpiral').value = harga.jilidSpiral;
+            document.getElementById('hargaJilidLakban').value = harga.jilidLakban;
+            document.getElementById('hargaLaminating').value = harga.laminating;
+        }
+
+        function simpanHargaFotokopi() {
+            const harga = {
+                fotokopiBW: parseInt(document.getElementById('hargaFotokopiBW').value) || 200,
+                printBW: parseInt(document.getElementById('hargaPrintBW').value) || 500,
+                printWarna: parseInt(document.getElementById('hargaPrintWarna').value) || 1500,
+                printA3BW: parseInt(document.getElementById('hargaPrintA3BW').value) || 1000,
+                printA3Warna: parseInt(document.getElementById('hargaPrintA3Warna').value) || 3000,
+                jilidSpiral: parseInt(document.getElementById('hargaJilidSpiral').value) || 5000,
+                jilidLakban: parseInt(document.getElementById('hargaJilidLakban').value) || 3000,
+                laminating: parseInt(document.getElementById('hargaLaminating').value) || 2000
+            };
+            localStorage.setItem('adminHargaFotokopi', JSON.stringify(harga));
+            tampilToast('Harga Fotokopi & Print berhasil disimpan!');
+        }
+
+        function loadHargaPassFoto() {
+            const harga = getHargaPassFoto();
+            document.getElementById('hargaPaketBasic').value = harga.basic;
+            document.getElementById('hargaPaketStandard').value = harga.standard;
+            document.getElementById('hargaPaketPremium').value = harga.premium;
+        }
+
+        function simpanHargaPassFoto() {
+            const harga = {
+                basic: parseInt(document.getElementById('hargaPaketBasic').value) || 15000,
+                standard: parseInt(document.getElementById('hargaPaketStandard').value) || 25000,
+                premium: parseInt(document.getElementById('hargaPaketPremium').value) || 45000
+            };
+            localStorage.setItem('adminHargaPassFoto', JSON.stringify(harga));
+            tampilToast('Harga Pass Foto berhasil disimpan!');
+        }
+
+        renderTabelATK();
+        renderTabelBuket();
+        loadHargaFotokopi();
+        loadHargaPassFoto();
+    </script>
+</body>
+
+</html>

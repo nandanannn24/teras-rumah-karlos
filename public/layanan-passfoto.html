@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Layanan Pass Foto Teras Rumah Karlos - Reservasi jadwal foto profesional untuk dokumen resmi.">
+    <title>Pass Foto | Teras Rumah Karlos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-utama: #F9F8F6;
+            --hijau-pekat: #2E5E3F;
+            --hijau-hover: #3A7A52;
+            --peach: #FFDAB9;
+            --gold: #E2C275;
+            --charcoal: #2D3436;
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-utama);
+            color: var(--charcoal);
+        }
+
+        .navbar-custom {
+            background: var(--hijau-pekat);
+            padding: 0.8rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .navbar-custom .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #fff !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-custom .navbar-brand img {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .navbar-custom .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 400;
+            font-size: 0.92rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-custom .nav-link:hover,
+        .navbar-custom .nav-link.active {
+            color: #fff !important;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,255,255,0.9)' stroke-linecap='round' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--hijau-pekat) 0%, #1a3a28 100%);
+            padding: 3rem 0 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(226, 194, 117, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .page-header p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .breadcrumb-custom a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        .breadcrumb-custom span {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .paket-card {
+            background: #fff;
+            border-radius: 20px;
+            border: 2px solid rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .paket-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--hijau-pekat), var(--gold));
+            transform: scaleX(0);
+            transition: 0.4s;
+        }
+
+        .paket-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .paket-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .paket-card.popular {
+            border-color: var(--gold);
+        }
+
+        .paket-card .popular-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--gold);
+            color: var(--charcoal);
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 50px;
+        }
+
+        .paket-card .paket-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .paket-card h5 {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .paket-card .paket-harga {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--hijau-pekat);
+            margin: 0.8rem 0;
+        }
+
+        .paket-card .paket-harga small {
+            font-size: 0.75rem;
+            color: #999;
+            font-weight: 400;
+        }
+
+        .paket-card ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .paket-card ul li {
+            font-size: 0.85rem;
+            color: #666;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .paket-card ul li i {
+            color: var(--hijau-pekat);
+            margin-right: 8px;
+        }
+
+        .btn-pilih-paket {
+            background: var(--hijau-pekat);
+            color: #fff;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 50px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn-pilih-paket:hover {
+            background: var(--hijau-hover);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .form-card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.06), -8px -8px 20px rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .form-label-custom {
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-control-custom,
+        .form-select-custom {
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control-custom:focus,
+        .form-select-custom:focus {
+            border-color: var(--hijau-pekat);
+            box-shadow: 0 0 0 3px rgba(46, 94, 63, 0.1);
+        }
+
+        input[type="date"],
+        input[type="time"] {
+            cursor: pointer;
+        }
+
+        .time-slot {
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #666;
+            background: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .time-slot:hover:not(.disabled) {
+            border-color: var(--hijau-pekat);
+            color: var(--hijau-pekat);
+        }
+
+        .time-slot.selected {
+            background: var(--hijau-pekat);
+            color: #fff;
+            border-color: var(--hijau-pekat);
+        }
+
+        .time-slot.disabled {
+            background: #f5f5f5;
+            color: #ccc;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+
+        .size-option {
+            border: 2px solid #eee;
+            border-radius: 12px;
+            padding: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .size-option:hover,
+        .size-option.selected {
+            border-color: var(--hijau-pekat);
+            background: rgba(46, 94, 63, 0.04);
+        }
+
+        .size-option input[type="radio"] {
+            display: none;
+        }
+
+        .size-option .size-preview {
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            margin: 0 auto 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #bbb;
+            background: var(--bg-utama);
+        }
+
+        .size-option h6 {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .size-option p {
+            font-size: 0.75rem;
+            color: #888;
+            margin: 0.2rem 0 0;
+        }
+
+        .payment-option {
+            border: 2px solid #eee;
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .payment-option:hover,
+        .payment-option.selected {
+            border-color: var(--hijau-pekat);
+            background: rgba(46, 94, 63, 0.03);
+        }
+
+        .payment-option input[type="radio"] {
+            accent-color: var(--hijau-pekat);
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-submit {
+            background: var(--gold);
+            color: var(--charcoal);
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: var(--peach);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(226, 194, 117, 0.3);
+            color: var(--charcoal);
+        }
+
+        .summary-box {
+            background: var(--bg-utama);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 2px solid rgba(46, 94, 63, 0.1);
+        }
+
+        .footer {
+            background: var(--hijau-pekat);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 2rem 0;
+        }
+
+        .toast-success {
+            background: var(--hijau-pekat) !important;
+            color: #fff !important;
+            border-radius: 12px !important;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-utama);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--hijau-pekat);
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><img src="logo.webp" alt="Logo">Teras Rumah Karlos</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarMenu">
+                <ul class="navbar-nav ms-auto gap-1">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i
+                                class="bi bi-house me-1"></i>Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="toko-atk.html"><i class="bi bi-pencil me-1"></i>Toko
+                            ATK</a></li>
+                    <li class="nav-item"><a class="nav-link" href="toko-buket.html"><i
+                                class="bi bi-flower1 me-1"></i>Buket Bunga</a></li>
+                    <li class="nav-item"><a class="nav-link" href="layanan-fotokopi.html"><i
+                                class="bi bi-printer me-1"></i>Fotokopi</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="layanan-passfoto.html"><i
+                                class="bi bi-camera me-1"></i>Pass Foto</a></li>
+                    <li class="nav-item"><a class="nav-link" href="dashboard-pesanan.html"><i
+                                class="bi bi-clipboard-data me-1"></i>Pesanan</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section class="page-header">
+        <div class="container" style="position: relative; z-index: 2;">
+            <div class="breadcrumb-custom mb-2">
+                <a href="index.html">Beranda</a> <span class="mx-2">/</span> <span>Layanan Pass Foto</span>
+            </div>
+            <h1><i class="bi bi-camera-fill me-2" style="color: var(--gold);"></i>Layanan Pass Foto</h1>
+            <p>Foto profesional untuk dokumen, SKCK, ijazah, KTP, dan lainnya</p>
+        </div>
+    </section>
+    <div class="container py-5">
+        <div class="text-center mb-4" style="margin-top: -1rem;">
+            <span
+                style="display: inline-block; background: rgba(46,94,63,0.1); color: var(--hijau-pekat); font-size: 0.8rem; font-weight: 600; padding: 6px 16px; border-radius: 50px; text-transform: uppercase; letter-spacing: 1px;">
+                Pilih Paket
+            </span>
+            <h3 style="font-weight: 700; margin-top: 0.8rem;">Paket Pass Foto</h3>
+            <p style="color: #888; font-size: 0.95rem;">Pilih ukuran dan paket yang sesuai kebutuhanmu</p>
+        </div>
+        <div class="row g-4 mb-5">
+            <div class="col-lg-4 col-md-6">
+                <div class="paket-card">
+                    <div class="paket-icon" style="background: rgba(52,152,219,0.1); color: #3498db;">
+                        <i class="bi bi-person-badge"></i>
+                    </div>
+                    <h5>Paket Basic</h5>
+                    <p style="font-size: 0.82rem; color: #888;">Ukuran 2×3 / 3×4</p>
+                    <div class="paket-harga">Rp 15.000<small>/paket</small></div>
+                    <ul>
+                        <li><i class="bi bi-check-circle-fill"></i>8 lembar cetak</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Background merah/biru</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Edit ringan (brightness)</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Soft copy via WhatsApp</li>
+                    </ul>
+                    <button class="btn-pilih-paket" onclick="pilihPaket('Paket Basic - 2x3/3x4', 15000)">
+                        Pilih Paket
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="paket-card popular">
+                    <span class="popular-badge"><i class="bi bi-star-fill me-1"></i>Terlaris</span>
+                    <div class="paket-icon" style="background: rgba(226,194,117,0.15); color: var(--gold);">
+                        <i class="bi bi-person-vcard"></i>
+                    </div>
+                    <h5>Paket Standard</h5>
+                    <p style="font-size: 0.82rem; color: #888;">Ukuran 4×6</p>
+                    <div class="paket-harga">Rp 25.000<small>/paket</small></div>
+                    <ul>
+                        <li><i class="bi bi-check-circle-fill"></i>8 lembar cetak</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Background custom</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Edit wajah profesional</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Soft copy HD via WhatsApp</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Cetak ulang 1× gratis</li>
+                    </ul>
+                    <button class="btn-pilih-paket" onclick="pilihPaket('Paket Standard - 4x6', 25000)"
+                        style="background: var(--gold); color: var(--charcoal);">
+                        Pilih Paket
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="paket-card">
+                    <div class="paket-icon" style="background: rgba(46,94,63,0.1); color: var(--hijau-pekat);">
+                        <i class="bi bi-person-square"></i>
+                    </div>
+                    <h5>Paket Premium</h5>
+                    <p style="font-size: 0.82rem; color: #888;">Semua Ukuran</p>
+                    <div class="paket-harga">Rp 45.000<small>/paket</small></div>
+                    <ul>
+                        <li><i class="bi bi-check-circle-fill"></i>12 lembar cetak (mix ukuran)</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Background bebas warna</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Retouching profesional</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Soft copy HD semua ukuran</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Cetak ulang 3× gratis</li>
+                    </ul>
+                    <button class="btn-pilih-paket" onclick="pilihPaket('Paket Premium - All Size', 45000)">
+                        Pilih Paket
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row g-4" id="formReservasi">
+            <div class="col-lg-8">
+                <div class="form-card">
+                    <h4 style="font-weight: 700; margin-bottom: 0.3rem;">
+                        <i class="bi bi-calendar-check me-2" style="color: var(--hijau-pekat);"></i>Form Reservasi
+                        Jadwal
+                    </h4>
+                    <p style="color: #888; font-size: 0.9rem; margin-bottom: 2rem;">Pilih tanggal dan waktu yang Anda
+                        inginkan</p>
+                    <form id="formPassFoto" onsubmit="return prosesReservasi(event)">
+                        <div id="paketTerpilihInfo" class="mb-4"
+                            style="background: rgba(46,94,63,0.06); border-radius: 12px; padding: 1rem; display: none;">
+                            <div class="d-flex align-items-center gap-3">
+                                <i class="bi bi-camera-fill" style="font-size: 1.5rem; color: var(--hijau-pekat);"></i>
+                                <div>
+                                    <h6 style="font-weight: 700; margin-bottom: 0;" id="namaPaketTerpilih">-</h6>
+                                    <span style="font-size: 0.85rem; color: var(--hijau-pekat); font-weight: 600;"
+                                        id="hargaPaketTerpilih">Rp 0</span>
+                                </div>
+                                <button type="button" class="btn btn-sm ms-auto" style="color: #888;"
+                                    onclick="resetPaket()">
+                                    <i class="bi bi-pencil-square"></i> Ganti
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Nama Lengkap *</label>
+                                <input type="text" class="form-control form-control-custom" id="namaPassFoto" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">No. HP / WhatsApp *</label>
+                                <input type="tel" class="form-control form-control-custom" id="hpPassFoto" required>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label-custom">Keperluan Foto *</label>
+                            <select class="form-select form-select-custom" id="keperluanFoto" required>
+                                <option value="">-- Pilih Keperluan --</option>
+                                <option value="SKCK">SKCK</option>
+                                <option value="KTP / e-KTP">KTP / e-KTP</option>
+                                <option value="SIM">SIM</option>
+                                <option value="Ijazah">Ijazah / Rapor</option>
+                                <option value="Visa / Paspor">Visa / Paspor</option>
+                                <option value="Lamaran Kerja">Lamaran Kerja</option>
+                                <option value="Kartu Pelajar">Kartu Pelajar</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label-custom">Warna Background *</label>
+                            <div class="d-flex gap-3 flex-wrap">
+                                <label class="size-option" style="padding: 0.8rem 1.5rem;" onclick="selectBg(this)">
+                                    <input type="radio" name="bgColor" value="Merah" required>
+                                    <div
+                                        style="width: 30px; height: 30px; border-radius: 50%; background: #e74c3c; margin: 0 auto 0.4rem; border: 2px solid #ddd;">
+                                    </div>
+                                    <h6>Merah</h6>
+                                </label>
+                                <label class="size-option" style="padding: 0.8rem 1.5rem;" onclick="selectBg(this)">
+                                    <input type="radio" name="bgColor" value="Biru">
+                                    <div
+                                        style="width: 30px; height: 30px; border-radius: 50%; background: #3498db; margin: 0 auto 0.4rem; border: 2px solid #ddd;">
+                                    </div>
+                                    <h6>Biru</h6>
+                                </label>
+                                <label class="size-option" style="padding: 0.8rem 1.5rem;" onclick="selectBg(this)">
+                                    <input type="radio" name="bgColor" value="Putih">
+                                    <div
+                                        style="width: 30px; height: 30px; border-radius: 50%; background: #fff; margin: 0 auto 0.4rem; border: 2px solid #ddd;">
+                                    </div>
+                                    <h6>Putih</h6>
+                                </label>
+                                <label class="size-option" style="padding: 0.8rem 1.5rem;" onclick="selectBg(this)">
+                                    <input type="radio" name="bgColor" value="Custom">
+                                    <div
+                                        style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #e74c3c, #3498db, #2ecc71); margin: 0 auto 0.4rem; border: 2px solid #ddd;">
+                                    </div>
+                                    <h6>Custom</h6>
+                                </label>
+                            </div>
+                        </div>
+                        <h5 style="font-weight: 600; font-size: 1rem; margin-bottom: 1rem;">
+                            <i class="bi bi-clock me-1" style="color: var(--hijau-pekat);"></i>Pilih Jadwal
+                        </h5>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Tanggal Reservasi *</label>
+                                <input type="date" class="form-control form-control-custom" id="tanggalReservasi"
+                                    required onchange="generateTimeSlots()">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Jam Reservasi *</label>
+                                <input type="time" class="form-control form-control-custom" id="jamReservasi"
+                                    min="08:00" max="20:00" required>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label-custom">Atau pilih slot waktu:</label>
+                            <div class="row g-2" id="timeSlotContainer">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label-custom">Jumlah Orang *</label>
+                            <input type="number" class="form-control form-control-custom" id="jumlahOrang" min="1"
+                                value="1" required onchange="hitungTotalPassFoto()" style="max-width: 200px;">
+                            <small style="color: #888; font-size: 0.78rem;">Harga dihitung per orang.</small>
+                        </div>
+                        <h5 style="font-weight: 600; font-size: 1rem; margin-bottom: 1rem;">
+                            <i class="bi bi-credit-card me-1" style="color: var(--hijau-pekat);"></i>Pengambilan Hasil
+                        </h5>
+                        <div class="d-flex flex-column gap-2 mb-4">
+                            <label class="payment-option">
+                                <input type="radio" name="metodePassFoto" value="COD - Ambil di Tempat" required>
+                                <div>
+                                    <strong style="font-size: 0.9rem;">COD - Ambil di Tempat</strong>
+                                    <div style="font-size: 0.78rem; color: #888;">Datang langsung ke studio kami</div>
+                                </div>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="metodePassFoto" value="COD - Diantar">
+                                <div>
+                                    <strong style="font-size: 0.9rem;">COD - Diantar</strong>
+                                    <div style="font-size: 0.78rem; color: #888;">Hasil foto diantar ke alamat</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div id="alamatAntarWrap" style="display: none;" class="mb-4">
+                            <label class="form-label-custom">Alamat Pengantaran *</label>
+                            <textarea class="form-control form-control-custom" id="alamatAntar" rows="2"></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label-custom">Catatan Tambahan (opsional)</label>
+                            <textarea class="form-control form-control-custom" id="catatanPassFoto" rows="2"
+                                placeholder="Contoh: pakai jas hitam, edit jerawat, dll."></textarea>
+                        </div>
+                        <div class="summary-box mb-4" id="summaryPassFoto">
+                            <h6 style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.8rem;">
+                                <i class="bi bi-receipt me-1"></i> Ringkasan Reservasi
+                            </h6>
+                            <div id="summaryDetail">
+                                <p style="color: #888; font-size: 0.85rem;">Pilih paket terlebih dahulu.</p>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-submit" id="btnSubmitReservasi" disabled>
+                            <i class="bi bi-calendar-check me-2"></i>Konfirmasi Reservasi
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div
+                    style="background: #fff; border-radius: 20px; padding: 1.5rem; border: 1px solid rgba(0,0,0,0.05); box-shadow: var(--shadow-soft); margin-bottom: 1.5rem;">
+                    <h5 style="font-weight: 700; font-size: 1rem; margin-bottom: 1rem;">
+                        <i class="bi bi-info-circle me-1" style="color: var(--hijau-pekat);"></i>Ketentuan
+                    </h5>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="font-size: 0.85rem; padding: 0.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.04);">
+                            <i class="bi bi-check text-success me-2"></i>Datang 10 menit sebelum jadwal
+                        </li>
+                        <li style="font-size: 0.85rem; padding: 0.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.04);">
+                            <i class="bi bi-check text-success me-2"></i>Pakai pakaian rapi & formal
+                        </li>
+                        <li style="font-size: 0.85rem; padding: 0.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.04);">
+                            <i class="bi bi-check text-success me-2"></i>Hasil cetak selesai 15-30 menit
+                        </li>
+                        <li style="font-size: 0.85rem; padding: 0.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.04);">
+                            <i class="bi bi-check text-success me-2"></i>Softcopy dikirim via WhatsApp
+                        </li>
+                        <li style="font-size: 0.85rem; padding: 0.5rem 0;">
+                            <i class="bi bi-check text-success me-2"></i>Bisa reschedule H-1
+                        </li>
+                    </ul>
+                </div>
+                <div
+                    style="background: #fff; border-radius: 20px; padding: 1.5rem; border: 1px solid rgba(0,0,0,0.05); box-shadow: var(--shadow-soft);">
+                    <h5 style="font-weight: 700; font-size: 1rem; margin-bottom: 1rem;">
+                        <i class="bi bi-clock-history me-1" style="color: var(--hijau-pekat);"></i>Jam Operasional
+                    </h5>
+                    <div style="font-size: 0.85rem;">
+                        <div class="d-flex justify-content-between py-2"
+                            style="border-bottom: 1px solid rgba(0,0,0,0.04);">
+                            <span>Senin - Jumat</span>
+                            <strong>08.00 - 20.00</strong>
+                        </div>
+                        <div class="d-flex justify-content-between py-2"
+                            style="border-bottom: 1px solid rgba(0,0,0,0.04);">
+                            <span>Sabtu</span>
+                            <strong>08.00 - 21.00</strong>
+                        </div>
+                        <div class="d-flex justify-content-between py-2">
+                            <span>Minggu</span>
+                            <strong>09.00 - 17.00</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
+        <div id="toastNotif" class="toast toast-success" role="alert">
+            <div class="toast-body d-flex align-items-center gap-2">
+                <i class="bi bi-check-circle-fill fs-5"></i>
+                <span id="toastMessage">Reservasi berhasil!</span>
+            </div>
+        </div>
+    </div>
+    <footer class="footer text-center">
+        <div class="container">
+            <p style="margin: 0; font-size: 0.85rem;">&copy; 2026 Teras Rumah Karlos. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const _hargaPaketAdmin = JSON.parse(localStorage.getItem('adminHargaPassFoto')) || { basic: 15000, standard: 25000, premium: 45000 };
+        (function updatePaketDisplay() {
+            const paketCards = document.querySelectorAll('.paket-card');
+            const hargaMap = [_hargaPaketAdmin.basic, _hargaPaketAdmin.standard, _hargaPaketAdmin.premium];
+            paketCards.forEach((card, i) => {
+                const hargaEl = card.querySelector('.paket-harga');
+                if (hargaEl && hargaMap[i] !== undefined) hargaEl.innerHTML = 'Rp ' + hargaMap[i].toLocaleString('id-ID') + '<small>/paket</small>';
+                const btn = card.querySelector('.btn-pilih-paket');
+                if (btn && hargaMap[i] !== undefined) {
+                    const namaPaket = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
+                    btn.setAttribute('onclick', `pilihPaket('${namaPaket}', ${hargaMap[i]})`);
+                }
+            });
+        })();
+        let paketTerpilih = null;
+        let hargaPaket = 0;
+        function pilihPaket(nama, harga) {
+            paketTerpilih = nama;
+            hargaPaket = harga;
+            document.getElementById('paketTerpilihInfo').style.display = 'block';
+            document.getElementById('namaPaketTerpilih').textContent = nama;
+            document.getElementById('hargaPaketTerpilih').textContent = `Rp ${harga.toLocaleString('id-ID')}`;
+            document.getElementById('btnSubmitReservasi').disabled = false;
+            document.getElementById('formReservasi').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            hitungTotalPassFoto();
+        }
+        function resetPaket() {
+            paketTerpilih = null;
+            hargaPaket = 0;
+            document.getElementById('paketTerpilihInfo').style.display = 'none';
+            document.getElementById('btnSubmitReservasi').disabled = true;
+            document.getElementById('summaryDetail').innerHTML = '<p style="color: #888; font-size: 0.85rem;">Pilih paket terlebih dahulu.</p>';
+        }
+        function generateTimeSlots() {
+            const container = document.getElementById('timeSlotContainer');
+            const slots = ['08:00', '09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00'];
+            const bookedSlots = ['10:00', '14:00', '17:00'];
+            container.innerHTML = slots.map(slot => {
+                const isBooked = bookedSlots.includes(slot);
+                return `
+                    <div class="col-4 col-md-3">
+                        <div class="time-slot ${isBooked ? 'disabled' : ''}" 
+                             onclick="${isBooked ? '' : `selectTimeSlot(this, '${slot}')`}">
+                            <i class="bi ${isBooked ? 'bi-x-circle' : 'bi-clock'} me-1"></i>${slot}
+                            ${isBooked ? '<br><small style="font-size: 0.65rem;">Penuh</small>' : ''}
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+        function selectTimeSlot(el, time) {
+            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+            el.classList.add('selected');
+            document.getElementById('jamReservasi').value = time;
+        }
+        function selectBg(el) {
+            document.querySelectorAll('.size-option').forEach(s => s.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+        function hitungTotalPassFoto() {
+            if (!paketTerpilih) return;
+            const jumlah = parseInt(document.getElementById('jumlahOrang').value) || 1;
+            const total = hargaPaket * jumlah;
+            document.getElementById('summaryDetail').innerHTML = `
+                <div class="d-flex justify-content-between mb-1">
+                    <span style="font-size: 0.85rem;">${paketTerpilih} × ${jumlah} orang</span>
+                    <span style="font-size: 0.85rem;">Rp ${total.toLocaleString('id-ID')}</span>
+                </div>
+                <hr style="margin: 0.5rem 0;">
+                <div class="d-flex justify-content-between">
+                    <strong>Total Bayar</strong>
+                    <strong style="color: var(--hijau-pekat); font-size: 1.1rem;">Rp ${total.toLocaleString('id-ID')}</strong>
+                </div>
+            `;
+        }
+        document.querySelectorAll('input[name="metodePassFoto"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                const wrap = document.getElementById('alamatAntarWrap');
+                wrap.style.display = this.value.includes('Diantar') ? 'block' : 'none';
+                document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+                this.closest('.payment-option').classList.add('selected');
+            });
+        });
+        function prosesReservasi(event) {
+            event.preventDefault();
+            if (!paketTerpilih) {
+                alert('Pilih paket terlebih dahulu!');
+                return false;
+            }
+            const bgColor = document.querySelector('input[name="bgColor"]:checked');
+            const metodeBayar = document.querySelector('input[name="metodePassFoto"]:checked');
+            if (!bgColor) { alert('Pilih warna background!'); return false; }
+            if (!metodeBayar) { alert('Pilih metode pengambilan!'); return false; }
+            const jumlah = parseInt(document.getElementById('jumlahOrang').value) || 1;
+            const total = hargaPaket * jumlah;
+            const idPesanan = 'PFT-' + Date.now().toString(36).toUpperCase();
+            let antrianCounters = JSON.parse(localStorage.getItem('antrianCounters')) || { ATK: 0, BKT: 0, FTK: 0, PFT: 0 };
+            antrianCounters.PFT++;
+            localStorage.setItem('antrianCounters', JSON.stringify(antrianCounters));
+            const pesananBaru = {
+                id: idPesanan,
+                tipe: 'Pass Foto',
+                nama: document.getElementById('namaPassFoto').value,
+                hp: document.getElementById('hpPassFoto').value,
+                alamat: document.getElementById('alamatAntar').value || 'Ambil di Toko',
+                catatan: document.getElementById('catatanPassFoto').value || '-',
+                nomorAntrian: antrianCounters.PFT,
+                items: [{
+                    nama: paketTerpilih,
+                    qty: jumlah,
+                    harga: hargaPaket,
+                    subtotal: total
+                }],
+                detail: {
+                    keperluan: document.getElementById('keperluanFoto').value,
+                    background: bgColor.value,
+                    tanggal: document.getElementById('tanggalReservasi').value,
+                    jam: document.getElementById('jamReservasi').value
+                },
+                total: total,
+                metode: metodeBayar.value,
+                status: 'Terjadwal',
+                tanggal: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }),
+                waktu: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+            };
+            let semuaPesanan = JSON.parse(localStorage.getItem('pesananTRK')) || [];
+            semuaPesanan.push(pesananBaru);
+            localStorage.setItem('pesananTRK', JSON.stringify(semuaPesanan));
+            document.getElementById('formPassFoto').reset();
+            resetPaket();
+            document.querySelectorAll('.size-option').forEach(s => s.classList.remove('selected'));
+            document.querySelectorAll('.payment-option').forEach(s => s.classList.remove('selected'));
+            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+            document.getElementById('alamatAntarWrap').style.display = 'none';
+            tampilToast(`Reservasi ${idPesanan} berhasil! Jangan lupa datang sesuai jadwal ya 📸`);
+            return false;
+        }
+        function tampilToast(pesan) {
+            document.getElementById('toastMessage').textContent = pesan;
+            const toast = new bootstrap.Toast(document.getElementById('toastNotif'), { delay: 4000 });
+            toast.show();
+        }
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        document.getElementById('tanggalReservasi').min = tomorrow.toISOString().split('T')[0];
+        generateTimeSlots();
+    </script>
+</body>
+
+</html>
