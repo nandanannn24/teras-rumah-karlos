@@ -2,9 +2,10 @@ import { getSQL, ok, err, cors } from './db.mjs';
 
 export default async (req) => {
   if (req.method === 'OPTIONS') return cors();
-  const sql = getSQL();
-
+  
   try {
+    const sql = getSQL();
+
     if (req.method === 'GET') {
       const products = await sql`SELECT * FROM products_buket ORDER BY id`;
       return ok(products);
