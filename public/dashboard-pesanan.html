@@ -312,6 +312,11 @@
             font-weight: 600;
         }
 
+        .badge-menunggu {
+            background: rgba(226, 194, 117, 0.2);
+            color: #b8860b;
+        }
+
         .badge-diproses {
             background: rgba(52, 152, 219, 0.12);
             color: #3498db;
@@ -320,11 +325,6 @@
         .badge-selesai {
             background: rgba(46, 94, 63, 0.12);
             color: var(--hijau-pekat);
-        }
-
-        .badge-terjadwal {
-            background: rgba(226, 194, 117, 0.2);
-            color: #b8860b;
         }
 
         .badge-dibatalkan {
@@ -544,11 +544,6 @@
             color: var(--gold);
         }
 
-        .antrian-nomor.done {
-            background: rgba(46, 94, 63, 0.1);
-            color: var(--hijau-pekat);
-        }
-
         .antrian-info h6 {
             font-weight: 600;
             font-size: 0.88rem;
@@ -579,11 +574,6 @@
             color: #b8860b;
         }
 
-        .antrian-status-badge.selesai-antri {
-            background: rgba(46, 94, 63, 0.1);
-            color: var(--hijau-pekat);
-        }
-
         .btn-antrian-action {
             border: none;
             padding: 6px 14px;
@@ -593,8 +583,6 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-
-
 
         .pagination-custom .page-item .page-link {
             border: none;
@@ -709,7 +697,7 @@
                 <a href="index.html">Beranda</a> <span class="mx-2">/</span> <span>Dashboard Pesanan</span>
             </div>
             <h1><i class="bi bi-clipboard-data-fill me-2" style="color: var(--gold);"></i>Dashboard Pesanan</h1>
-            <p>Pantau riwayat pesanan dan antrian pengambilan</p>
+            <p>Pantau riwayat pesanan dan antrian secara Live dari Database</p>
         </div>
     </section>
     <div class="container py-5">
@@ -725,7 +713,7 @@
         </div>
         <div class="tab-content-section active" id="tabPesanan">
             <div class="row g-3 mb-4">
-                <div class="col-lg-3 col-md-6 col-6">
+                <div class="col-lg-4 col-md-4">
                     <div class="stat-card">
                         <div class="stat-icon" style="background: rgba(46,94,63,0.1); color: var(--hijau-pekat);"><i
                                 class="bi bi-bag-check-fill"></i></div>
@@ -733,28 +721,20 @@
                         <div class="stat-label">Total Pesanan</div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 col-6">
+                <div class="col-lg-4 col-md-4">
                     <div class="stat-card">
                         <div class="stat-icon" style="background: rgba(52,152,219,0.1); color: #3498db;"><i
                                 class="bi bi-hourglass-split"></i></div>
                         <div class="stat-value" id="statDiproses">0</div>
-                        <div class="stat-label">Diproses</div>
+                        <div class="stat-label">Sedang Diproses</div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 col-6">
+                <div class="col-lg-4 col-md-4">
                     <div class="stat-card">
                         <div class="stat-icon" style="background: rgba(46,94,63,0.1); color: var(--hijau-pekat);"><i
                                 class="bi bi-check-circle-fill"></i></div>
                         <div class="stat-value" id="statSelesai">0</div>
                         <div class="stat-label">Selesai</div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-6">
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: rgba(226,194,117,0.15); color: var(--gold);"><i
-                                class="bi bi-cash-stack"></i></div>
-                        <div class="stat-value" id="statPendapatan" style="font-size: 1.3rem;">Rp 0</div>
-                        <div class="stat-label">Total Pendapatan</div>
                     </div>
                 </div>
             </div>
@@ -771,22 +751,23 @@
                     <div class="col-lg-2 col-md-3 col-6">
                         <select class="form-select filter-select" id="filterTipe" onchange="filterPesanan()">
                             <option value="">Semua Tipe</option>
-                            <option value="Toko ATK">Toko ATK</option>
-                            <option value="Buket Bunga">Buket Bunga</option>
-                            <option value="Fotokopi & Print">Fotokopi</option>
-                            <option value="Pass Foto">Pass Foto</option>
+                            <option value="atk">Toko ATK</option>
+                            <option value="buket">Buket Bunga</option>
+                            <option value="fotokopi">Fotokopi & Print</option>
+                            <option value="passfoto">Pass Foto</option>
                         </select>
                     </div>
                     <div class="col-lg-2 col-md-3 col-6">
                         <select class="form-select filter-select" id="filterStatus" onchange="filterPesanan()">
                             <option value="">Semua Status</option>
+                            <option value="Menunggu">Menunggu</option>
                             <option value="Diproses">Diproses</option>
                             <option value="Selesai">Selesai</option>
-                            <option value="Terjadwal">Terjadwal</option>
                             <option value="Dibatalkan">Dibatalkan</option>
                         </select>
                     </div>
                     <div class="col-lg-4 col-md-12 text-lg-end">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadDataServer()"><i class="bi bi-arrow-clockwise me-1"></i>Refresh Data</button>
                     </div>
                 </div>
             </div>
@@ -794,14 +775,12 @@
                 <table class="table table-pesanan" id="tabelPesanan">
                     <thead>
                         <tr>
-                            <th>ID Pesanan</th>
-                            <th>Tipe</th>
-                            <th>Nama</th>
-                            <th>Item</th>
-                            <th>Total</th>
-                            <th>Metode</th>
+                            <th>ID</th>
+                            <th>Tipe Layanan</th>
+                            <th>Pemesan</th>
+                            <th>Detail Order</th>
+                            <th>Waktu</th>
                             <th>Status</th>
-                            <th>Tanggal</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -810,7 +789,7 @@
                 <div id="emptyState" class="empty-state" style="display: none;">
                     <i class="bi bi-inbox d-block"></i>
                     <h5>Belum Ada Pesanan</h5>
-                    <p>Pesanan dari semua layanan akan muncul di sini.</p>
+                    <p>Pesanan dari semua layanan akan ditarik dari Cloud Database dan muncul di sini.</p>
                 </div>
             </div>
             <div class="d-flex justify-content-between align-items-center">
@@ -885,7 +864,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-receipt me-2"></i>Detail Pesanan</h5>
+                    <h5 class="modal-title"><i class="bi bi-receipt me-2"></i>Detail Pesanan Full</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body" id="modalDetailBody"></div>
@@ -912,14 +891,15 @@
         }
         const adminNama = localStorage.getItem('adminNama') || 'Admin';
         document.getElementById('adminName').textContent = adminNama;
+        
         function logoutAdmin() {
             if (confirm('Yakin ingin logout?')) {
                 localStorage.removeItem('adminLoggedIn');
                 localStorage.removeItem('adminNama');
-                localStorage.removeItem('adminUsername');
                 window.location.href = 'login-admin.html';
             }
         }
+        
         function switchTab(tabName, btn) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
@@ -927,14 +907,47 @@
             document.getElementById(tabName === 'pesanan' ? 'tabPesanan' : 'tabAntrian').classList.add('active');
             if (tabName === 'antrian') renderAntrian();
         }
-        let semuaPesanan = JSON.parse(localStorage.getItem('pesananTRK')) || [];
-        let pesananFiltered = [...semuaPesanan];
+
+        // ==========================================
+        // FETCH DARI DATABASE CLOUD (NEON)
+        // ==========================================
+        let semuaPesanan = [];
+        let pesananFiltered = [];
         const ITEMS_PER_PAGE = 10;
         let currentPage = 1;
+
+        async function loadDataServer() {
+            try {
+                const res = await fetch('/.netlify/functions/orders');
+                if (res.ok) {
+                    semuaPesanan = await res.json();
+                    filterPesanan();
+                    updateStatistik();
+                    renderAntrian();
+                } else {
+                    console.error("Gagal narik data pesanan");
+                }
+            } catch (e) {
+                console.error("Error:", e);
+                alert("Gagal konek ke database pesanan!");
+            }
+        }
+
+        function getTipeLabel(layanan) {
+            const labels = { 'atk': 'Toko ATK', 'buket': 'Buket Bunga', 'fotokopi': 'Fotokopi & Print', 'passfoto': 'Pass Foto' };
+            return labels[layanan] || layanan;
+        }
+
+        function getTipeClass(layanan) {
+            const classes = { 'atk': 'badge-atk', 'buket': 'badge-buket', 'fotokopi': 'badge-fotokopi', 'passfoto': 'badge-passfoto' };
+            return classes[layanan] || 'badge-atk';
+        }
+
         function renderTabel() {
             const tbody = document.getElementById('bodyTabel');
             const emptyState = document.getElementById('emptyState');
             const tableEl = document.getElementById('tabelPesanan');
+            
             if (pesananFiltered.length === 0) {
                 tableEl.style.display = 'none';
                 emptyState.style.display = 'block';
@@ -942,6 +955,7 @@
                 document.getElementById('paginationNav').innerHTML = '';
                 return;
             }
+            
             tableEl.style.display = 'table';
             emptyState.style.display = 'none';
             const totalPages = Math.ceil(pesananFiltered.length / ITEMS_PER_PAGE);
@@ -949,31 +963,36 @@
             const start = (currentPage - 1) * ITEMS_PER_PAGE;
             const end = start + ITEMS_PER_PAGE;
             const pageData = pesananFiltered.slice(start, end);
+            
             tbody.innerHTML = pageData.map(p => {
-                const tipeBadgeClass = { 'Toko ATK': 'badge-atk', 'Buket Bunga': 'badge-buket', 'Fotokopi & Print': 'badge-fotokopi', 'Pass Foto': 'badge-passfoto' }[p.tipe] || 'badge-atk';
-                const statusBadgeClass = { 'Diproses': 'badge-diproses', 'Selesai': 'badge-selesai', 'Terjadwal': 'badge-terjadwal', 'Dibatalkan': 'badge-dibatalkan' }[p.status] || 'badge-diproses';
-                const itemsSummary = p.items ? p.items.map(i => `${i.nama} (×${i.qty})`).join(', ') : '-';
+                const tipeBadgeClass = getTipeClass(p.layanan);
+                const tipeLabel = getTipeLabel(p.layanan);
+                const statusBadgeClass = { 'Menunggu': 'badge-menunggu', 'Diproses': 'badge-diproses', 'Selesai': 'badge-selesai', 'Dibatalkan': 'badge-dibatalkan' }[p.status] || 'badge-menunggu';
+                
+                // Bikin detail text jadi pendek buat preview di tabel
+                const shortDetail = p.detail.length > 50 ? p.detail.substring(0, 50) + '...' : p.detail;
+                const tanggalBagus = new Date(p.waktu_pesan).toLocaleString('id-ID');
+
                 return `<tr>
-                    <td><strong style="color: var(--hijau-pekat); font-size: 0.82rem;">${p.id}</strong></td>
-                    <td><span class="badge-tipe ${tipeBadgeClass}">${p.tipe}</span></td>
-                    <td>${p.nama}</td>
-                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${itemsSummary}">${itemsSummary}</td>
-                    <td><strong>Rp ${p.total.toLocaleString('id-ID')}</strong></td>
-                    <td style="font-size: 0.8rem;">${p.metode}</td>
+                    <td><strong style="color: var(--hijau-pekat); font-size: 0.82rem;">#${p.id}</strong></td>
+                    <td><span class="badge-tipe ${tipeBadgeClass}">${tipeLabel}</span></td>
+                    <td>${p.nama_pelanggan || 'Guest'}</td>
+                    <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${p.detail}">${shortDetail}</td>
+                    <td style="font-size: 0.8rem;">${tanggalBagus}</td>
                     <td><span class="badge-status ${statusBadgeClass}">${p.status}</span></td>
-                    <td style="font-size: 0.8rem; white-space: nowrap;">${p.tanggal}<br><small style="color: #aaa;">${p.waktu}</small></td>
                     <td>
                         <div class="d-flex gap-1">
-                            <button class="btn-action btn-action-detail" onclick="lihatDetail('${p.id}')" title="Detail"><i class="bi bi-eye"></i></button>
-                            <button class="btn-action btn-action-status" onclick="ubahStatus('${p.id}')" title="Ubah Status"><i class="bi bi-arrow-repeat"></i></button>
-                            <button class="btn-action btn-action-delete" onclick="hapusPesanan('${p.id}')" title="Hapus"><i class="bi bi-trash3"></i></button>
+                            <button class="btn-action btn-action-detail" onclick="lihatDetail(${p.id})" title="Detail Full"><i class="bi bi-eye"></i></button>
+                            <button class="btn-action btn-action-status" onclick="ubahStatus(${p.id})" title="Ganti Status (Klik terus)"><i class="bi bi-arrow-repeat"></i></button>
                         </div>
                     </td>
                 </tr>`;
             }).join('');
+            
             document.getElementById('infoJumlah').textContent = `Menampilkan ${start + 1}-${Math.min(end, pesananFiltered.length)} dari ${pesananFiltered.length} pesanan`;
             renderPagination(totalPages);
         }
+
         function renderPagination(totalPages) {
             const nav = document.getElementById('paginationNav');
             if (totalPages <= 1) { nav.innerHTML = ''; return; }
@@ -984,155 +1003,150 @@
             html += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}"><a class="page-link" href="#" onclick="gotoPage(${currentPage + 1}); return false;">›</a></li>`;
             nav.innerHTML = html;
         }
+
         function gotoPage(page) { currentPage = page; renderTabel(); }
+
         function updateStatistik() {
-            const all = JSON.parse(localStorage.getItem('pesananTRK')) || [];
-            document.getElementById('statTotal').textContent = all.length;
-            document.getElementById('statDiproses').textContent = all.filter(p => p.status === 'Diproses' || p.status === 'Terjadwal').length;
-            document.getElementById('statSelesai').textContent = all.filter(p => p.status === 'Selesai').length;
-            const totalPendapatan = all.filter(p => p.status === 'Selesai').reduce((sum, p) => sum + p.total, 0);
-            document.getElementById('statPendapatan').textContent = `Rp ${totalPendapatan.toLocaleString('id-ID')}`;
+            document.getElementById('statTotal').textContent = semuaPesanan.length;
+            document.getElementById('statDiproses').textContent = semuaPesanan.filter(p => p.status === 'Diproses' || p.status === 'Menunggu').length;
+            document.getElementById('statSelesai').textContent = semuaPesanan.filter(p => p.status === 'Selesai').length;
         }
+
         function filterPesanan() {
-            semuaPesanan = JSON.parse(localStorage.getItem('pesananTRK')) || [];
             const tipe = document.getElementById('filterTipe').value;
             const status = document.getElementById('filterStatus').value;
             const search = document.getElementById('searchPesanan').value.toLowerCase();
+            
             pesananFiltered = semuaPesanan.filter(p => {
-                if (tipe && p.tipe !== tipe) return false;
+                if (tipe && p.layanan !== tipe) return false;
                 if (status && p.status !== status) return false;
-                if (search && !p.id.toLowerCase().includes(search) && !p.nama.toLowerCase().includes(search)) return false;
+                if (search && !p.id.toString().includes(search) && !(p.nama_pelanggan || '').toLowerCase().includes(search)) return false;
                 return true;
             });
-            pesananFiltered.reverse();
+            
             currentPage = 1;
             renderTabel();
         }
+
         document.getElementById('searchPesanan').addEventListener('input', filterPesanan);
+
         function lihatDetail(id) {
             const pesanan = semuaPesanan.find(p => p.id === id);
             if (!pesanan) return;
+            
             const body = document.getElementById('modalDetailBody');
-            const itemsHtml = pesanan.items ? pesanan.items.map(i =>
-                `<div class="d-flex justify-content-between" style="font-size: 0.85rem;"><span>${i.nama} × ${i.qty}</span><span>Rp ${i.subtotal.toLocaleString('id-ID')}</span></div>`
-            ).join('') : '-';
-            let detailExtra = '';
-            if (pesanan.detail) {
-                if (pesanan.detail.files) detailExtra += `<div class="detail-item"><span class="label">File</span><span class="value">${pesanan.detail.files.join(', ')}</span></div>`;
-                if (pesanan.detail.keperluan) detailExtra += `<div class="detail-item"><span class="label">Keperluan</span><span class="value">${pesanan.detail.keperluan}</span></div>`;
-                if (pesanan.detail.tanggal) detailExtra += `<div class="detail-item"><span class="label">Jadwal</span><span class="value">${pesanan.detail.tanggal} ${pesanan.detail.jam || ''}</span></div>`;
-                if (pesanan.detail.background) detailExtra += `<div class="detail-item"><span class="label">Background</span><span class="value">${pesanan.detail.background}</span></div>`;
-            }
-            const nomorAntrian = pesanan.nomorAntrian ? `<div class="detail-item"><span class="label">Nomor Antrian</span><span class="value" style="color: var(--hijau-pekat); font-size: 1.1rem;">#${pesanan.nomorAntrian}</span></div>` : '';
-            body.innerHTML = `<div class="row g-4">
-                <div class="col-md-6">
-                    <h6 style="font-weight: 700; margin-bottom: 1rem; color: var(--hijau-pekat);"><i class="bi bi-person me-1"></i>Info Pemesan</h6>
-                    <div class="detail-item"><span class="label">ID Pesanan</span><span class="value">${pesanan.id}</span></div>
-                    ${nomorAntrian}
-                    <div class="detail-item"><span class="label">Nama</span><span class="value">${pesanan.nama}</span></div>
-                    <div class="detail-item"><span class="label">HP</span><span class="value">${pesanan.hp}</span></div>
-                    <div class="detail-item"><span class="label">Alamat</span><span class="value">${pesanan.alamat}</span></div>
-                    <div class="detail-item"><span class="label">Metode</span><span class="value">${pesanan.metode}</span></div>
-                    <div class="detail-item"><span class="label">Catatan</span><span class="value">${pesanan.catatan || '-'}</span></div>
-                </div>
-                <div class="col-md-6">
-                    <h6 style="font-weight: 700; margin-bottom: 1rem; color: var(--hijau-pekat);"><i class="bi bi-bag me-1"></i>Detail Pesanan</h6>
-                    <div class="detail-item"><span class="label">Tipe</span><span class="value">${pesanan.tipe}</span></div>
-                    <div class="detail-item"><span class="label">Tanggal Pesan</span><span class="value">${pesanan.tanggal}, ${pesanan.waktu}</span></div>
-                    ${detailExtra}
-                    <hr style="margin: 0.5rem 0;">
-                    <h6 style="font-weight: 600; font-size: 0.88rem; margin: 0.5rem 0;">Items:</h6>
-                    ${itemsHtml}
-                    <hr style="margin: 0.5rem 0;">
-                    <div class="d-flex justify-content-between"><strong>Total</strong><strong style="color: var(--hijau-pekat); font-size: 1.1rem;">Rp ${pesanan.total.toLocaleString('id-ID')}</strong></div>
+            
+            // Format ulang detail text biar rapi (pecah per enter)
+            const detailHtml = pesanan.detail.split('\n').map(baris => {
+                const parts = baris.split(':');
+                if(parts.length > 1) {
+                    return `<div class="detail-item"><span class="label">${parts[0].trim()}</span><span class="value">${parts.slice(1).join(':').trim()}</span></div>`;
+                }
+                return baris ? `<div class="detail-item"><span class="value">${baris}</span></div>` : '';
+            }).join('');
+
+            body.innerHTML = `
+            <div class="row g-4">
+                <div class="col-12">
+                    <h6 style="font-weight: 700; margin-bottom: 1rem; color: var(--hijau-pekat);"><i class="bi bi-person me-1"></i>Informasi Database</h6>
+                    <div class="detail-item"><span class="label">ID Database</span><span class="value">#${pesanan.id}</span></div>
+                    <div class="detail-item"><span class="label">Layanan</span><span class="value">${getTipeLabel(pesanan.layanan)}</span></div>
+                    <div class="detail-item"><span class="label">Nama User</span><span class="value">${pesanan.nama_pelanggan || 'Guest'}</span></div>
+                    <div class="detail-item"><span class="label">Status</span><span class="value">${pesanan.status}</span></div>
+                    <div class="detail-item"><span class="label">Waktu</span><span class="value">${new Date(pesanan.waktu_pesan).toLocaleString('id-ID')}</span></div>
+                    <hr style="margin: 1.5rem 0;">
+                    <h6 style="font-weight: 700; margin-bottom: 1rem; color: var(--gold);"><i class="bi bi-card-text me-1"></i>Rincian Teks Dari User</h6>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; border: 1px solid #eee;">
+                        ${detailHtml}
+                    </div>
                 </div>
             </div>`;
             new bootstrap.Modal(document.getElementById('modalDetail')).show();
         }
-        function ubahStatus(id) {
-            let data = JSON.parse(localStorage.getItem('pesananTRK')) || [];
-            const pesanan = data.find(p => p.id === id);
+
+        async function ubahStatus(id) {
+            const pesanan = semuaPesanan.find(p => p.id === id);
             if (!pesanan) return;
-            const statusCycle = ['Diproses', 'Terjadwal', 'Selesai', 'Dibatalkan'];
+            
+            const statusCycle = ['Menunggu', 'Diproses', 'Selesai', 'Dibatalkan'];
             const currentIndex = statusCycle.indexOf(pesanan.status);
-            pesanan.status = statusCycle[(currentIndex + 1) % statusCycle.length];
-            localStorage.setItem('pesananTRK', JSON.stringify(data));
-            semuaPesanan = data;
-            filterPesanan();
-            updateStatistik();
-            tampilToast(`Status pesanan ${id} → "${pesanan.status}"`);
-        }
-        function hapusPesanan(id) {
-            if (!confirm(`Yakin hapus pesanan ${id}?`)) return;
-            let data = JSON.parse(localStorage.getItem('pesananTRK')) || [];
-            data = data.filter(p => p.id !== id);
-            localStorage.setItem('pesananTRK', JSON.stringify(data));
-            semuaPesanan = data;
-            filterPesanan();
-            updateStatistik();
-            tampilToast(`Pesanan ${id} dihapus.`);
+            const nextStatus = statusCycle[(currentIndex + 1) % statusCycle.length];
+            
+            try {
+                // Tembak API buat update database
+                const res = await fetch('/.netlify/functions/orders', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id, status: nextStatus })
+                });
+
+                if (res.ok) {
+                    tampilToast(`Status pesanan #${id} diubah jadi "${nextStatus}"`);
+                    loadDataServer(); // Reload data biar real-time
+                } else {
+                    alert("Gagal update status ke server!");
+                }
+            } catch(e) {
+                console.error(e);
+            }
         }
 
         function renderAntrian() {
-            const allPesanan = JSON.parse(localStorage.getItem('pesananTRK')) || [];
-            const antrianATK = allPesanan.filter(p => p.tipe === 'Toko ATK' && (p.status === 'Diproses' || p.status === 'Terjadwal'));
-            const antrianBuket = allPesanan.filter(p => p.tipe === 'Buket Bunga' && (p.status === 'Diproses' || p.status === 'Terjadwal'));
-            const antrianFotokopi = allPesanan.filter(p => p.tipe === 'Fotokopi & Print' && (p.status === 'Diproses' || p.status === 'Terjadwal'));
-            const antrianPassFoto = allPesanan.filter(p => p.tipe === 'Pass Foto' && (p.status === 'Diproses' || p.status === 'Terjadwal'));
+            const antrianATK = semuaPesanan.filter(p => p.layanan === 'atk' && (p.status === 'Menunggu' || p.status === 'Diproses'));
+            const antrianBuket = semuaPesanan.filter(p => p.layanan === 'buket' && (p.status === 'Menunggu' || p.status === 'Diproses'));
+            const antrianFotokopi = semuaPesanan.filter(p => p.layanan === 'fotokopi' && (p.status === 'Menunggu' || p.status === 'Diproses'));
+            const antrianPassFoto = semuaPesanan.filter(p => p.layanan === 'passfoto' && (p.status === 'Menunggu' || p.status === 'Diproses'));
+            
             renderAntrianList('listAntrianATK', 'countAntrianATK', antrianATK, 'A');
             renderAntrianList('listAntrianBuket', 'countAntrianBuket', antrianBuket, 'B');
             renderAntrianList('listAntrianFotokopi', 'countAntrianFotokopi', antrianFotokopi, 'F');
             renderAntrianList('listAntrianPassFoto', 'countAntrianPassFoto', antrianPassFoto, 'P');
         }
+
         function renderAntrianList(containerId, countId, dataAntrian, prefix) {
             const container = document.getElementById(containerId);
             const countEl = document.getElementById(countId);
-            countEl.textContent = `${dataAntrian.length} antrian`;
-            if (dataAntrian.length === 0) {
+            
+            // Reverse biar yang pertama masuk (id terkecil) jadi antrian pertama
+            const antrianUrut = [...dataAntrian].sort((a,b) => a.id - b.id);
+            
+            countEl.textContent = `${antrianUrut.length} antrian`;
+            if (antrianUrut.length === 0) {
                 container.innerHTML = `<div class="text-center py-3" style="color: #ccc;"><i class="bi bi-inbox" style="font-size: 2rem;"></i><p style="font-size: 0.82rem; margin-top: 0.5rem;">Belum ada antrian</p></div>`;
                 return;
             }
-            container.innerHTML = dataAntrian.map((item, idx) => {
-                const nomorDisplay = item.nomorAntrian || (idx + 1);
+            
+            container.innerHTML = antrianUrut.map((item, idx) => {
                 const isCurrent = idx === 0;
                 const nomorClass = isCurrent ? 'current' : 'waiting';
                 const statusLabel = isCurrent ? 'Sedang Dilayani' : 'Menunggu';
                 const statusClass = isCurrent ? 'sedang' : 'menunggu';
-                const itemSummary = item.items ? item.items.map(i => `${i.nama} ×${i.qty}`).join(', ') : '-';
+                const tanggalSingkat = new Date(item.waktu_pesan).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
+                
                 return `
                     <div class="antrian-item ${isCurrent ? 'current' : ''}">
-                        <div class="antrian-nomor ${nomorClass}">${prefix}${nomorDisplay}</div>
+                        <div class="antrian-nomor ${nomorClass}">${prefix}${idx+1}</div>
                         <div class="antrian-info">
-                            <h6>${item.nama}</h6>
-                            <small>${itemSummary}</small><br>
-                            <small style="color: #aaa;">${item.tanggal} • ${item.metode}</small>
+                            <h6>${item.nama_pelanggan || 'Guest'}</h6>
+                            <small>ID: #${item.id}</small><br>
+                            <small style="color: #aaa;">Masuk: ${tanggalSingkat}</small>
                         </div>
                         <div class="d-flex flex-column align-items-end gap-1">
-                            <span class="antrian-status-badge ${statusClass}">${statusLabel}</span>
-                            ${isCurrent ? `<button class="btn-antrian-action" style="background: var(--hijau-pekat); color: #fff;" onclick="selesaikanAntrian('${item.id}')"><i class="bi bi-check2 me-1"></i>Selesai</button>` : ''}
+                            <span class="antrian-status-badge ${statusClass}">${item.status}</span>
+                            ${isCurrent ? `<button class="btn-antrian-action" style="background: var(--hijau-pekat); color: #fff;" onclick="ubahStatus(${item.id})"><i class="bi bi-check2 me-1"></i>Selesai</button>` : ''}
                         </div>
                     </div>`;
             }).join('');
         }
-        function selesaikanAntrian(id) {
-            let data = JSON.parse(localStorage.getItem('pesananTRK')) || [];
-            const pesanan = data.find(p => p.id === id);
-            if (!pesanan) return;
-            pesanan.status = 'Selesai';
-            localStorage.setItem('pesananTRK', JSON.stringify(data));
-            renderAntrian();
-            semuaPesanan = data;
-            filterPesanan();
-            updateStatistik();
-            tampilToast(`Antrian ${pesanan.nama} telah selesai! ✅`);
-        }
+
         function tampilToast(pesan) {
             document.getElementById('toastMessage').textContent = pesan;
             const toast = new bootstrap.Toast(document.getElementById('toastNotif'), { delay: 3500 });
             toast.show();
         }
-        filterPesanan();
-        updateStatistik();
+
+        // Panggil fungsi tarik data pas halaman diload
+        loadDataServer();
     </script>
 </body>
 
