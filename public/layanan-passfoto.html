@@ -928,9 +928,9 @@ HP: ${hp}
 
                 tampilToast(`Reservasi berhasil! Jangan lupa datang sesuai jadwal ya 📸`);
 
-                // Kasih delay dikit, lempar WA
+        
                 setTimeout(() => {
-                    const noWA = "6281234567890"; // <-- WAK! JANGAN LUPA GANTI NOMOR WA LU
+                    const noWA = "6282228295920";
                     const textWA = encodeURIComponent(`Halo Teras Rumah Karlos,\n\nSaya mau reservasi Pass Foto.\n\n*Detail Reservasi:*\nNama: ${nama}\n${detailOrder}`);
                     window.location.href = `https://wa.me/${noWA}?text=${textWA}`;
                 }, 1500);
