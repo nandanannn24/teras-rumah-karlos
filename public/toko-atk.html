@@ -345,6 +345,13 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(226, 194, 117, 0.3);
         }
+        
+        .btn-checkout:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
 
         .fab-cart {
             position: fixed;
@@ -634,7 +641,7 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <button type="submit" class="btn-checkout">
+                                <button type="submit" class="btn-checkout" id="btnProsesCheckout">
                                     <i class="bi bi-check-circle me-2"></i>Konfirmasi Pesanan
                                 </button>
                             </div>
@@ -677,6 +684,7 @@
                     </div>`;
             }
         }
+
         function renderProduk(produkList) {
             const grid = document.getElementById('produkGrid');
             if (produkList.length === 0) {
@@ -691,12 +699,12 @@
                 <div class="col-xl-3 col-lg-4 col-md-6 col-6 produk-item" data-kategori="${p.kategori}">
                     <div class="product-card">
                         <div class="product-img">
-                            <img src="${p.img}" alt="${p.nama}" loading="lazy">
+                            <img src="${p.img || 'logo.webp'}" alt="${p.nama}" loading="lazy" onerror="this.src='logo.webp'">
                         </div>
                         <div class="product-body">
                             <span class="kategori-tag">${getKategoriLabel(p.kategori)}</span>
                             <h6>${p.nama}</h6>
-                            <p style="font-size: 0.8rem; color: #888; margin-bottom: 0.6rem;">${p.deskripsi}</p>
+                            <p style="font-size: 0.8rem; color: #888; margin-bottom: 0.6rem; height: 35px; overflow: hidden; text-overflow: ellipsis;">${p.deskripsi || ''}</p>
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <div class="harga">Rp ${p.harga.toLocaleString('id-ID')}</div>
                             </div>
@@ -708,25 +716,29 @@
                 </div>
             `).join('');
         }
+
         function getKategoriLabel(kat) {
             const labels = { tulis: 'Alat Tulis', kertas: 'Kertas & Buku', kantor: 'Kantor', sekolah: 'Sekolah' };
             return labels[kat] || kat;
         }
+
         function filterKategori(kategori, btn) {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             const filtered = kategori === 'semua' ? dataProduk : dataProduk.filter(p => p.kategori === kategori);
             renderProduk(filtered);
         }
+
         document.getElementById('searchProduk').addEventListener('input', function () {
             const query = this.value.toLowerCase();
             const filtered = dataProduk.filter(p =>
-                p.nama.toLowerCase().includes(query) || p.deskripsi.toLowerCase().includes(query)
+                p.nama.toLowerCase().includes(query) || (p.deskripsi && p.deskripsi.toLowerCase().includes(query))
             );
             renderProduk(filtered);
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             document.querySelector('.filter-btn').classList.add('active');
         });
+
         function tambahKeKeranjang(idProduk) {
             const produk = dataProduk.find(p => p.id === idProduk);
             if (!produk) return;
@@ -740,11 +752,13 @@
             updateUIKeranjang();
             tampilToast(`"${produk.nama}" ditambahkan ke keranjang!`);
         }
+
         function hapusDariKeranjang(idProduk) {
             dataKeranjang = dataKeranjang.filter(item => item.id !== idProduk);
             simpanKeranjang();
             updateUIKeranjang();
         }
+
         function updateQty(idProduk, delta) {
             const item = dataKeranjang.find(i => i.id === idProduk);
             if (!item) return;
@@ -756,15 +770,18 @@
             simpanKeranjang();
             updateUIKeranjang();
         }
+
         function simpanKeranjang() {
             localStorage.setItem('keranjangATK', JSON.stringify(dataKeranjang));
         }
+
         function updateUIKeranjang() {
             const list = document.getElementById('keranjangList');
             const totalBox = document.getElementById('cartTotalBox');
             const countBadge = document.getElementById('cartCount');
             const totalItem = dataKeranjang.reduce((sum, i) => sum + i.qty, 0);
             countBadge.textContent = totalItem;
+            
             if (dataKeranjang.length === 0) {
                 list.innerHTML = `
                     <div class="text-center py-5">
@@ -774,6 +791,7 @@
                 totalBox.style.display = 'none';
                 return;
             }
+            
             totalBox.style.display = 'block';
             let subtotal = 0;
             list.innerHTML = dataKeranjang.map(item => {
@@ -781,9 +799,9 @@
                 subtotal += itemTotal;
                 return `
                     <div class="cart-item">
-                        <div class="cart-item-icon"><img src="${item.img}" alt="${item.nama}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;"></div>
+                        <div class="cart-item-icon"><img src="${item.img || 'logo.webp'}" alt="${item.nama}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;" onerror="this.src='logo.webp'"></div>
                         <div class="cart-item-info flex-grow-1">
-                            <h6>${item.nama}</h6>
+                            <h6 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">${item.nama}</h6>
                             <small>Rp ${item.harga.toLocaleString('id-ID')} × ${item.qty}</small>
                             <div class="d-flex gap-2 mt-1">
                                 <button class="btn-qty" onclick="updateQty(${item.id}, -1)">−</button>
@@ -802,58 +820,96 @@
             document.getElementById('subtotalText').textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
             document.getElementById('totalText').textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
         }
+
         function bukaKeranjang() {
             const offcanvas = new bootstrap.Offcanvas(document.getElementById('keranjangOffcanvas'));
             offcanvas.show();
         }
-        function prosesCheckout(event) {
+
+        // ==========================================
+        // PROSES CHECKOUT (UDAH DIROMBAK KE NEON API)
+        // ==========================================
+        async function prosesCheckout(event) {
             event.preventDefault();
+            
             const nama = document.getElementById('namaCheckout').value;
             const hp = document.getElementById('hpCheckout').value;
             const alamat = document.getElementById('alamatCheckout').value;
             const catatan = document.getElementById('catatanCheckout').value;
             const metodeBayar = document.querySelector('input[name="metodeBayar"]:checked');
+            
             if (!metodeBayar) {
                 alert('Pilih metode pembayaran!');
                 return false;
             }
+
+            const btnSubmit = document.getElementById('btnProsesCheckout');
+            const originalText = btnSubmit.innerHTML;
+            btnSubmit.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Memproses...';
+            btnSubmit.disabled = true;
+
             const total = dataKeranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
-            const idPesanan = 'ATK-' + Date.now().toString(36).toUpperCase();
-            let antrianCounters = JSON.parse(localStorage.getItem('antrianCounters')) || { ATK: 0, BKT: 0, FTK: 0, PFT: 0 };
-            antrianCounters.ATK++;
-            localStorage.setItem('antrianCounters', JSON.stringify(antrianCounters));
-            const pesananBaru = {
-                id: idPesanan,
-                tipe: 'Toko ATK',
-                nama: nama,
-                hp: hp,
-                alamat: alamat,
-                catatan: catatan,
-                nomorAntrian: antrianCounters.ATK,
-                items: dataKeranjang.map(item => ({
-                    nama: item.nama,
-                    qty: item.qty,
-                    harga: item.harga,
-                    subtotal: item.harga * item.qty
-                })),
-                total: total,
-                metode: metodeBayar.value,
-                status: 'Diproses',
-                tanggal: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }),
-                waktu: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-            };
-            let semuaPesanan = JSON.parse(localStorage.getItem('pesananTRK')) || [];
-            semuaPesanan.push(pesananBaru);
-            localStorage.setItem('pesananTRK', JSON.stringify(semuaPesanan));
-            dataKeranjang = [];
-            simpanKeranjang();
-            updateUIKeranjang();
-            bootstrap.Modal.getInstance(document.getElementById('modalCheckout')).hide();
-            bootstrap.Offcanvas.getInstance(document.getElementById('keranjangOffcanvas'))?.hide();
-            document.getElementById('formCheckout').reset();
-            tampilToast(`Pesanan ${idPesanan} berhasil dibuat! Cek di Dashboard Pesanan.`);
+            
+            // Susun detail belanjaan buat dikirim ke DB & WA
+            const itemsText = dataKeranjang.map(item => `- ${item.nama} (x${item.qty}) : Rp ${(item.harga * item.qty).toLocaleString('id-ID')}`).join('\n');
+            const detailOrder = `
+Pembelian: Toko ATK
+Items:
+${itemsText}
+Metode: ${metodeBayar.value}
+Alamat: ${alamat}
+Catatan: ${catatan || '-'}
+Total Bayar: Rp ${total.toLocaleString('id-ID')}
+HP: ${hp}
+            `.trim();
+
+            try {
+                // Tembak API Orders
+                const res = await fetch('/.netlify/functions/orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        layanan: 'atk',
+                        nama_pelanggan: nama,
+                        detail: detailOrder
+                    })
+                });
+
+                if (!res.ok) throw new Error("Gagal menyimpan pesanan ke Database");
+
+                // Bersihin keranjang & form
+                dataKeranjang = [];
+                simpanKeranjang();
+                updateUIKeranjang();
+                document.getElementById('formCheckout').reset();
+                
+                // Tutup Modals
+                bootstrap.Modal.getInstance(document.getElementById('modalCheckout')).hide();
+                const offcanvasEl = document.getElementById('keranjangOffcanvas');
+                if (offcanvasEl) {
+                    const offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasEl);
+                    if (offcanvasInstance) offcanvasInstance.hide();
+                }
+
+                tampilToast(`Pesanan ATK berhasil dibuat! Mengalihkan ke WhatsApp...`);
+
+                // Kasih delay dikit biar toast kebaca, lalu lempar WA
+                setTimeout(() => {
+                    const noWA = "6281234567890"; // <-- WAK! GANTI NO WA LU DISINI
+                    const textWA = encodeURIComponent(`Halo Teras Rumah Karlos,\n\nSaya mau order alat tulis kantor (ATK).\n\n*Detail Pesanan:*\nNama: ${nama}\n${detailOrder}`);
+                    window.location.href = `https://wa.me/${noWA}?text=${textWA}`;
+                }, 1500);
+
+            } catch (e) {
+                alert('Waduh, server ngadat: ' + e.message);
+            } finally {
+                btnSubmit.innerHTML = originalText;
+                btnSubmit.disabled = false;
+            }
+            
             return false;
         }
+
         document.getElementById('modalCheckout').addEventListener('show.bs.modal', function () {
             const ringkasan = document.getElementById('ringkasanCheckout');
             let total = 0;
@@ -861,23 +917,26 @@
                 const sub = item.harga * item.qty;
                 total += sub;
                 return `<div class="d-flex justify-content-between mb-1">
-                    <span style="font-size: 0.85rem;">${item.nama} × ${item.qty}</span>
+                    <span style="font-size: 0.85rem; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.nama} × ${item.qty}</span>
                     <span style="font-size: 0.85rem; font-weight: 500;">Rp ${sub.toLocaleString('id-ID')}</span>
                 </div>`;
             }).join('');
             document.getElementById('totalCheckout').textContent = `Rp ${total.toLocaleString('id-ID')}`;
         });
+
         function tampilToast(pesan) {
             document.getElementById('toastMessage').textContent = pesan;
             const toast = new bootstrap.Toast(document.getElementById('toastNotif'), { delay: 3000 });
             toast.show();
         }
+
         document.querySelectorAll('.payment-option input').forEach(radio => {
             radio.addEventListener('change', function () {
                 document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
                 this.closest('.payment-option').classList.add('selected');
             });
         });
+
         initDataServer();
         updateUIKeranjang();
     </script>
