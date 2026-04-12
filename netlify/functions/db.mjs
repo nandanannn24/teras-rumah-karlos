@@ -1,7 +1,14 @@
 import { neon } from '@neondatabase/serverless';
 
 export function getSQL() {
-  return neon(process.env.DATABASE_URL);
+  // Pinter dikit: ambil dari .env lokal ATAU dari extension Netlify
+  const dbUrl = process.env.DATABASE_URL || process.env.NETLIFY_DATABASE_URL;
+  
+  if (!dbUrl) {
+    throw new Error("Gembok database (URL) nggak nemu wak! Cek env lo.");
+  }
+  
+  return neon(dbUrl);
 }
 
 export function headers(extra = {}) {
