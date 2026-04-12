@@ -382,10 +382,14 @@
             background: var(--peach);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(226, 194, 117, 0.3);
-        }
-
-        .btn-konfirmasi:hover {
             color: var(--charcoal);
+        }
+        
+        .btn-konfirmasi:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
         .footer {
@@ -546,7 +550,7 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <button type="submit" class="btn-konfirmasi">
+                                <button type="submit" class="btn-konfirmasi" id="btnProsesBuket">
                                     <i class="bi bi-check-circle me-2"></i>Konfirmasi Pesanan
                                 </button>
                             </div>
@@ -587,6 +591,7 @@
                     </div>`;
             }
         }
+
         let buketDipilih = null;
         function renderBuket(list) {
             const grid = document.getElementById('buketGrid');
@@ -601,7 +606,7 @@
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="buket-card">
                         <div class="buket-img-wrap">
-                            <div class="buket-visual" style="background: ${b.bg};"><img src="${b.img}" alt="${b.nama}" loading="lazy"></div>
+                            <div class="buket-visual" style="background: rgba(231, 76, 139, 0.05);"><img src="${b.img || 'logo.webp'}" alt="${b.nama}" loading="lazy" onerror="this.src='logo.webp'"></div>
                             ${b.badge ? `<span class="buket-badge">${b.badge}</span>` : ''}
                             <button class="buket-love-btn" onclick="toggleLove(this)" title="Favorit">
                                 <i class="bi bi-heart"></i>
@@ -609,8 +614,8 @@
                         </div>
                         <div class="buket-body">
                             <span class="buket-kategori">${getKatLabel(b.kategori)}</span>
-                            <h5>${b.nama}</h5>
-                            <p class="buket-desc">${b.deskripsi}</p>
+                            <h5 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${b.nama}</h5>
+                            <p class="buket-desc" style="height: 40px; overflow: hidden; text-overflow: ellipsis;">${b.deskripsi || ''}</p>
                             <div class="buket-harga">Rp ${b.harga.toLocaleString('id-ID')}</div>
                             <button class="btn-pesan-buket" onclick="bukaPesanBuket(${b.id})">
                                 <i class="bi bi-bag-plus me-1"></i>Pesan Sekarang
@@ -620,16 +625,19 @@
                 </div>
             `).join('');
         }
+
         function getKatLabel(kat) {
             const labels = { wisuda: '🎓 Wisuda', anniversary: '💕 Anniversary', 'ulang-tahun': '🎂 Ulang Tahun', uang: '💰 Buket Uang' };
             return labels[kat] || kat;
         }
+
         function filterBuket(kategori, btn) {
             document.querySelectorAll('.kategori-tab').forEach(t => t.classList.remove('active'));
             btn.classList.add('active');
             const list = kategori === 'semua' ? dataBuket : dataBuket.filter(b => b.kategori === kategori);
             renderBuket(list);
         }
+
         function toggleLove(btn) {
             btn.classList.toggle('active');
             const icon = btn.querySelector('i');
@@ -639,80 +647,120 @@
                 icon.className = 'bi bi-heart';
             }
         }
+
         function bukaPesanBuket(id) {
             buketDipilih = dataBuket.find(b => b.id === id);
             if (!buketDipilih) return;
             document.getElementById('infoBuketDipilih').innerHTML = `
                 <div class="d-flex align-items-center gap-3">
-                    <div style="font-size: 2.5rem;">${buketDipilih.emoji}</div>
+                    <div style="width: 60px; height: 60px; border-radius: 10px; overflow: hidden;">
+                        <img src="${buketDipilih.img || 'logo.webp'}" alt="${buketDipilih.nama}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='logo.webp'">
+                    </div>
                     <div>
                         <h6 style="font-weight: 700; margin-bottom: 2px;">${buketDipilih.nama}</h6>
                         <span style="font-weight: 600; color: var(--hijau-pekat);">Rp ${buketDipilih.harga.toLocaleString('id-ID')}</span>
                     </div>
                 </div>
             `;
+            document.getElementById('jumlahBuket').value = 1;
             hitungTotalBuket();
             const modal = new bootstrap.Modal(document.getElementById('modalPesanBuket'));
             modal.show();
         }
+
         function hitungTotalBuket() {
             const jumlah = parseInt(document.getElementById('jumlahBuket').value) || 1;
             const total = buketDipilih ? buketDipilih.harga * jumlah : 0;
             document.getElementById('totalBuket').textContent = `Rp ${total.toLocaleString('id-ID')}`;
         }
+
         document.getElementById('jumlahBuket').addEventListener('input', hitungTotalBuket);
-        function prosesPesanBuket(event) {
+
+        // ==========================================
+        // PROSES CHECKOUT (UDAH DIROMBAK KE NEON API)
+        // ==========================================
+        async function prosesPesanBuket(event) {
             event.preventDefault();
             const metodeBayar = document.querySelector('input[name="metodeBuket"]:checked');
             if (!metodeBayar) {
                 alert('Pilih metode pembayaran!');
                 return false;
             }
+
+            const btnSubmit = document.getElementById('btnProsesBuket');
+            const originalText = btnSubmit.innerHTML;
+            btnSubmit.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Memproses...';
+            btnSubmit.disabled = true;
+
             const jumlah = parseInt(document.getElementById('jumlahBuket').value) || 1;
             const total = buketDipilih.harga * jumlah;
-            const idPesanan = 'BKT-' + Date.now().toString(36).toUpperCase();
-            let antrianCounters = JSON.parse(localStorage.getItem('antrianCounters')) || { ATK: 0, BKT: 0, FTK: 0, PFT: 0 };
-            antrianCounters.BKT++;
-            localStorage.setItem('antrianCounters', JSON.stringify(antrianCounters));
-            const pesananBaru = {
-                id: idPesanan,
-                tipe: 'Buket Bunga',
-                nama: document.getElementById('namaBuket').value,
-                hp: document.getElementById('hpBuket').value,
-                alamat: document.getElementById('alamatBuket').value,
-                catatan: document.getElementById('ucapanBuket').value || '-',
-                nomorAntrian: antrianCounters.BKT,
-                items: [{
-                    nama: buketDipilih.nama,
-                    qty: jumlah,
-                    harga: buketDipilih.harga,
-                    subtotal: total
-                }],
-                total: total,
-                metode: metodeBayar.value,
-                status: 'Diproses',
-                tanggal: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }),
-                waktu: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-            };
-            let semuaPesanan = JSON.parse(localStorage.getItem('pesananTRK')) || [];
-            semuaPesanan.push(pesananBaru);
-            localStorage.setItem('pesananTRK', JSON.stringify(semuaPesanan));
-            bootstrap.Modal.getInstance(document.getElementById('modalPesanBuket')).hide();
-            document.getElementById('formPesanBuket').reset();
-            tampilToast(`Pesanan ${idPesanan} berhasil! Buket "${buketDipilih.nama}" segera disiapkan 🌸`);
+            const nama = document.getElementById('namaBuket').value;
+            const hp = document.getElementById('hpBuket').value;
+            const alamat = document.getElementById('alamatBuket').value;
+            const catatan = document.getElementById('ucapanBuket').value || '-';
+            const tanggal = document.getElementById('tanggalBuket').value;
+
+            // Rangkuman buat DB & WhatsApp
+            const detailOrder = `
+Pembelian: Buket Bunga
+Item: ${buketDipilih.nama} (x${jumlah})
+Tgl Dibutuhkan: ${tanggal}
+Metode: ${metodeBayar.value}
+Alamat: ${alamat}
+Ucapan/Catatan: ${catatan}
+Total Bayar: Rp ${total.toLocaleString('id-ID')}
+HP: ${hp}
+            `.trim();
+
+            try {
+                // Tembak ke Database
+                const res = await fetch('/.netlify/functions/orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        layanan: 'buket',
+                        nama_pelanggan: nama,
+                        detail: detailOrder
+                    })
+                });
+
+                if (!res.ok) throw new Error("Gagal menyimpan pesanan ke Database");
+
+                // Bersihin Modal & UI
+                bootstrap.Modal.getInstance(document.getElementById('modalPesanBuket')).hide();
+                document.getElementById('formPesanBuket').reset();
+                tampilToast(`Pesanan berhasil! Buket "${buketDipilih.nama}" segera disiapkan 🌸`);
+
+                // Kasih delay dikit biar toast kebaca, lalu lempar WA
+                setTimeout(() => {
+                    const noWA = "6281234567890"; // <-- WAK! GANTI NO WA LU DISINI
+                    const textWA = encodeURIComponent(`Halo Teras Rumah Karlos,\n\nSaya mau order Buket Bunga.\n\n*Detail Pesanan:*\nNama: ${nama}\n${detailOrder}`);
+                    window.location.href = `https://wa.me/${noWA}?text=${textWA}`;
+                }, 1500);
+
+            } catch (e) {
+                alert('Waduh, server ngadat: ' + e.message);
+            } finally {
+                btnSubmit.innerHTML = originalText;
+                btnSubmit.disabled = false;
+            }
+            
             return false;
         }
+
         document.querySelectorAll('.payment-option input').forEach(radio => {
             radio.addEventListener('change', function () {
                 document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
                 this.closest('.payment-option').classList.add('selected');
             });
         });
+
         function tampilToast(pesan) {
             document.getElementById('toastMessage').textContent = pesan;
             const toast = new bootstrap.Toast(document.getElementById('toastNotif'), { delay: 3500 });
             toast.show();
         }
+
         initDataServer();
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
