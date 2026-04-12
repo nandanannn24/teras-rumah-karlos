@@ -1048,6 +1048,23 @@
         let globalDataATK = [];
         let globalDataBuket = [];
 
+        const defaultHargaFotokopi = {
+    fotokopiBW: 200,
+    printBW: 500,
+    printWarna: 1500,
+    printA3BW: 1000,
+    printA3Warna: 3000,
+    jilidSpiral: 5000,
+    jilidLakban: 3000,
+    laminating: 2000
+};
+
+const defaultHargaPassFoto = {
+    basic: 15000,
+    standard: 25000,
+    premium: 45000
+};
+        
         async function fetchNeon(endpoint, method = 'GET', body = null) {
             const options = { method, headers: { 'Content-Type': 'application/json' } };
             if (body) options.body = JSON.stringify(body);
