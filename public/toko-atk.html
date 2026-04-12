@@ -659,25 +659,24 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const dataProduk = JSON.parse(localStorage.getItem('adminProdukATK')) || [
-            { id: 1, nama: "Pulpen Pilot G2", harga: 12000, kategori: "tulis", img: "atk/pulpen-pilot-g2.webp", deskripsi: "Pulpen gel hitam 0.5mm" },
-            { id: 2, nama: "Pensil 2B Faber-Castell", harga: 5000, kategori: "tulis", img: "atk/pensil-2b-faber-castell.webp", deskripsi: "Pensil ujian berkualitas" },
-            { id: 3, nama: "Buku Tulis Sidu 58 lbr", harga: 7000, kategori: "kertas", img: "atk/buku-tulis-sidu.webp", deskripsi: "Buku tulis isi 58 lembar" },
-            { id: 4, nama: "Kertas HVS A4 70gr (Rim)", harga: 48000, kategori: "kertas", img: "atk/kertas-hvs-a4.webp", deskripsi: "1 rim / 500 lembar" },
-            { id: 5, nama: "Spidol Snowman Hitam", harga: 8000, kategori: "tulis", img: "atk/spidol-snowman.webp", deskripsi: "Spidol whiteboard" },
-            { id: 6, nama: "Penggaris Besi 30cm", harga: 10000, kategori: "sekolah", img: "atk/penggaris-besi.webp", deskripsi: "Penggaris stainless steel" },
-            { id: 7, nama: "Stapler Kenko HD-10", harga: 25000, kategori: "kantor", img: "atk/stapler-kenko.webp", deskripsi: "Stapler ukuran kecil" },
-            { id: 8, nama: "Map File Plastik F4", harga: 3500, kategori: "kantor", img: "atk/map-file-plastik.webp", deskripsi: "Map plastik warna-warni" },
-            { id: 9, nama: "Penghapus Joyko EB-30", harga: 3000, kategori: "tulis", img: "atk/penghapus-joyko.webp", deskripsi: "Penghapus kuat dan bersih" },
-            { id: 10, nama: "Binder Clip No. 111", harga: 9000, kategori: "kantor", img: "atk/binder-clip.webp", deskripsi: "Isi 12 pcs per kotak" },
-            { id: 11, nama: "Buku Gambar A3", harga: 15000, kategori: "sekolah", img: "atk/buku-gambar-a3.webp", deskripsi: "Buku gambar besar 10 lembar" },
-            { id: 12, nama: "Correction Tape Joyko", harga: 6500, kategori: "tulis", img: "atk/correction-tape.webp", deskripsi: "Tip-Ex cair roll 5mm" },
-            { id: 13, nama: "Amplop Coklat A4", harga: 2000, kategori: "kantor", img: "atk/amplop-coklat.webp", deskripsi: "Amplop coklat per lembar" },
-            { id: 14, nama: "Crayon Titi 12 Warna", harga: 18000, kategori: "sekolah", img: "atk/crayon-titi.webp", deskripsi: "Set crayon anak-anak" },
-            { id: 15, nama: "Post-it Notes 3x3 inch", harga: 11000, kategori: "kantor", img: "atk/post-it-notes.webp", deskripsi: "Sticky notes warna kuning" },
-            { id: 16, nama: "Kertas Folio Bergaris", harga: 1500, kategori: "kertas", img: "atk/kertas-folio.webp", deskripsi: "Per lembar, minimal 10" },
-        ];
+        let dataProduk = [];
         let dataKeranjang = JSON.parse(localStorage.getItem('keranjangATK')) || [];
+
+        async function initDataServer() {
+            try {
+                const res = await fetch('/.netlify/functions/products-atk');
+                if (!res.ok) throw new Error('Gagal load ATK');
+                dataProduk = await res.json();
+                renderProduk(dataProduk);
+            } catch (err) {
+                console.error(err);
+                document.getElementById('produkGrid').innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="bi bi-cloud-slash" style="font-size: 3rem; color: #ccc;"></i>
+                        <p style="color: #999; margin-top: 1rem;">Gagal memuat produk ATK dari Database.</p>
+                    </div>`;
+            }
+        }
         function renderProduk(produkList) {
             const grid = document.getElementById('produkGrid');
             if (produkList.length === 0) {
@@ -879,7 +878,7 @@
                 this.closest('.payment-option').classList.add('selected');
             });
         });
-        renderProduk(dataProduk);
+        initDataServer();
         updateUIKeranjang();
     </script>
 </body>
