@@ -380,6 +380,13 @@
             color: var(--charcoal);
         }
 
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
         .summary-box {
             background: var(--bg-utama);
             border-radius: 16px;
@@ -475,14 +482,14 @@
                     </div>
                     <h5>Paket Basic</h5>
                     <p style="font-size: 0.82rem; color: #888;">Ukuran 2×3 / 3×4</p>
-                    <div class="paket-harga">Rp 15.000<small>/paket</small></div>
+                    <div class="paket-harga" id="hargaBasic">Rp 15.000<small>/paket</small></div>
                     <ul>
                         <li><i class="bi bi-check-circle-fill"></i>8 lembar cetak</li>
                         <li><i class="bi bi-check-circle-fill"></i>Background merah/biru</li>
                         <li><i class="bi bi-check-circle-fill"></i>Edit ringan (brightness)</li>
                         <li><i class="bi bi-check-circle-fill"></i>Soft copy via WhatsApp</li>
                     </ul>
-                    <button class="btn-pilih-paket" onclick="pilihPaket('Paket Basic - 2x3/3x4', 15000)">
+                    <button class="btn-pilih-paket" onclick="pilihPaket('Paket Basic - 2x3/3x4', 'basic')">
                         Pilih Paket
                     </button>
                 </div>
@@ -495,7 +502,7 @@
                     </div>
                     <h5>Paket Standard</h5>
                     <p style="font-size: 0.82rem; color: #888;">Ukuran 4×6</p>
-                    <div class="paket-harga">Rp 25.000<small>/paket</small></div>
+                    <div class="paket-harga" id="hargaStandard">Rp 25.000<small>/paket</small></div>
                     <ul>
                         <li><i class="bi bi-check-circle-fill"></i>8 lembar cetak</li>
                         <li><i class="bi bi-check-circle-fill"></i>Background custom</li>
@@ -503,7 +510,7 @@
                         <li><i class="bi bi-check-circle-fill"></i>Soft copy HD via WhatsApp</li>
                         <li><i class="bi bi-check-circle-fill"></i>Cetak ulang 1× gratis</li>
                     </ul>
-                    <button class="btn-pilih-paket" onclick="pilihPaket('Paket Standard - 4x6', 25000)"
+                    <button class="btn-pilih-paket" onclick="pilihPaket('Paket Standard - 4x6', 'standard')"
                         style="background: var(--gold); color: var(--charcoal);">
                         Pilih Paket
                     </button>
@@ -516,7 +523,7 @@
                     </div>
                     <h5>Paket Premium</h5>
                     <p style="font-size: 0.82rem; color: #888;">Semua Ukuran</p>
-                    <div class="paket-harga">Rp 45.000<small>/paket</small></div>
+                    <div class="paket-harga" id="hargaPremium">Rp 45.000<small>/paket</small></div>
                     <ul>
                         <li><i class="bi bi-check-circle-fill"></i>12 lembar cetak (mix ukuran)</li>
                         <li><i class="bi bi-check-circle-fill"></i>Background bebas warna</li>
@@ -524,7 +531,7 @@
                         <li><i class="bi bi-check-circle-fill"></i>Soft copy HD semua ukuran</li>
                         <li><i class="bi bi-check-circle-fill"></i>Cetak ulang 3× gratis</li>
                     </ul>
-                    <button class="btn-pilih-paket" onclick="pilihPaket('Paket Premium - All Size', 45000)">
+                    <button class="btn-pilih-paket" onclick="pilihPaket('Paket Premium - All Size', 'premium')">
                         Pilih Paket
                     </button>
                 </div>
@@ -744,32 +751,50 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const _hargaPaketAdmin = JSON.parse(localStorage.getItem('adminHargaPassFoto')) || { basic: 15000, standard: 25000, premium: 45000 };
-        (function updatePaketDisplay() {
-            const paketCards = document.querySelectorAll('.paket-card');
-            const hargaMap = [_hargaPaketAdmin.basic, _hargaPaketAdmin.standard, _hargaPaketAdmin.premium];
-            paketCards.forEach((card, i) => {
-                const hargaEl = card.querySelector('.paket-harga');
-                if (hargaEl && hargaMap[i] !== undefined) hargaEl.innerHTML = 'Rp ' + hargaMap[i].toLocaleString('id-ID') + '<small>/paket</small>';
-                const btn = card.querySelector('.btn-pilih-paket');
-                if (btn && hargaMap[i] !== undefined) {
-                    const namaPaket = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
-                    btn.setAttribute('onclick', `pilihPaket('${namaPaket}', ${hargaMap[i]})`);
+        // Harga Default
+        let _hargaPaketAdmin = { basic: 15000, standard: 25000, premium: 45000 };
+
+        // Fetch Harga dari Database
+        async function fetchHargaPassFoto() {
+            try {
+                const res = await fetch('/.netlify/functions/harga-passfoto');
+                if (res.ok) {
+                    const data = await res.json();
+                    _hargaPaketAdmin = {
+                        basic: data.basic,
+                        standard: data.standard,
+                        premium: data.premium
+                    };
                 }
-            });
-        })();
+            } catch (e) {
+                console.error('Gagal fetch harga pass foto', e);
+            }
+            updatePaketDisplay();
+        }
+
+        function updatePaketDisplay() {
+            document.getElementById('hargaBasic').innerHTML = `Rp ${_hargaPaketAdmin.basic.toLocaleString('id-ID')}<small>/paket</small>`;
+            document.getElementById('hargaStandard').innerHTML = `Rp ${_hargaPaketAdmin.standard.toLocaleString('id-ID')}<small>/paket</small>`;
+            document.getElementById('hargaPremium').innerHTML = `Rp ${_hargaPaketAdmin.premium.toLocaleString('id-ID')}<small>/paket</small>`;
+        }
+
+        // Panggil fungsi fetch saat pertama jalan
+        fetchHargaPassFoto();
+
         let paketTerpilih = null;
         let hargaPaket = 0;
-        function pilihPaket(nama, harga) {
+
+        function pilihPaket(nama, keyHarga) {
             paketTerpilih = nama;
-            hargaPaket = harga;
+            hargaPaket = _hargaPaketAdmin[keyHarga];
             document.getElementById('paketTerpilihInfo').style.display = 'block';
             document.getElementById('namaPaketTerpilih').textContent = nama;
-            document.getElementById('hargaPaketTerpilih').textContent = `Rp ${harga.toLocaleString('id-ID')}`;
+            document.getElementById('hargaPaketTerpilih').textContent = `Rp ${hargaPaket.toLocaleString('id-ID')}`;
             document.getElementById('btnSubmitReservasi').disabled = false;
             document.getElementById('formReservasi').scrollIntoView({ behavior: 'smooth', block: 'start' });
             hitungTotalPassFoto();
         }
+
         function resetPaket() {
             paketTerpilih = null;
             hargaPaket = 0;
@@ -777,10 +802,14 @@
             document.getElementById('btnSubmitReservasi').disabled = true;
             document.getElementById('summaryDetail').innerHTML = '<p style="color: #888; font-size: 0.85rem;">Pilih paket terlebih dahulu.</p>';
         }
+
         function generateTimeSlots() {
             const container = document.getElementById('timeSlotContainer');
             const slots = ['08:00', '09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00'];
-            const bookedSlots = ['10:00', '14:00', '17:00'];
+            
+            // Dummy logic slot penuh, ini aslinya lu fetch dari DB kalo rajin
+            const bookedSlots = ['10:00', '14:00', '17:00']; 
+            
             container.innerHTML = slots.map(slot => {
                 const isBooked = bookedSlots.includes(slot);
                 return `
@@ -793,15 +822,18 @@
                     </div>`;
             }).join('');
         }
+
         function selectTimeSlot(el, time) {
             document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
             el.classList.add('selected');
             document.getElementById('jamReservasi').value = time;
         }
+
         function selectBg(el) {
             document.querySelectorAll('.size-option').forEach(s => s.classList.remove('selected'));
             el.classList.add('selected');
         }
+
         function hitungTotalPassFoto() {
             if (!paketTerpilih) return;
             const jumlah = parseInt(document.getElementById('jumlahOrang').value) || 1;
@@ -818,6 +850,7 @@
                 </div>
             `;
         }
+
         document.querySelectorAll('input[name="metodePassFoto"]').forEach(radio => {
             radio.addEventListener('change', function () {
                 const wrap = document.getElementById('alamatAntarWrap');
@@ -826,7 +859,11 @@
                 this.closest('.payment-option').classList.add('selected');
             });
         });
-        function prosesReservasi(event) {
+
+        // ==========================================
+        // PROSES RESERVASI (UDAH DIROMBAK KE NEON API)
+        // ==========================================
+        async function prosesReservasi(event) {
             event.preventDefault();
             if (!paketTerpilih) {
                 alert('Pilih paket terlebih dahulu!');
@@ -834,57 +871,86 @@
             }
             const bgColor = document.querySelector('input[name="bgColor"]:checked');
             const metodeBayar = document.querySelector('input[name="metodePassFoto"]:checked');
+            
             if (!bgColor) { alert('Pilih warna background!'); return false; }
             if (!metodeBayar) { alert('Pilih metode pengambilan!'); return false; }
+
+            const btnSubmit = document.getElementById('btnSubmitReservasi');
+            const originalText = btnSubmit.innerHTML;
+            btnSubmit.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Memproses...';
+            btnSubmit.disabled = true;
+
             const jumlah = parseInt(document.getElementById('jumlahOrang').value) || 1;
             const total = hargaPaket * jumlah;
-            const idPesanan = 'PFT-' + Date.now().toString(36).toUpperCase();
-            let antrianCounters = JSON.parse(localStorage.getItem('antrianCounters')) || { ATK: 0, BKT: 0, FTK: 0, PFT: 0 };
-            antrianCounters.PFT++;
-            localStorage.setItem('antrianCounters', JSON.stringify(antrianCounters));
-            const pesananBaru = {
-                id: idPesanan,
-                tipe: 'Pass Foto',
-                nama: document.getElementById('namaPassFoto').value,
-                hp: document.getElementById('hpPassFoto').value,
-                alamat: document.getElementById('alamatAntar').value || 'Ambil di Toko',
-                catatan: document.getElementById('catatanPassFoto').value || '-',
-                nomorAntrian: antrianCounters.PFT,
-                items: [{
-                    nama: paketTerpilih,
-                    qty: jumlah,
-                    harga: hargaPaket,
-                    subtotal: total
-                }],
-                detail: {
-                    keperluan: document.getElementById('keperluanFoto').value,
-                    background: bgColor.value,
-                    tanggal: document.getElementById('tanggalReservasi').value,
-                    jam: document.getElementById('jamReservasi').value
-                },
-                total: total,
-                metode: metodeBayar.value,
-                status: 'Terjadwal',
-                tanggal: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }),
-                waktu: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-            };
-            let semuaPesanan = JSON.parse(localStorage.getItem('pesananTRK')) || [];
-            semuaPesanan.push(pesananBaru);
-            localStorage.setItem('pesananTRK', JSON.stringify(semuaPesanan));
-            document.getElementById('formPassFoto').reset();
-            resetPaket();
-            document.querySelectorAll('.size-option').forEach(s => s.classList.remove('selected'));
-            document.querySelectorAll('.payment-option').forEach(s => s.classList.remove('selected'));
-            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-            document.getElementById('alamatAntarWrap').style.display = 'none';
-            tampilToast(`Reservasi ${idPesanan} berhasil! Jangan lupa datang sesuai jadwal ya 📸`);
+            const nama = document.getElementById('namaPassFoto').value;
+            const hp = document.getElementById('hpPassFoto').value;
+            const alamat = document.getElementById('alamatAntar').value || '-';
+            const catatan = document.getElementById('catatanPassFoto').value || '-';
+            const keperluan = document.getElementById('keperluanFoto').value;
+            const tglReservasi = document.getElementById('tanggalReservasi').value;
+            const jamReservasi = document.getElementById('jamReservasi').value;
+
+            // Rangkum info
+            const detailOrder = `
+Layanan: Pass Foto (${paketTerpilih})
+Jumlah: ${jumlah} Orang
+Jadwal: ${tglReservasi} Pukul ${jamReservasi}
+Warna Background: ${bgColor.value}
+Keperluan: ${keperluan}
+Metode Pengambilan: ${metodeBayar.value}
+Alamat Pengantaran: ${alamat}
+Catatan Tambahan: ${catatan}
+Total Biaya: Rp ${total.toLocaleString('id-ID')}
+HP: ${hp}
+            `.trim();
+
+            try {
+                // Tembak Database
+                const res = await fetch('/.netlify/functions/orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        layanan: 'passfoto',
+                        nama_pelanggan: nama,
+                        detail: detailOrder
+                    })
+                });
+
+                if (!res.ok) throw new Error("Gagal menyimpan reservasi ke Database");
+
+                // Bersihin Form & UI
+                document.getElementById('formPassFoto').reset();
+                resetPaket();
+                document.querySelectorAll('.size-option').forEach(s => s.classList.remove('selected'));
+                document.querySelectorAll('.payment-option').forEach(s => s.classList.remove('selected'));
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                document.getElementById('alamatAntarWrap').style.display = 'none';
+
+                tampilToast(`Reservasi berhasil! Jangan lupa datang sesuai jadwal ya 📸`);
+
+                // Kasih delay dikit, lempar WA
+                setTimeout(() => {
+                    const noWA = "6281234567890"; // <-- WAK! JANGAN LUPA GANTI NOMOR WA LU
+                    const textWA = encodeURIComponent(`Halo Teras Rumah Karlos,\n\nSaya mau reservasi Pass Foto.\n\n*Detail Reservasi:*\nNama: ${nama}\n${detailOrder}`);
+                    window.location.href = `https://wa.me/${noWA}?text=${textWA}`;
+                }, 1500);
+
+            } catch (e) {
+                alert('Waduh, server ngadat: ' + e.message);
+            } finally {
+                btnSubmit.innerHTML = originalText;
+                btnSubmit.disabled = false;
+            }
+            
             return false;
         }
+
         function tampilToast(pesan) {
             document.getElementById('toastMessage').textContent = pesan;
             const toast = new bootstrap.Toast(document.getElementById('toastNotif'), { delay: 4000 });
             toast.show();
         }
+
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
         document.getElementById('tanggalReservasi').min = tomorrow.toISOString().split('T')[0];
