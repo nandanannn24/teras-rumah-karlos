@@ -894,11 +894,6 @@ HP: ${hp}
                 tampilToast(`Pesanan ATK berhasil dibuat! Mengalihkan ke WhatsApp...`);
 
                 // Kasih delay dikit biar toast kebaca, lalu lempar WA
-                setTimeout(() => {
-                    const noWA = "6281234567890"; // <-- WAK! GANTI NO WA LU DISINI
-                    const textWA = encodeURIComponent(`Halo Teras Rumah Karlos,\n\nSaya mau order alat tulis kantor (ATK).\n\n*Detail Pesanan:*\nNama: ${nama}\n${detailOrder}`);
-                    window.location.href = `https://wa.me/${noWA}?text=${textWA}`;
-                }, 1500);
 
             } catch (e) {
                 alert('Waduh, server ngadat: ' + e.message);
