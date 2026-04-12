@@ -7,12 +7,15 @@
     <meta name="description"
         content="Layanan Fotokopi & Print Teras Rumah Karlos - Upload file dan cetak dokumen dengan mudah.">
     <title>Layanan Fotokopi | Teras Rumah Karlos</title>
+    
     <link rel="icon" type="image/webp" href="logo.webp">
-    <meta property="og:title" content="Teras Rumah Karlos | Layanan Cetak & Kado">
-    <meta property="og:description" content="Toko ATK, Buket Bunga, Fotokopi, dan Pass Foto terlengkap dan termurah. Pesan sekarang!">
+
+    <meta property="og:title" content="Teras Rumah Karlos | Fotokopi & Print">
+    <meta property="og:description" content="Cetak dokumen mudah, cepat, dan murah. Upload dari HP langsung jadi!">
     <meta property="og:image" content="https://teras-rumah-karlos.netlify.app/logo.webp">
-    <meta property="og:url" content="https://teras-rumah-karlos.netlify.app/">
+    <meta property="og:url" content="https://teras-rumah-karlos.netlify.app/layanan-fotokopi.html">
     <meta property="og:type" content="website">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
@@ -203,82 +206,6 @@
             box-shadow: 0 0 0 3px rgba(46, 94, 63, 0.1);
         }
 
-        .upload-area {
-            border: 3px dashed #ddd;
-            border-radius: 16px;
-            padding: 2.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            background: rgba(46, 94, 63, 0.02);
-        }
-
-        .upload-area:hover,
-        .upload-area.dragover {
-            border-color: var(--hijau-pekat);
-            background: rgba(46, 94, 63, 0.05);
-        }
-
-        .upload-area .upload-icon {
-            font-size: 3rem;
-            color: var(--hijau-pekat);
-            opacity: 0.5;
-            margin-bottom: 1rem;
-        }
-
-        .upload-area h6 {
-            font-weight: 600;
-            font-size: 1rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .upload-area p {
-            font-size: 0.82rem;
-            color: #888;
-        }
-
-        .file-preview {
-            background: #fff;
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            border-radius: 12px;
-            padding: 0.8rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            margin-top: 0.8rem;
-        }
-
-        .file-preview .fp-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-        }
-
-        .file-preview .fp-info h6 {
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0;
-        }
-
-        .file-preview .fp-info small {
-            color: #888;
-            font-size: 0.75rem;
-        }
-
-        .file-preview .fp-remove {
-            margin-left: auto;
-            border: none;
-            background: none;
-            color: #e74c3c;
-            cursor: pointer;
-            font-size: 1.1rem;
-        }
-
         .spec-option {
             border: 2px solid #eee;
             border-radius: 12px;
@@ -460,6 +387,7 @@
             </div>
         </div>
     </nav>
+
     <section class="page-header">
         <div class="container" style="position: relative; z-index: 2;">
             <div class="breadcrumb-custom mb-2">
@@ -469,6 +397,7 @@
             <p>Upload file Anda, pilih spesifikasi cetak, dan kami siapkan!</p>
         </div>
     </section>
+
     <div class="container py-5">
         <div class="row g-3 mb-5" style="margin-top: -2rem; position: relative; z-index: 2;">
             <div class="col-md-3 col-6">
@@ -504,6 +433,7 @@
                 </div>
             </div>
         </div>
+
         <div class="row g-4">
             <div class="col-lg-8">
                 <div class="form-card">
@@ -512,20 +442,26 @@
                     </h4>
                     <p style="color: #888; font-size: 0.9rem; margin-bottom: 2rem;">Lengkapi formulir di bawah untuk
                         memesan cetak dokumen</p>
+
                     <form id="formFotokopi" onsubmit="return prosesFotokopi(event)">
-                        <div class="mb-4">
-                            <label class="form-label-custom"><i class="bi bi-file-earmark-arrow-up me-1"></i>Upload File
-                                Dokumen *</label>
-                            <div class="upload-area" id="uploadArea"
-                                onclick="document.getElementById('fileInput').click()">
-                                <i class="bi bi-cloud-arrow-up-fill upload-icon d-block"></i>
-                                <h6>Klik atau seret file ke sini</h6>
-                                <p>Format: <strong>.pdf, .docx, .doc, .jpg, .png</strong> — Maks. 10MB</p>
+                        
+                        <div class="mb-4 p-3" style="border-radius: 12px; border: 1px dashed #3498db; background: rgba(52, 152, 219, 0.03);">
+                            <h6 style="color: #3498db; font-weight: 600; margin-bottom: 12px;">
+                                <i class="bi bi-folder-symlink me-2"></i>Langkah 1: Upload File Dokumen
+                            </h6>
+                            <p style="font-size: 0.85rem; color: #555;">Karena keterbatasan sistem, silakan upload file Anda (PDF/DOCX/JPG) ke folder Google Drive kami terlebih dahulu.</p>
+                            
+                            <a href="https://drive.google.com/drive/folders/1Pe4bzdA1ugj99i2MoRxyxUTmekSrkINX?usp=sharing" target="_blank" class="btn btn-outline-primary btn-sm mb-3" style="border-radius: 8px; padding: 8px 16px;">
+                                <i class="bi bi-google me-2"></i>Buka Folder Google Drive
+                            </a>
+
+                            <div class="mt-2">
+                                <label class="form-label-custom" style="color: #333;">Langkah 2: Ketik Nama File Anda *</label>
+                                <input type="text" class="form-control form-control-custom" id="namaFileGdrive" placeholder="Contoh: Skripsi_Bab1_Nanda.pdf" required>
+                                <small style="color: #888; font-size: 0.75rem;">Agar kami mudah mencari file Anda di GDrive.</small>
                             </div>
-                            <input type="file" id="fileInput" accept=".pdf,.docx,.doc,.jpg,.jpeg,.png" multiple
-                                style="display: none;" onchange="handleFileUpload(this.files)">
-                            <div id="filePreviewList"></div>
                         </div>
+
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
                                 <label class="form-label-custom">Nama Lengkap *</label>
@@ -536,6 +472,7 @@
                                 <input type="tel" class="form-control form-control-custom" id="hpFotokopi" required>
                             </div>
                         </div>
+
                         <h5 style="font-weight: 600; font-size: 1rem; margin-bottom: 1rem;">
                             <i class="bi bi-sliders me-1" style="color: var(--hijau-pekat);"></i>Spesifikasi Cetak
                         </h5>
@@ -568,6 +505,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <label class="form-label-custom">Ukuran Kertas *</label>
@@ -585,6 +523,7 @@
                                     value="1" required onchange="hitungEstimasi()">
                             </div>
                         </div>
+
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <label class="form-label-custom">Bolak-Balik?</label>
@@ -603,11 +542,13 @@
                                 </select>
                             </div>
                         </div>
+
                         <div class="mb-4">
                             <label class="form-label-custom">Catatan Tambahan (opsional)</label>
                             <textarea class="form-control form-control-custom" id="catatanFotokopi" rows="2"
                                 placeholder="Contoh: halaman 1-10 saja, warna di hal 5, dll."></textarea>
                         </div>
+
                         <h5 style="font-weight: 600; font-size: 1rem; margin-bottom: 1rem;">
                             <i class="bi bi-credit-card me-1" style="color: var(--hijau-pekat);"></i>Metode Pengambilan
                         </h5>
@@ -627,10 +568,12 @@
                                 </div>
                             </label>
                         </div>
+
                         <div id="alamatAntarWrap" style="display: none;" class="mb-4">
                             <label class="form-label-custom">Alamat Pengantaran *</label>
                             <textarea class="form-control form-control-custom" id="alamatAntar" rows="2"></textarea>
                         </div>
+
                         <div class="summary-box mb-4" id="estimasiBox">
                             <h6 style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.8rem;">
                                 <i class="bi bi-calculator me-1"></i> Estimasi Harga
@@ -640,12 +583,14 @@
                                     melihat estimasi.</p>
                             </div>
                         </div>
+
                         <button type="submit" class="btn-submit-order" id="btnKirim">
                             <i class="bi bi-send me-2"></i>Kirim Pesanan Cetak
                         </button>
                     </form>
                 </div>
             </div>
+
             <div class="col-lg-4">
                 <div class="harga-table mb-4">
                     <h5 style="font-weight: 700; font-size: 1rem; margin-bottom: 1rem;">
@@ -682,6 +627,7 @@
                         </tbody>
                     </table>
                 </div>
+
                 <div class="harga-table mb-4">
                     <h5 style="font-weight: 700; font-size: 1rem; margin-bottom: 1rem;">
                         <i class="bi bi-bookmark me-1" style="color: var(--hijau-pekat);"></i>Harga Finishing
@@ -709,47 +655,10 @@
                         </tbody>
                     </table>
                 </div>
-                <div
-                    style="background: #fff; border-radius: 16px; padding: 1.5rem; border: 1px solid rgba(0,0,0,0.05); box-shadow: var(--shadow-soft);">
-                    <h5 style="font-weight: 700; font-size: 1rem; margin-bottom: 1rem;">
-                        <i class="bi bi-question-circle me-1" style="color: var(--hijau-pekat);"></i>FAQ
-                    </h5>
-                    <div class="accordion accordion-flush" id="faqAccordion">
-                        <div class="accordion-item" style="border: none; background: transparent;">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed"
-                                    style="font-size: 0.85rem; padding: 0.8rem 0; background: transparent;"
-                                    type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                                    Berapa lama proses cetak?
-                                </button>
-                            </h2>
-                            <div id="faq1" class="accordion-collapse collapse">
-                                <div class="accordion-body"
-                                    style="font-size: 0.82rem; color: #888; padding: 0 0 0.8rem;">
-                                    Untuk order biasa 10-30 menit. Order banyak atau jilid bisa 1-2 jam.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item" style="border: none; background: transparent;">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed"
-                                    style="font-size: 0.85rem; padding: 0.8rem 0; background: transparent;"
-                                    type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-                                    Bisa cetak dari HP?
-                                </button>
-                            </h2>
-                            <div id="faq2" class="accordion-collapse collapse">
-                                <div class="accordion-body"
-                                    style="font-size: 0.82rem; color: #888; padding: 0 0 0.8rem;">
-                                    Ya! Upload file PDF atau gambar langsung dari HP Anda melalui form ini.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
+
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
         <div id="toastNotif" class="toast toast-success" role="alert">
             <div class="toast-body d-flex align-items-center gap-2">
@@ -758,17 +667,17 @@
             </div>
         </div>
     </div>
+
     <footer class="footer text-center">
         <div class="container">
             <p style="margin: 0; font-size: 0.85rem;">&copy; 2026 Teras Rumah Karlos. All rights reserved.</p>
         </div>
     </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Default harga kalau gagal fetch
         let _hargaAdmin = { fotokopiBW: 200, printBW: 500, printWarna: 1500, printA3BW: 1000, printA3Warna: 3000, jilidSpiral: 5000, jilidLakban: 3000, laminating: 2000 };
 
-        // Tarik harga dari DB
         async function fetchHarga() {
             try {
                 const res = await fetch('/.netlify/functions/harga-fotokopi');
@@ -786,25 +695,22 @@
                     };
                 }
             } catch (e) {
-                console.error('Gagal fetch harga, pakai default.', e);
+                console.error('Gagal fetch harga', e);
             }
             updateHargaDisplay();
         }
 
         function updateHargaDisplay() {
-            // Update pilihan spec
             document.getElementById('lblHargaBW').textContent = 'Rp ' + _hargaAdmin.fotokopiBW.toLocaleString('id-ID') + '/lbr';
             document.getElementById('lblHargaPrintBW').textContent = 'Rp ' + _hargaAdmin.printBW.toLocaleString('id-ID') + '/lbr';
             document.getElementById('lblHargaWarna').textContent = 'Rp ' + _hargaAdmin.printWarna.toLocaleString('id-ID') + '/lbr';
             
-            // Update tabel harga utama
             document.getElementById('tblFotoBW').innerHTML = '<strong>Rp ' + _hargaAdmin.fotokopiBW.toLocaleString('id-ID') + '</strong>';
             document.getElementById('tblPrintBW').innerHTML = '<strong>Rp ' + _hargaAdmin.printBW.toLocaleString('id-ID') + '</strong>';
             document.getElementById('tblPrintWarna').innerHTML = '<strong>Rp ' + _hargaAdmin.printWarna.toLocaleString('id-ID') + '</strong>';
             document.getElementById('tblPrintA3BW').innerHTML = '<strong>Rp ' + _hargaAdmin.printA3BW.toLocaleString('id-ID') + '</strong>';
             document.getElementById('tblPrintA3Warna').innerHTML = '<strong>Rp ' + _hargaAdmin.printA3Warna.toLocaleString('id-ID') + '</strong>';
             
-            // Update tabel finishing & dropdown
             document.getElementById('tblJilidSpiral').innerHTML = '<strong>Rp ' + _hargaAdmin.jilidSpiral.toLocaleString('id-ID') + '</strong>';
             document.getElementById('tblJilidLakban').innerHTML = '<strong>Rp ' + _hargaAdmin.jilidLakban.toLocaleString('id-ID') + '</strong>';
             document.getElementById('tblLaminating').innerHTML = '<strong>Rp ' + _hargaAdmin.laminating.toLocaleString('id-ID') + '</strong>';
@@ -814,75 +720,7 @@
             document.getElementById('optLaminating').textContent = 'Laminating per lembar (+Rp ' + _hargaAdmin.laminating.toLocaleString('id-ID') + ')';
         }
 
-        fetchHarga(); // Jalanin pas awal buka
-
-        let uploadedFiles = [];
-        const uploadArea = document.getElementById('uploadArea');
-        uploadArea.addEventListener('dragover', function (e) {
-            e.preventDefault();
-            this.classList.add('dragover');
-        });
-        uploadArea.addEventListener('dragleave', function () {
-            this.classList.remove('dragover');
-        });
-        uploadArea.addEventListener('drop', function (e) {
-            e.preventDefault();
-            this.classList.remove('dragover');
-            handleFileUpload(e.dataTransfer.files);
-        });
-
-        function handleFileUpload(files) {
-            const allowedTypes = ['application/pdf', 'application/msword',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'image/jpeg', 'image/png'];
-            const maxSize = 10 * 1024 * 1024;
-            for (let file of files) {
-                if (!allowedTypes.includes(file.type)) {
-                    alert(`File "${file.name}" tidak didukung. Gunakan PDF, DOCX, JPG, atau PNG.`);
-                    continue;
-                }
-                if (file.size > maxSize) {
-                    alert(`File "${file.name}" terlalu besar. Maksimal 10MB.`);
-                    continue;
-                }
-                uploadedFiles.push({
-                    name: file.name,
-                    size: file.size,
-                    type: file.type
-                });
-            }
-            renderFilePreview();
-        }
-
-        function renderFilePreview() {
-            const container = document.getElementById('filePreviewList');
-            if (uploadedFiles.length === 0) {
-                container.innerHTML = '';
-                return;
-            }
-            container.innerHTML = uploadedFiles.map((f, i) => {
-                const sizeKB = (f.size / 1024).toFixed(1);
-                const icon = f.type.includes('pdf') ? 'bi-file-earmark-pdf-fill' :
-                    f.type.includes('word') ? 'bi-file-earmark-word-fill' :
-                        'bi-file-earmark-image-fill';
-                const color = f.type.includes('pdf') ? '#e74c3c' :
-                    f.type.includes('word') ? '#3498db' : '#2ecc71';
-                return `
-                    <div class="file-preview">
-                        <div class="fp-icon" style="background: ${color}15; color: ${color};"><i class="bi ${icon}"></i></div>
-                        <div class="fp-info">
-                            <h6>${f.name}</h6>
-                            <small>${sizeKB} KB</small>
-                        </div>
-                        <button type="button" class="fp-remove" onclick="hapusFile(${i})"><i class="bi bi-x-circle"></i></button>
-                    </div>`;
-            }).join('');
-        }
-
-        function hapusFile(index) {
-            uploadedFiles.splice(index, 1);
-            renderFilePreview();
-        }
+        fetchHarga(); 
 
         function selectSpec(el, groupName) {
             document.querySelectorAll(`input[name="${groupName}"]`).forEach(r => {
@@ -941,8 +779,10 @@
 
         async function prosesFotokopi(event) {
             event.preventDefault();
-            if (uploadedFiles.length === 0) {
-                alert('Silakan upload file dokumen terlebih dahulu!');
+            
+            const namaFileGDrive = document.getElementById('namaFileGdrive').value;
+            if (!namaFileGDrive) {
+                alert('Tolong isi nama file yang udah diupload ke Google Drive ya!');
                 return false;
             }
 
@@ -972,10 +812,9 @@
             else if (jilid === 'Jilid Lakban') total += _hargaAdmin.jilidLakban;
             else if (jilid === 'Laminating') total += _hargaAdmin.laminating * jumlahLembar;
 
-            // Ngerangkum detail order buat dikirim ke DB & WA
-            const namaFiles = uploadedFiles.map(f => f.name).join(', ');
+            // Rangkuman order
             const detailOrder = `
-File: ${namaFiles}
+File di GDrive: ${namaFileGDrive}
 Tipe: ${jenisCetak.value} (${ukuran})
 Jumlah: ${jumlahLembar} lbr
 Bolak-Balik: ${bolakBalik}
@@ -988,7 +827,7 @@ HP: ${hp}
             `.trim();
 
             try {
-                // Tembak data ke database Neon
+                // Tembak ke DB
                 const res = await fetch('/.netlify/functions/orders', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1001,19 +840,19 @@ HP: ${hp}
 
                 if (!res.ok) throw new Error("Gagal menyimpan ke database");
 
-                // Reset form setelah sukses
+                // Reset form
                 document.getElementById('formFotokopi').reset();
-                uploadedFiles = [];
-                renderFilePreview();
                 document.querySelectorAll('.spec-option').forEach(s => s.classList.remove('selected'));
                 document.querySelectorAll('.payment-option').forEach(s => s.classList.remove('selected'));
                 document.getElementById('estimasiDetail').innerHTML = '<p style="color: #888; font-size: 0.85rem;">Pilih jenis cetak dan jumlah lembar untuk melihat estimasi.</p>';
                 document.getElementById('alamatAntarWrap').style.display = 'none';
                 
-                tampilToast(`Pesanan dari ${nama} berhasil dikirim! Mengalihkan ke WhatsApp...`);
+                tampilToast(`Pesanan berhasil dikirim! Mengalihkan ke WhatsApp...`);
+
+                // Lempar ke WA
                 setTimeout(() => {
-                    const noWA = "6282228295940";
-                    const textWA = encodeURIComponent(`Halo Teras Rumah Karlos,\n\nSaya mau pesan layanan Cetak/Fotokopi nih.\n\n*Detail Pesanan:*\nNama: ${nama}\n${detailOrder}\n\nSaya akan kirimkan file dokumennya sekarang.`);
+                    const noWA = "6281234567890"; // <-- GANTI NOMOR WA LU DISINI WAK!
+                    const textWA = encodeURIComponent(`Halo Teras Rumah Karlos,\n\nSaya sudah upload file dan order Fotokopi/Print.\n\n*Detail Pesanan:*\nNama: ${nama}\n${detailOrder}\n\nTolong diproses ya min!`);
                     window.location.href = `https://wa.me/${noWA}?text=${textWA}`;
                 }, 1500);
 
