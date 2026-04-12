@@ -1045,62 +1045,45 @@
             toast.show();
         }
 
-        const defaultProdukATK = [
-            { id: 1, nama: "Pulpen Pilot G2", harga: 12000, kategori: "tulis", img: "atk/pulpen-pilot-g2.webp", deskripsi: "Pulpen gel hitam 0.5mm" },
-            { id: 2, nama: "Pensil 2B Faber-Castell", harga: 5000, kategori: "tulis", img: "atk/pensil-2b-faber-castell.webp", deskripsi: "Pensil ujian berkualitas" },
-            { id: 3, nama: "Buku Tulis Sidu 58 lbr", harga: 7000, kategori: "kertas", img: "atk/buku-tulis-sidu.webp", deskripsi: "Buku tulis isi 58 lembar" },
-            { id: 4, nama: "Kertas HVS A4 70gr (Rim)", harga: 48000, kategori: "kertas", img: "atk/kertas-hvs-a4.webp", deskripsi: "1 rim / 500 lembar" },
-            { id: 5, nama: "Spidol Snowman Hitam", harga: 8000, kategori: "tulis", img: "atk/spidol-snowman.webp", deskripsi: "Spidol whiteboard" },
-            { id: 6, nama: "Penggaris Besi 30cm", harga: 10000, kategori: "sekolah", img: "atk/penggaris-besi.webp", deskripsi: "Penggaris stainless steel" },
-            { id: 7, nama: "Stapler Kenko HD-10", harga: 25000, kategori: "kantor", img: "atk/stapler-kenko.webp", deskripsi: "Stapler ukuran kecil" },
-            { id: 8, nama: "Map File Plastik F4", harga: 3500, kategori: "kantor", img: "atk/map-file-plastik.webp", deskripsi: "Map plastik warna-warni" },
-            { id: 9, nama: "Penghapus Joyko EB-30", harga: 3000, kategori: "tulis", img: "atk/penghapus-joyko.webp", deskripsi: "Penghapus kuat dan bersih" },
-            { id: 10, nama: "Binder Clip No. 111", harga: 9000, kategori: "kantor", img: "atk/binder-clip.webp", deskripsi: "Isi 12 pcs per kotak" },
-            { id: 11, nama: "Buku Gambar A3", harga: 15000, kategori: "sekolah", img: "atk/buku-gambar-a3.webp", deskripsi: "Buku gambar besar 10 lembar" },
-            { id: 12, nama: "Correction Tape Joyko", harga: 6500, kategori: "tulis", img: "atk/correction-tape.webp", deskripsi: "Tip-Ex cair roll 5mm" },
-            { id: 13, nama: "Amplop Coklat A4", harga: 2000, kategori: "kantor", img: "atk/amplop-coklat.webp", deskripsi: "Amplop coklat per lembar" },
-            { id: 14, nama: "Crayon Titi 12 Warna", harga: 18000, kategori: "sekolah", img: "atk/crayon-titi.webp", deskripsi: "Set crayon anak-anak" },
-            { id: 15, nama: "Post-it Notes 3x3 inch", harga: 11000, kategori: "kantor", img: "atk/post-it-notes.webp", deskripsi: "Sticky notes warna kuning" },
-            { id: 16, nama: "Kertas Folio Bergaris", harga: 1500, kategori: "kertas", img: "atk/kertas-folio.webp", deskripsi: "Per lembar, minimal 10" },
-        ];
+        let globalDataATK = [];
+        let globalDataBuket = [];
 
-        const defaultProdukBuket = [
-            { id: 1, nama: "Bouquet Rose Classic", harga: 150000, kategori: "anniversary", img: "buket/bouquet-rose-classic.webp", deskripsi: "Rangkaian mawar merah premium dengan baby breath dan wrapping elegan.", badge: "Best Seller" },
-            { id: 2, nama: "Wisuda Sunflower Joy", harga: 120000, kategori: "wisuda", img: "buket/wisuda-sunflower-joy.webp", deskripsi: "Buket sunflower cerah untuk merayakan momen kelulusan istimewa.", badge: "Popular" },
-            { id: 3, nama: "Pink Lily Bouquet", harga: 180000, kategori: "anniversary", img: "buket/pink-lily-bouquet.webp", deskripsi: "Lily pink elegan dengan sentuhan eucalyptus dan pita satin.", badge: "" },
-            { id: 4, nama: "Birthday Rainbow Mix", harga: 95000, kategori: "ulang-tahun", img: "buket/birthday-rainbow-mix.webp", deskripsi: "Campuran bunga warna-warni ceria untuk ucapan ulang tahun.", badge: "" },
-            { id: 5, nama: "Wisuda Teddy Bear Combo", harga: 200000, kategori: "wisuda", img: "buket/wisuda-teddy-bear.webp", deskripsi: "Buket bunga + boneka teddy bear kecil, cocok untuk wisuda!", badge: "Premium" },
-            { id: 6, nama: "Money Bouquet 50K", harga: 85000, kategori: "uang", img: "buket/money-bouquet-50k.webp", deskripsi: "Buket uang Rp50.000 (belum termasuk nominal uang). Kreatif dan unik!", badge: "" },
-            { id: 7, nama: "White Elegance", harga: 165000, kategori: "anniversary", img: "buket/white-elegance.webp", deskripsi: "Buket putih minimalis dengan baby breath dan daun hijau.", badge: "" },
-            { id: 8, nama: "Money Bouquet 100K", harga: 120000, kategori: "uang", img: "buket/money-bouquet-100k.webp", deskripsi: "Buket uang Rp100.000 cantik (belum termasuk nominal uang).", badge: "Popular" },
-            { id: 9, nama: "Wisuda Dried Flower", harga: 135000, kategori: "wisuda", img: "buket/wisuda-dried-flower.webp", deskripsi: "Buket dried flower tahan lama, aesthetic untuk foto wisuda.", badge: "" },
-            { id: 10, nama: "Birthday Snack Bouquet", harga: 75000, kategori: "ulang-tahun", img: "buket/birthday-snack-bouquet.webp", deskripsi: "Buket snack cokelat & permen untuk pecinta kuliner.", badge: "Fun!" },
-            { id: 11, nama: "Red Velvet Romance", harga: 220000, kategori: "anniversary", img: "buket/red-velvet-romance.webp", deskripsi: "50 tangkai mawar merah premium dalam box elegant.", badge: "Luxury" },
-            { id: 12, nama: "Wisuda Orchid Premium", harga: 250000, kategori: "wisuda", img: "buket/wisuda-orchid-premium.webp", deskripsi: "Anggrek ungu cantik dengan wrapping premium dan pita emas.", badge: "Premium" },
-        ];
-
-        const defaultHargaFotokopi = {
-            fotokopiBW: 200, printBW: 500, printWarna: 1500,
-            printA3BW: 1000, printA3Warna: 3000,
-            jilidSpiral: 5000, jilidLakban: 3000, laminating: 2000
-        };
-
-        const defaultHargaPassFoto = {
-            basic: 15000, standard: 25000, premium: 45000
-        };
+        async function fetchNeon(endpoint, method = 'GET', body = null) {
+            const options = { method, headers: { 'Content-Type': 'application/json' } };
+            if (body) options.body = JSON.stringify(body);
+            const res = await fetch(endpoint, options);
+            if (!res.ok) {
+                const err = await res.json().catch(()=>({}));
+                throw new Error(err.error || res.statusText);
+            }
+            return res.json();
+        }
 
         function getDataATK() {
-            return JSON.parse(localStorage.getItem('adminProdukATK')) || [...defaultProdukATK];
-        }
-        function setDataATK(data) {
-            localStorage.setItem('adminProdukATK', JSON.stringify(data));
+            return globalDataATK;
         }
         function getDataBuket() {
-            return JSON.parse(localStorage.getItem('adminProdukBuket')) || [...defaultProdukBuket];
+            return globalDataBuket;
         }
-        function setDataBuket(data) {
-            localStorage.setItem('adminProdukBuket', JSON.stringify(data));
+
+        async function initDataServer() {
+            try {
+                const btnSimpanATK = document.getElementById('btnSimpanATK');
+                if(btnSimpanATK) btnSimpanATK.disabled = true;
+                const [atk, buket] = await Promise.all([
+                    fetchNeon('/.netlify/functions/products-atk'),
+                    fetchNeon('/.netlify/functions/products-buket')
+                ]);
+                globalDataATK = atk;
+                globalDataBuket = buket;
+                renderTabelATK();
+                renderTabelBuket();
+                if(btnSimpanATK) btnSimpanATK.disabled = false;
+            } catch (e) {
+                console.error("Gagal load dari Neon:", e);
+            }
         }
+
         function getHargaFotokopi() {
             return JSON.parse(localStorage.getItem('adminHargaFotokopi')) || { ...defaultHargaFotokopi };
         }
@@ -1250,41 +1233,46 @@
             new bootstrap.Modal(document.getElementById('modalATK')).show();
         }
 
-        function simpanProdukATK(event) {
+        async function simpanProdukATK(event) {
             event.preventDefault();
-            let data = getDataATK();
             const editId = document.getElementById('editIdATK').value;
             const produk = {
                 nama: document.getElementById('namaATK').value,
                 harga: parseInt(document.getElementById('hargaATK').value),
                 kategori: document.getElementById('kategoriATK').value,
-                img: document.getElementById('imgATKData').value || 'logo.webp', // FIX TYPO DISINI
+                img: document.getElementById('imgATKData').value || '', 
                 deskripsi: document.getElementById('deskATK').value
             };
-            if (editId) {
-                const idx = data.findIndex(p => p.id === parseInt(editId));
-                if (idx !== -1) {
+            
+            try {
+                if (editId) {
                     produk.id = parseInt(editId);
-                    data[idx] = produk;
+                    await fetchNeon('/.netlify/functions/products-atk', 'PUT', produk);
+                } else {
+                    await fetchNeon('/.netlify/functions/products-atk', 'POST', produk);
                 }
-            } else {
-                produk.id = data.length > 0 ? Math.max(...data.map(p => p.id)) + 1 : 1;
-                data.push(produk);
+                
+                bootstrap.Modal.getInstance(document.getElementById('modalATK')).hide();
+                // Reload global data and render
+                globalDataATK = await fetchNeon('/.netlify/functions/products-atk');
+                renderTabelATK();
+                tampilToast(editId ? 'Produk ATK berhasil diperbarui!' : 'Produk ATK berhasil ditambahkan!');
+            } catch(e) {
+                alert("Gagal simpan ke Neon DB: " + e.message);
             }
-            setDataATK(data);
-            bootstrap.Modal.getInstance(document.getElementById('modalATK')).hide();
-            renderTabelATK();
-            tampilToast(editId ? 'Produk ATK berhasil diperbarui!' : 'Produk ATK berhasil ditambahkan!');
             return false;
         }
 
-        function hapusProdukATK(id) {
-            if (!confirm('Yakin hapus produk ini?')) return;
-            let data = getDataATK();
-            data = data.filter(p => p.id !== id);
-            setDataATK(data);
-            renderTabelATK();
-            tampilToast('Produk ATK berhasil dihapus!');
+        async function hapusProdukATK(id) {
+            if (!confirm('Yakin hapus produk ini dari Database?')) return;
+            try {
+                await fetchNeon(`/.netlify/functions/products-atk?id=${id}`, 'DELETE');
+                globalDataATK = await fetchNeon('/.netlify/functions/products-atk');
+                renderTabelATK();
+                tampilToast('Produk ATK berhasil dihapus!');
+            } catch(e) {
+                alert("Gagal menghapus dari Neon DB: " + e.message);
+            }
         }
 
         function renderTabelBuket() {
@@ -1360,42 +1348,47 @@
             new bootstrap.Modal(document.getElementById('modalBuket')).show();
         }
 
-        function simpanProdukBuket(event) {
+        async function simpanProdukBuket(event) {
             event.preventDefault();
-            let data = getDataBuket();
             const editId = document.getElementById('editIdBuket').value;
             const buket = {
                 nama: document.getElementById('namaBuket').value,
                 harga: parseInt(document.getElementById('hargaBuket').value),
                 kategori: document.getElementById('kategoriBuket').value,
-                img: document.getElementById('imgBuketData').value || 'logo.webp', // FIX TYPO DISINI
+                img: document.getElementById('imgBuketData').value || '', 
                 deskripsi: document.getElementById('deskBuket').value,
                 badge: document.getElementById('badgeBuket').value
             };
-            if (editId) {
-                const idx = data.findIndex(b => b.id === parseInt(editId));
-                if (idx !== -1) {
+            
+            try {
+                if (editId) {
                     buket.id = parseInt(editId);
-                    data[idx] = buket;
+                    await fetchNeon('/.netlify/functions/products-buket', 'PUT', buket);
+                } else {
+                    await fetchNeon('/.netlify/functions/products-buket', 'POST', buket);
                 }
-            } else {
-                buket.id = data.length > 0 ? Math.max(...data.map(b => b.id)) + 1 : 1;
-                data.push(buket);
+                
+                bootstrap.Modal.getInstance(document.getElementById('modalBuket')).hide();
+                // Reload data from neon
+                globalDataBuket = await fetchNeon('/.netlify/functions/products-buket');
+                renderTabelBuket();
+                tampilToast(editId ? 'Buket bunga berhasil diperbarui!' : 'Buket bunga berhasil ditambahkan!');
+            } catch(e) {
+                alert("Gagal simpan ke Neon DB: " + e.message);
             }
-            setDataBuket(data);
-            bootstrap.Modal.getInstance(document.getElementById('modalBuket')).hide();
-            renderTabelBuket();
-            tampilToast(editId ? 'Buket bunga berhasil diperbarui!' : 'Buket bunga berhasil ditambahkan!');
             return false;
         }
 
-        function hapusProdukBuket(id) {
-            if (!confirm('Yakin hapus buket ini?')) return;
-            let data = getDataBuket();
-            data = data.filter(b => b.id !== id);
-            setDataBuket(data);
-            renderTabelBuket();
-            tampilToast('Buket bunga berhasil dihapus!');
+        async function hapusProdukBuket(id) {
+            if (!confirm('Yakin hapus buket ini dari Database?')) return;
+            try {
+                await fetchNeon(`/.netlify/functions/products-buket?id=${id}`, 'DELETE');
+                globalDataBuket = await fetchNeon('/.netlify/functions/products-buket');
+                renderTabelBuket();
+                tampilToast('Buket bunga berhasil dihapus!');
+            } catch(e) {
+                alert("Gagal menghapus dari Neon DB: " + e.message);
+            }
         }
 
         function loadHargaFotokopi() {
@@ -1442,8 +1435,7 @@
             tampilToast('Harga Pass Foto berhasil disimpan!');
         }
 
-        renderTabelATK();
-        renderTabelBuket();
+        initDataServer();
         loadHargaFotokopi();
         loadHargaPassFoto();
     </script>
