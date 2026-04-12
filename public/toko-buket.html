@@ -571,20 +571,22 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const dataBuket = JSON.parse(localStorage.getItem('adminProdukBuket')) || [
-            { id: 1, nama: "Bouquet Rose Classic", harga: 150000, kategori: "anniversary", img: "buket/bouquet-rose-classic.webp", deskripsi: "Rangkaian mawar merah premium dengan baby breath dan wrapping elegan.", badge: "Best Seller" },
-            { id: 2, nama: "Wisuda Sunflower Joy", harga: 120000, kategori: "wisuda", img: "buket/wisuda-sunflower-joy.webp", deskripsi: "Buket sunflower cerah untuk merayakan momen kelulusan istimewa.", badge: "Popular" },
-            { id: 3, nama: "Pink Lily Bouquet", harga: 180000, kategori: "anniversary", img: "buket/pink-lily-bouquet.webp", deskripsi: "Lily pink elegan dengan sentuhan eucalyptus dan pita satin.", badge: "" },
-            { id: 4, nama: "Birthday Rainbow Mix", harga: 95000, kategori: "ulang-tahun", img: "buket/birthday-rainbow-mix.webp", deskripsi: "Campuran bunga warna-warni ceria untuk ucapan ulang tahun.", badge: "" },
-            { id: 5, nama: "Wisuda Teddy Bear Combo", harga: 200000, kategori: "wisuda", img: "buket/wisuda-teddy-bear.webp", deskripsi: "Buket bunga + boneka teddy bear kecil, cocok untuk wisuda!", badge: "Premium" },
-            { id: 6, nama: "Money Bouquet 50K", harga: 85000, kategori: "uang", img: "buket/money-bouquet-50k.webp", deskripsi: "Buket uang Rp50.000 (belum termasuk nominal uang). Kreatif dan unik!", badge: "" },
-            { id: 7, nama: "White Elegance", harga: 165000, kategori: "anniversary", img: "buket/white-elegance.webp", deskripsi: "Buket putih minimalis dengan baby breath dan daun hijau.", badge: "" },
-            { id: 8, nama: "Money Bouquet 100K", harga: 120000, kategori: "uang", img: "buket/money-bouquet-100k.webp", deskripsi: "Buket uang Rp100.000 cantik (belum termasuk nominal uang).", badge: "Popular" },
-            { id: 9, nama: "Wisuda Dried Flower", harga: 135000, kategori: "wisuda", img: "buket/wisuda-dried-flower.webp", deskripsi: "Buket dried flower tahan lama, aesthetic untuk foto wisuda.", badge: "" },
-            { id: 10, nama: "Birthday Snack Bouquet", harga: 75000, kategori: "ulang-tahun", img: "buket/birthday-snack-bouquet.webp", deskripsi: "Buket snack cokelat & permen untuk pecinta kuliner.", badge: "Fun!" },
-            { id: 11, nama: "Red Velvet Romance", harga: 220000, kategori: "anniversary", img: "buket/red-velvet-romance.webp", deskripsi: "50 tangkai mawar merah premium dalam box elegant.", badge: "Luxury" },
-            { id: 12, nama: "Wisuda Orchid Premium", harga: 250000, kategori: "wisuda", img: "buket/wisuda-orchid-premium.webp", deskripsi: "Anggrek ungu cantik dengan wrapping premium dan pita emas.", badge: "Premium" },
-        ];
+        let dataBuket = [];
+        async function initDataServer() {
+            try {
+                const res = await fetch('/.netlify/functions/products-buket');
+                if (!res.ok) throw new Error('Gagal load Buket');
+                dataBuket = await res.json();
+                renderBuket(dataBuket);
+            } catch (err) {
+                console.error(err);
+                document.getElementById('buketGrid').innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="bi bi-cloud-slash" style="font-size: 3rem; color: #ccc;"></i>
+                        <p style="color: #999; margin-top: 1rem;">Gagal memuat katalog Buket dari Database.</p>
+                    </div>`;
+            }
+        }
         let buketDipilih = null;
         function renderBuket(list) {
             const grid = document.getElementById('buketGrid');
@@ -711,7 +713,7 @@
             const toast = new bootstrap.Toast(document.getElementById('toastNotif'), { delay: 3500 });
             toast.show();
         }
-        renderBuket(dataBuket);
+        initDataServer();
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
         document.getElementById('tanggalBuket').min = tomorrow.toISOString().split('T')[0];
