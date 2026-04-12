@@ -594,38 +594,7 @@
             transition: all 0.3s;
         }
 
-        .btn-generate {
-            background: var(--gold);
-            color: var(--charcoal);
-            border: none;
-            padding: 8px 20px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
 
-        .btn-generate:hover {
-            background: var(--peach);
-            transform: translateY(-2px);
-            color: var(--charcoal);
-        }
-
-        .btn-clear-all {
-            background: rgba(231, 76, 60, 0.1);
-            color: #e74c3c;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .btn-clear-all:hover {
-            background: #e74c3c;
-            color: #fff;
-        }
 
         .pagination-custom .page-item .page-link {
             border: none;
@@ -818,12 +787,6 @@
                         </select>
                     </div>
                     <div class="col-lg-4 col-md-12 text-lg-end">
-                        <button class="btn-generate me-2" onclick="generateSampleData()">
-                            <i class="bi bi-database-add me-1"></i>Generate Data
-                        </button>
-                        <button class="btn-clear-all" onclick="hapusSemuaPesanan()">
-                            <i class="bi bi-trash3 me-1"></i>Hapus Semua
-                        </button>
                     </div>
                 </div>
             </div>
@@ -848,8 +811,6 @@
                     <i class="bi bi-inbox d-block"></i>
                     <h5>Belum Ada Pesanan</h5>
                     <p>Pesanan dari semua layanan akan muncul di sini.</p>
-                    <button class="btn-generate mt-3" onclick="generateSampleData()"><i
-                            class="bi bi-database-add me-1"></i>Generate Data Contoh</button>
                 </div>
             </div>
             <div class="d-flex justify-content-between align-items-center">
@@ -1111,84 +1072,7 @@
             updateStatistik();
             tampilToast(`Pesanan ${id} dihapus.`);
         }
-        function hapusSemuaPesanan() {
-            if (!confirm('Yakin hapus SEMUA data pesanan?')) return;
-            localStorage.removeItem('pesananTRK');
-            semuaPesanan = [];
-            pesananFiltered = [];
-            renderTabel();
-            updateStatistik();
-            tampilToast('Semua data pesanan dihapus.');
-        }
-        function generateSampleData() {
-            let antrianCounters = JSON.parse(localStorage.getItem('antrianCounters')) || { ATK: 0, BKT: 0, FTK: 0, PFT: 0 };
-            const sampleData = [
-                {
-                    id: 'ATK-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
-                    tipe: 'Toko ATK', nama: 'Ahmad Fauzi', hp: '081234567890',
-                    alamat: 'Jl. Rungkut Madya No. 5', catatan: 'Minta plastik',
-                    items: [{ nama: 'Pulpen Pilot G2', qty: 3, harga: 12000, subtotal: 36000 }, { nama: 'Buku Tulis Sidu', qty: 5, harga: 7000, subtotal: 35000 }],
-                    total: 71000, metode: 'COD - Ambil di Tempat', status: 'Diproses',
-                    nomorAntrian: ++antrianCounters.ATK,
-                    tanggal: '11 April 2026', waktu: '09:15'
-                },
-                {
-                    id: 'BKT-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
-                    tipe: 'Buket Bunga', nama: 'Siti Nurhaliza', hp: '085678901234',
-                    alamat: 'Jl. Kertajaya No. 12', catatan: 'Ucapan: Selamat Wisuda!',
-                    items: [{ nama: 'Wisuda Sunflower Joy', qty: 1, harga: 120000, subtotal: 120000 }],
-                    total: 120000, metode: 'COD - Diantar', status: 'Diproses',
-                    nomorAntrian: ++antrianCounters.BKT,
-                    tanggal: '11 April 2026', waktu: '10:30'
-                },
-                {
-                    id: 'FTK-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
-                    tipe: 'Fotokopi & Print', nama: 'Budi Santoso', hp: '087890123456',
-                    alamat: 'Ambil di Toko', catatan: 'Halaman 1-50 saja',
-                    items: [{ nama: 'Print B/W - A4', qty: 50, harga: 500, subtotal: 25000 }],
-                    detail: { files: ['Skripsi_Bab1.pdf'], ukuran: 'A4', bolakBalik: 'Ya', jilid: 'Jilid Spiral' },
-                    total: 30000, metode: 'COD - Ambil di Tempat', status: 'Diproses',
-                    nomorAntrian: ++antrianCounters.FTK,
-                    tanggal: '11 April 2026', waktu: '14:20'
-                },
-                {
-                    id: 'PFT-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
-                    tipe: 'Pass Foto', nama: 'Dewi Anggraini', hp: '089012345678',
-                    alamat: 'Ambil di Toko', catatan: 'Pakai jas hitam',
-                    items: [{ nama: 'Paket Standard - 4x6', qty: 2, harga: 25000, subtotal: 50000 }],
-                    detail: { keperluan: 'SKCK', background: 'Merah', tanggal: '2026-04-15', jam: '10:00' },
-                    total: 50000, metode: 'COD - Ambil di Tempat', status: 'Terjadwal',
-                    nomorAntrian: ++antrianCounters.PFT,
-                    tanggal: '11 April 2026', waktu: '08:45'
-                },
-                {
-                    id: 'ATK-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
-                    tipe: 'Toko ATK', nama: 'Reza Pratama', hp: '081345678901',
-                    alamat: 'Jl. Arief Rahman Hakim No. 8', catatan: '-',
-                    items: [{ nama: 'Kertas HVS A4 (Rim)', qty: 2, harga: 48000, subtotal: 96000 }, { nama: 'Stapler Kenko HD-10', qty: 1, harga: 25000, subtotal: 25000 }],
-                    total: 121000, metode: 'COD - Diantar', status: 'Diproses',
-                    nomorAntrian: ++antrianCounters.ATK,
-                    tanggal: '11 April 2026', waktu: '11:00'
-                },
-                {
-                    id: 'BKT-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
-                    tipe: 'Buket Bunga', nama: 'Linda Megawati', hp: '082345678901',
-                    alamat: 'Jl. Mulyosari No. 22', catatan: 'Happy Anniversary',
-                    items: [{ nama: 'Red Velvet Romance', qty: 1, harga: 220000, subtotal: 220000 }],
-                    total: 220000, metode: 'COD - Diantar', status: 'Selesai',
-                    nomorAntrian: ++antrianCounters.BKT,
-                    tanggal: '08 April 2026', waktu: '16:00'
-                }
-            ];
-            localStorage.setItem('antrianCounters', JSON.stringify(antrianCounters));
-            let existing = JSON.parse(localStorage.getItem('pesananTRK')) || [];
-            existing = existing.concat(sampleData);
-            localStorage.setItem('pesananTRK', JSON.stringify(existing));
-            semuaPesanan = existing;
-            filterPesanan();
-            updateStatistik();
-            tampilToast(`${sampleData.length} data contoh berhasil ditambahkan!`);
-        }
+
         function renderAntrian() {
             const allPesanan = JSON.parse(localStorage.getItem('pesananTRK')) || [];
             const antrianATK = allPesanan.filter(p => p.tipe === 'Toko ATK' && (p.status === 'Diproses' || p.status === 'Terjadwal'));
