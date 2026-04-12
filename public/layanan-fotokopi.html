@@ -1005,10 +1005,8 @@ HP: ${hp}
                 document.getElementById('alamatAntarWrap').style.display = 'none';
                 
                 tampilToast(`Pesanan dari ${nama} berhasil dikirim! Mengalihkan ke WhatsApp...`);
-
-                // Kasih delay dikit biar user baca toast, terus lempar ke WA
                 setTimeout(() => {
-                    const noWA = "6281234567890"; // <-- WAK! JANGAN LUPA GANTI NOMOR WA LU DI SINI
+                    const noWA = "6282228295940";
                     const textWA = encodeURIComponent(`Halo Teras Rumah Karlos,\n\nSaya mau pesan layanan Cetak/Fotokopi nih.\n\n*Detail Pesanan:*\nNama: ${nama}\n${detailOrder}\n\nSaya akan kirimkan file dokumennya sekarang.`);
                     window.location.href = `https://wa.me/${noWA}?text=${textWA}`;
                 }, 1500);
