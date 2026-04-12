@@ -1,12 +1,12 @@
 import { neon } from '@neondatabase/serverless';
 
 export function getSQL() {
-  // Pinter dikit: ambil dari .env lokal (kalo lagi ngetes di laptop) 
-  // ATAU ambil dari extension Netlify (kalo udah di-deploy)
-  const dbUrl = process.env.DATABASE_URL || process.env.NETLIFY_DATABASE_URL;
+  // Pake URL bawaan Neon secara prioritas. 
+  // NETLIFY_DATABASE_URL ini digenerate otomatis sama Neon extension.
+  const dbUrl = process.env.NETLIFY_DATABASE_URL || process.env.DATABASE_URL;
   
   if (!dbUrl) {
-    throw new Error("Waduh, URL Databasenya nggak nemu nih wak! Cek environment variable lu.");
+    throw new Error("Gembok database (URL) nggak nemu wak! Cek environment variable lu.");
   }
   
   return neon(dbUrl);
