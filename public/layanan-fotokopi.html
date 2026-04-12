@@ -357,6 +357,13 @@
             box-shadow: 0 6px 20px rgba(226, 194, 117, 0.3);
             color: var(--charcoal);
         }
+        
+        .btn-submit-order:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
 
         .harga-table {
             background: #fff;
@@ -534,7 +541,7 @@
                                         <input type="radio" name="jenisCetak" value="Fotokopi B/W" required>
                                         <i class="bi bi-files d-block"></i>
                                         <h6>Fotokopi B/W</h6>
-                                        <p>Rp 200/lbr</p>
+                                        <p id="lblHargaBW">Loading...</p>
                                     </label>
                                 </div>
                                 <div class="col-md-4 col-6">
@@ -542,7 +549,7 @@
                                         <input type="radio" name="jenisCetak" value="Print B/W">
                                         <i class="bi bi-printer d-block"></i>
                                         <h6>Print B/W</h6>
-                                        <p>Rp 500/lbr</p>
+                                        <p id="lblHargaPrintBW">Loading...</p>
                                     </label>
                                 </div>
                                 <div class="col-md-4 col-6">
@@ -550,7 +557,7 @@
                                         <input type="radio" name="jenisCetak" value="Print Warna">
                                         <i class="bi bi-palette d-block"></i>
                                         <h6>Print Warna</h6>
-                                        <p>Rp 1.500/lbr</p>
+                                        <p id="lblHargaWarna">Loading...</p>
                                     </label>
                                 </div>
                             </div>
@@ -584,9 +591,9 @@
                                 <label class="form-label-custom">Jilid / Finishing</label>
                                 <select class="form-select form-select-custom" id="jilid">
                                     <option value="Tanpa Jilid">Tanpa Jilid</option>
-                                    <option value="Jilid Spiral">Jilid Spiral (+Rp 5.000)</option>
-                                    <option value="Jilid Lakban">Jilid Lakban (+Rp 3.000)</option>
-                                    <option value="Laminating">Laminating per lembar (+Rp 2.000)</option>
+                                    <option value="Jilid Spiral" id="optJilidSpiral">Jilid Spiral</option>
+                                    <option value="Jilid Lakban" id="optJilidLakban">Jilid Lakban</option>
+                                    <option value="Laminating" id="optLaminating">Laminating per lembar</option>
                                 </select>
                             </div>
                         </div>
@@ -627,7 +634,7 @@
                                     melihat estimasi.</p>
                             </div>
                         </div>
-                        <button type="submit" class="btn-submit-order">
+                        <button type="submit" class="btn-submit-order" id="btnKirim">
                             <i class="bi bi-send me-2"></i>Kirim Pesanan Cetak
                         </button>
                     </form>
@@ -648,23 +655,23 @@
                         <tbody>
                             <tr>
                                 <td>Fotokopi B/W</td>
-                                <td><strong>Rp 200</strong></td>
+                                <td id="tblFotoBW"><strong>Loading...</strong></td>
                             </tr>
                             <tr>
                                 <td>Print B/W</td>
-                                <td><strong>Rp 500</strong></td>
+                                <td id="tblPrintBW"><strong>Loading...</strong></td>
                             </tr>
                             <tr>
                                 <td>Print Warna</td>
-                                <td><strong>Rp 1.500</strong></td>
+                                <td id="tblPrintWarna"><strong>Loading...</strong></td>
                             </tr>
                             <tr>
                                 <td>Print A3 B/W</td>
-                                <td><strong>Rp 1.000</strong></td>
+                                <td id="tblPrintA3BW"><strong>Loading...</strong></td>
                             </tr>
                             <tr>
                                 <td>Print A3 Warna</td>
-                                <td><strong>Rp 3.000</strong></td>
+                                <td id="tblPrintA3Warna"><strong>Loading...</strong></td>
                             </tr>
                         </tbody>
                     </table>
@@ -683,15 +690,15 @@
                         <tbody>
                             <tr>
                                 <td>Jilid Spiral</td>
-                                <td><strong>Rp 5.000</strong></td>
+                                <td id="tblJilidSpiral"><strong>Loading...</strong></td>
                             </tr>
                             <tr>
                                 <td>Jilid Lakban</td>
-                                <td><strong>Rp 3.000</strong></td>
+                                <td id="tblJilidLakban"><strong>Loading...</strong></td>
                             </tr>
                             <tr>
                                 <td>Laminating /lbr</td>
-                                <td><strong>Rp 2.000</strong></td>
+                                <td id="tblLaminating"><strong>Loading...</strong></td>
                             </tr>
                         </tbody>
                     </table>
@@ -752,18 +759,57 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const _hargaAdmin = JSON.parse(localStorage.getItem('adminHargaFotokopi')) || { fotokopiBW: 200, printBW: 500, printWarna: 1500, printA3BW: 1000, printA3Warna: 3000, jilidSpiral: 5000, jilidLakban: 3000, laminating: 2000 };
-        (function updateHargaDisplay() {
-            const specLabels = document.querySelectorAll('.spec-option p');
-            if (specLabels[0]) specLabels[0].textContent = 'Rp ' + _hargaAdmin.fotokopiBW.toLocaleString('id-ID') + '/lbr';
-            if (specLabels[1]) specLabels[1].textContent = 'Rp ' + _hargaAdmin.printBW.toLocaleString('id-ID') + '/lbr';
-            if (specLabels[2]) specLabels[2].textContent = 'Rp ' + _hargaAdmin.printWarna.toLocaleString('id-ID') + '/lbr';
-            const rows = document.querySelectorAll('.harga-table tbody tr');
-            const hargaDisplay = [_hargaAdmin.fotokopiBW, _hargaAdmin.printBW, _hargaAdmin.printWarna, _hargaAdmin.printA3BW, _hargaAdmin.printA3Warna, _hargaAdmin.jilidSpiral, _hargaAdmin.jilidLakban, _hargaAdmin.laminating];
-            rows.forEach((row, i) => { if (hargaDisplay[i] !== undefined) { const td = row.querySelector('td:last-child'); if (td) td.innerHTML = '<strong>Rp ' + hargaDisplay[i].toLocaleString('id-ID') + '</strong>'; } });
-            const jilidSelect = document.getElementById('jilid');
-            if (jilidSelect) { jilidSelect.options[1].textContent = 'Jilid Spiral (+Rp ' + _hargaAdmin.jilidSpiral.toLocaleString('id-ID') + ')'; jilidSelect.options[2].textContent = 'Jilid Lakban (+Rp ' + _hargaAdmin.jilidLakban.toLocaleString('id-ID') + ')'; jilidSelect.options[3].textContent = 'Laminating per lembar (+Rp ' + _hargaAdmin.laminating.toLocaleString('id-ID') + ')'; }
-        })();
+        // Default harga kalau gagal fetch
+        let _hargaAdmin = { fotokopiBW: 200, printBW: 500, printWarna: 1500, printA3BW: 1000, printA3Warna: 3000, jilidSpiral: 5000, jilidLakban: 3000, laminating: 2000 };
+
+        // Tarik harga dari DB
+        async function fetchHarga() {
+            try {
+                const res = await fetch('/.netlify/functions/harga-fotokopi');
+                if (res.ok) {
+                    const data = await res.json();
+                    _hargaAdmin = {
+                        fotokopiBW: data.fotokopi_bw,
+                        printBW: data.print_bw,
+                        printWarna: data.print_warna,
+                        printA3BW: data.print_a3_bw,
+                        printA3Warna: data.print_a3_warna,
+                        jilidSpiral: data.jilid_spiral,
+                        jilidLakban: data.jilid_lakban,
+                        laminating: data.laminating
+                    };
+                }
+            } catch (e) {
+                console.error('Gagal fetch harga, pakai default.', e);
+            }
+            updateHargaDisplay();
+        }
+
+        function updateHargaDisplay() {
+            // Update pilihan spec
+            document.getElementById('lblHargaBW').textContent = 'Rp ' + _hargaAdmin.fotokopiBW.toLocaleString('id-ID') + '/lbr';
+            document.getElementById('lblHargaPrintBW').textContent = 'Rp ' + _hargaAdmin.printBW.toLocaleString('id-ID') + '/lbr';
+            document.getElementById('lblHargaWarna').textContent = 'Rp ' + _hargaAdmin.printWarna.toLocaleString('id-ID') + '/lbr';
+            
+            // Update tabel harga utama
+            document.getElementById('tblFotoBW').innerHTML = '<strong>Rp ' + _hargaAdmin.fotokopiBW.toLocaleString('id-ID') + '</strong>';
+            document.getElementById('tblPrintBW').innerHTML = '<strong>Rp ' + _hargaAdmin.printBW.toLocaleString('id-ID') + '</strong>';
+            document.getElementById('tblPrintWarna').innerHTML = '<strong>Rp ' + _hargaAdmin.printWarna.toLocaleString('id-ID') + '</strong>';
+            document.getElementById('tblPrintA3BW').innerHTML = '<strong>Rp ' + _hargaAdmin.printA3BW.toLocaleString('id-ID') + '</strong>';
+            document.getElementById('tblPrintA3Warna').innerHTML = '<strong>Rp ' + _hargaAdmin.printA3Warna.toLocaleString('id-ID') + '</strong>';
+            
+            // Update tabel finishing & dropdown
+            document.getElementById('tblJilidSpiral').innerHTML = '<strong>Rp ' + _hargaAdmin.jilidSpiral.toLocaleString('id-ID') + '</strong>';
+            document.getElementById('tblJilidLakban').innerHTML = '<strong>Rp ' + _hargaAdmin.jilidLakban.toLocaleString('id-ID') + '</strong>';
+            document.getElementById('tblLaminating').innerHTML = '<strong>Rp ' + _hargaAdmin.laminating.toLocaleString('id-ID') + '</strong>';
+
+            document.getElementById('optJilidSpiral').textContent = 'Jilid Spiral (+Rp ' + _hargaAdmin.jilidSpiral.toLocaleString('id-ID') + ')';
+            document.getElementById('optJilidLakban').textContent = 'Jilid Lakban (+Rp ' + _hargaAdmin.jilidLakban.toLocaleString('id-ID') + ')';
+            document.getElementById('optLaminating').textContent = 'Laminating per lembar (+Rp ' + _hargaAdmin.laminating.toLocaleString('id-ID') + ')';
+        }
+
+        fetchHarga(); // Jalanin pas awal buka
+
         let uploadedFiles = [];
         const uploadArea = document.getElementById('uploadArea');
         uploadArea.addEventListener('dragover', function (e) {
@@ -778,6 +824,7 @@
             this.classList.remove('dragover');
             handleFileUpload(e.dataTransfer.files);
         });
+
         function handleFileUpload(files) {
             const allowedTypes = ['application/pdf', 'application/msword',
                 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -800,6 +847,7 @@
             }
             renderFilePreview();
         }
+
         function renderFilePreview() {
             const container = document.getElementById('filePreviewList');
             if (uploadedFiles.length === 0) {
@@ -824,10 +872,12 @@
                     </div>`;
             }).join('');
         }
+
         function hapusFile(index) {
             uploadedFiles.splice(index, 1);
             renderFilePreview();
         }
+
         function selectSpec(el, groupName) {
             document.querySelectorAll(`input[name="${groupName}"]`).forEach(r => {
                 r.closest('.spec-option').classList.remove('selected');
@@ -835,21 +885,25 @@
             el.classList.add('selected');
             hitungEstimasi();
         }
+
         function hitungEstimasi() {
             const jenisCetak = document.querySelector('input[name="jenisCetak"]:checked');
             const jumlahLembar = parseInt(document.getElementById('jumlahLembar').value) || 0;
             const jilid = document.getElementById('jilid').value;
             if (!jenisCetak || jumlahLembar <= 0) return;
+            
             const hargaPerLembar = {
                 'Fotokopi B/W': _hargaAdmin.fotokopiBW,
                 'Print B/W': _hargaAdmin.printBW,
                 'Print Warna': _hargaAdmin.printWarna
             };
+            
             let hargaCetak = (hargaPerLembar[jenisCetak.value] || 0) * jumlahLembar;
             let hargaFinishing = 0;
             if (jilid === 'Jilid Spiral') hargaFinishing = _hargaAdmin.jilidSpiral;
             else if (jilid === 'Jilid Lakban') hargaFinishing = _hargaAdmin.jilidLakban;
             else if (jilid === 'Laminating') hargaFinishing = _hargaAdmin.laminating * jumlahLembar;
+            
             const total = hargaCetak + hargaFinishing;
             document.getElementById('estimasiDetail').innerHTML = `
                 <div class="d-flex justify-content-between mb-1">
@@ -868,6 +922,7 @@
                 </div>
             `;
         }
+
         document.getElementById('jilid').addEventListener('change', hitungEstimasi);
         document.querySelectorAll('input[name="metodeFotokopi"]').forEach(radio => {
             radio.addEventListener('change', function () {
@@ -877,66 +932,97 @@
                 this.closest('.payment-option').classList.add('selected');
             });
         });
-        function prosesFotokopi(event) {
+
+        async function prosesFotokopi(event) {
             event.preventDefault();
             if (uploadedFiles.length === 0) {
                 alert('Silakan upload file dokumen terlebih dahulu!');
                 return false;
             }
+
             const jenisCetak = document.querySelector('input[name="jenisCetak"]:checked');
             const metodeBayar = document.querySelector('input[name="metodeFotokopi"]:checked');
+            
             if (!jenisCetak) { alert('Pilih jenis cetak!'); return false; }
             if (!metodeBayar) { alert('Pilih metode pengambilan!'); return false; }
+
+            const btnKirim = document.getElementById('btnKirim');
+            const textAwal = btnKirim.innerHTML;
+            btnKirim.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Memproses...';
+            btnKirim.disabled = true;
+
+            const nama = document.getElementById('namaFotokopi').value;
+            const hp = document.getElementById('hpFotokopi').value;
             const jumlahLembar = parseInt(document.getElementById('jumlahLembar').value) || 1;
             const jilid = document.getElementById('jilid').value;
+            const alamat = document.getElementById('alamatAntar').value || '-';
+            const catatan = document.getElementById('catatanFotokopi').value || '-';
+            const ukuran = document.getElementById('ukuranKertas').value;
+            const bolakBalik = document.getElementById('bolakBalik').value;
+
             const hargaPerLembar = { 'Fotokopi B/W': _hargaAdmin.fotokopiBW, 'Print B/W': _hargaAdmin.printBW, 'Print Warna': _hargaAdmin.printWarna };
             let total = (hargaPerLembar[jenisCetak.value] || 0) * jumlahLembar;
             if (jilid === 'Jilid Spiral') total += _hargaAdmin.jilidSpiral;
             else if (jilid === 'Jilid Lakban') total += _hargaAdmin.jilidLakban;
             else if (jilid === 'Laminating') total += _hargaAdmin.laminating * jumlahLembar;
-            const idPesanan = 'FTK-' + Date.now().toString(36).toUpperCase();
-            let antrianCounters = JSON.parse(localStorage.getItem('antrianCounters')) || { ATK: 0, BKT: 0, FTK: 0, PFT: 0 };
-            antrianCounters.FTK++;
-            localStorage.setItem('antrianCounters', JSON.stringify(antrianCounters));
-            const pesananBaru = {
-                id: idPesanan,
-                tipe: 'Fotokopi & Print',
-                nama: document.getElementById('namaFotokopi').value,
-                hp: document.getElementById('hpFotokopi').value,
-                alamat: document.getElementById('alamatAntar').value || 'Ambil di Toko',
-                catatan: document.getElementById('catatanFotokopi').value || '-',
-                nomorAntrian: antrianCounters.FTK,
-                items: [{
-                    nama: `${jenisCetak.value} - ${document.getElementById('ukuranKertas').value}`,
-                    qty: jumlahLembar,
-                    harga: hargaPerLembar[jenisCetak.value],
-                    subtotal: total
-                }],
-                detail: {
-                    files: uploadedFiles.map(f => f.name),
-                    ukuran: document.getElementById('ukuranKertas').value,
-                    bolakBalik: document.getElementById('bolakBalik').value,
-                    jilid: jilid
-                },
-                total: total,
-                metode: metodeBayar.value,
-                status: 'Diproses',
-                tanggal: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }),
-                waktu: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-            };
-            let semuaPesanan = JSON.parse(localStorage.getItem('pesananTRK')) || [];
-            semuaPesanan.push(pesananBaru);
-            localStorage.setItem('pesananTRK', JSON.stringify(semuaPesanan));
-            document.getElementById('formFotokopi').reset();
-            uploadedFiles = [];
-            renderFilePreview();
-            document.querySelectorAll('.spec-option').forEach(s => s.classList.remove('selected'));
-            document.querySelectorAll('.payment-option').forEach(s => s.classList.remove('selected'));
-            document.getElementById('estimasiDetail').innerHTML = '<p style="color: #888; font-size: 0.85rem;">Pilih jenis cetak dan jumlah lembar untuk melihat estimasi.</p>';
-            document.getElementById('alamatAntarWrap').style.display = 'none';
-            tampilToast(`Pesanan ${idPesanan} berhasil dikirim! Dokumen Anda segera diproses 📄`);
+
+            // Ngerangkum detail order buat dikirim ke DB & WA
+            const namaFiles = uploadedFiles.map(f => f.name).join(', ');
+            const detailOrder = `
+File: ${namaFiles}
+Tipe: ${jenisCetak.value} (${ukuran})
+Jumlah: ${jumlahLembar} lbr
+Bolak-Balik: ${bolakBalik}
+Jilid: ${jilid}
+Metode: ${metodeBayar.value}
+Alamat: ${alamat}
+Catatan: ${catatan}
+Total: Rp ${total.toLocaleString('id-ID')}
+HP: ${hp}
+            `.trim();
+
+            try {
+                // Tembak data ke database Neon
+                const res = await fetch('/.netlify/functions/orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        layanan: 'fotokopi',
+                        nama_pelanggan: nama,
+                        detail: detailOrder
+                    })
+                });
+
+                if (!res.ok) throw new Error("Gagal menyimpan ke database");
+
+                // Reset form setelah sukses
+                document.getElementById('formFotokopi').reset();
+                uploadedFiles = [];
+                renderFilePreview();
+                document.querySelectorAll('.spec-option').forEach(s => s.classList.remove('selected'));
+                document.querySelectorAll('.payment-option').forEach(s => s.classList.remove('selected'));
+                document.getElementById('estimasiDetail').innerHTML = '<p style="color: #888; font-size: 0.85rem;">Pilih jenis cetak dan jumlah lembar untuk melihat estimasi.</p>';
+                document.getElementById('alamatAntarWrap').style.display = 'none';
+                
+                tampilToast(`Pesanan dari ${nama} berhasil dikirim! Mengalihkan ke WhatsApp...`);
+
+                // Kasih delay dikit biar user baca toast, terus lempar ke WA
+                setTimeout(() => {
+                    const noWA = "6281234567890"; // <-- WAK! JANGAN LUPA GANTI NOMOR WA LU DI SINI
+                    const textWA = encodeURIComponent(`Halo Teras Rumah Karlos,\n\nSaya mau pesan layanan Cetak/Fotokopi nih.\n\n*Detail Pesanan:*\nNama: ${nama}\n${detailOrder}\n\nSaya akan kirimkan file dokumennya sekarang.`);
+                    window.location.href = `https://wa.me/${noWA}?text=${textWA}`;
+                }, 1500);
+
+            } catch(e) {
+                alert('Waduh, server lagi ngadat: ' + e.message);
+            } finally {
+                btnKirim.innerHTML = textAwal;
+                btnKirim.disabled = false;
+            }
+            
             return false;
         }
+
         function tampilToast(pesan) {
             document.getElementById('toastMessage').textContent = pesan;
             const toast = new bootstrap.Toast(document.getElementById('toastNotif'), { delay: 4000 });
